@@ -1,0 +1,22 @@
+#buggy{
+}
+#hrd{
+    font-family: 'Bungee Outline', cursive;
+    align-content: right;
+}
+.jumbotron{
+    padding-top: 1%;
+}
+#jtron{
+    /* background: url(https://i.pinimg.com/originals/ca/51/ba/ca51ba3f5a0168e464d0354dec916f11.jpg); */
+    background-position: center;
+}
+.card-title{
+    font-family: 'Fascinate', cursive;
+}
+.card-text{
+    font-family: 'Quicksand', sans-serif;
+}
+#dp{
+    height: 300px;
+}
