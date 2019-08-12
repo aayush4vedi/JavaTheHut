@@ -1,0 +1,12 @@
+<h1>List of all the camps</h1>
+<a href="/">Home</a>
+
+
+<% hotels.forEach((hotel)=>{ %>
+    <div>
+        <h4>
+            <%=hotel.name  %>
+        </h4>
+        <img src="<%= hotel.image %>" alt="">
+    </div>
+<% }) %>
