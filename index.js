@@ -1,43 +1,65 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var app = express();
-app.use(bodyParser.urlencoded({extended: true}));
+var express     = require('express'),
+    bodyParser  = require('body-parser'),
+    app         = express(),
+    mongoose     = require('mongoose');
 
+
+
+mongoose.connect('mongodb://localhost/yelp_hotel');    
+app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine','ejs');
 
 
-//TODO: move to DB
-var hotels = [
-    {name: 'The Elanza Hotel', image:'https://lh3.googleusercontent.com/p/AF1QipPjN1pQ00OOS2aMxAvnAwD7rFjQg_UH1pputFPL=w592-h404-n-k-rw-no-v1'},
-    {name: 'Grand Mercure Bangalore', image:'https://lh3.googleusercontent.com/p/AF1QipPnaPc7H5JX1zJYEWeNZh1RdYB_iauTgPI-nEaZ=w592-h404-n-k-rw-no-v1'},
-    {name: 'La Marvella', image:'https://lh3.googleusercontent.com/p/AF1QipM7KZhlFpLiSZwjSLL-E9tRlzey9MRNdjaRRJ6u=w592-h404-n-k-rw-no-v1'},
-    {name: 'Hotel Davanam Sarovar Portico Suites', image:'https://lh3.googleusercontent.com/p/AF1QipPGnA_UFw44sS5u2bTdKA8rP07WYPFCrjHFGgoy=w592-h404-n-k-rw-no-v1'},
-    {name: 'The Elanza Hotel', image:'https://lh3.googleusercontent.com/p/AF1QipPjN1pQ00OOS2aMxAvnAwD7rFjQg_UH1pputFPL=w592-h404-n-k-rw-no-v1'},
-    {name: 'Grand Mercure Bangalore', image:'https://lh3.googleusercontent.com/p/AF1QipPnaPc7H5JX1zJYEWeNZh1RdYB_iauTgPI-nEaZ=w592-h404-n-k-rw-no-v1'},
-    {name: 'La Marvella', image:'https://lh3.googleusercontent.com/p/AF1QipM7KZhlFpLiSZwjSLL-E9tRlzey9MRNdjaRRJ6u=w592-h404-n-k-rw-no-v1'},
-    {name: 'La Marvella', image:'https://lh3.googleusercontent.com/p/AF1QipM7KZhlFpLiSZwjSLL-E9tRlzey9MRNdjaRRJ6u=w592-h404-n-k-rw-no-v1'},
-    {name: 'La Marvella', image:'https://lh3.googleusercontent.com/p/AF1QipM7KZhlFpLiSZwjSLL-E9tRlzey9MRNdjaRRJ6u=w592-h404-n-k-rw-no-v1'},
-    {name: 'La Marvella', image:'https://lh3.googleusercontent.com/p/AF1QipM7KZhlFpLiSZwjSLL-E9tRlzey9MRNdjaRRJ6u=w592-h404-n-k-rw-no-v1'},
-];
-//home page
+var hotelSchema = new mongoose.Schema({
+    name: String,
+    image: String,
+    description: String
+});
+var Hotel = mongoose.model('Hotel', hotelSchema);
+
+
 app.get('/', (req,res)=>{ 
     res.render('home'); 
 });
-//camps
 app.get('/hotels', (req,res)=>{
-    res.render('hotels', {hotels:hotels});
+    Hotel.find({},(err, allHotels)=>{
+        if(err){
+            console.log(err);
+        }else{
+            res.render('index',{hotels: allHotels});
+        }
+    });
 });
 
 app.post('/hotels', (req,res)=>{
-    var newHotel = {name: req.body.name, image: req.body.image};
-    hotels.push(newHotel);
+    var newHotel = {
+        name: req.body.name,
+        image: req.body.image,
+        description: req.body.description
+    };
+    Hotel.create(newHotel,(err,newHotel)=>{
+        if(err){
+            console.log(err);
+        }else{
+            console.log('SUCCESSFULLY created entry', newHotel);
+        }
+    });
     res.redirect('/hotels');
 });
-
+//order is important here!!!
 app.get('/hotels/new', (req,res)=>{
     res.render('new');
 });
-
+app.get('/hotels/:id',(req,res)=>{
+    Hotel.findById(req.params.id, (err,found)=>{
+        if(err){
+            console.log(err);
+        }else{
+            res.render('show',{hotel: found});
+        }
+    });
+    // res.send('Show');
+});
 
 
 
