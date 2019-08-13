@@ -58,7 +58,6 @@ app.get('/hotels/:id',(req,res)=>{
             res.render('show',{hotel: found});
         }
     });
-    // res.send('Show');
 });
 
 
