@@ -48,20 +48,9 @@ app.get('/blogs',(req,res)=>{
 });
 //NEW
 app.get('/blogs/new',(req,res)=>{
-    console.log('about to render');
     res.render('new');
-    console.log('rendered!');
-    
 });
 app.post('/blogs',(req,res)=>{
-    // console.log("here");
-    // console.log('req:', req);
-    
-    // var newBlog={
-    //     title: req.title,
-    //     // image: req.image,
-    //     body: req.body
-    // }
     Blog.create(req.body.blog,(err,newBlog)=>{
         if(err){
             console.log('ERROR: ',err);
@@ -71,7 +60,22 @@ app.post('/blogs',(req,res)=>{
     });
     res.redirect('/');
 });
+//SHOW
+app.get('/blogs/:id',(req,res)=>{
+    Blog.findById(req.params.id,(err, found)=>{
+        if(err){
+            console.log(err);
+        }else{
+            res.render('show', {blog: found})
+        }
+    });
+});
 
+//SERVER
 app.listen(3000,()=>{
     console.log('I love you 3000');
 });
+
+
+
+

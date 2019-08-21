@@ -2,15 +2,28 @@
 
 <div class="ui container main segment">
     <h1>New POST</h1>
-    
-    <form action="/blogs" method="post">
-        <input type="text" name="blog[title]" placeholder="Title">
-        <input type="text" name="blog[image]" placeholder="Image Url">
-        <input type="text" name="blog[body]" placeholder="Body">
-        <button type="submit" >Submit</button>
+    <form action="/blogs" method="post" class="ui form">
+        <div class="field">
+            <label >
+                Title
+            </label>
+            <input type="text" name="blog[title]" placeholder="Title">
+        </div>
+        <div class="field">
+            <label >
+                Image URL
+            </label>
+            <input type="text" name="blog[image]" placeholder="Image Url">
+        </div>
+        <div class="field">
+            <label >
+                Body
+            </label>
+            <textarea name="blog[body]" placeholder="Body">
+            </textarea>
+        </div>
+        <button class="ui button" type="submit" >Submit</button>
     </form>
 </div>
-
-
-
 <% include partials/footer %>
+
