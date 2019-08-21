@@ -1,12 +1,17 @@
-<h1>Index Page</h1>
+<% include partials/header %>
 
-<div class="blog">
+<div class="ui container main  segment">
+    <h1>Index Page</h1>
+    <div class="blog">
         <% blogs.forEach((blog)=>{ %>
-        <h3> 
-            Title:<%= blog.title %>
-        </h3>
-        <img src="<%=blog.image %>" >
-        <p> Body:<%= blog.body %> </p>
-        <h4>Created At: <%= blog.created %> </h4>
-        <% }) %>
+            <h3> 
+                <%= blog.title %>
+            </h3>
+            <img src="<%=blog.image %>" >
+            <p><%= blog.body %> </p>
+            <h4>Created At: <%= blog.created %> </h4>
+            <% }) %>
+        </div>
 </div>
+        
+<% include partials/footer %>

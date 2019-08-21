@@ -32,11 +32,11 @@ var Blog = mongoose.model('Blog', blogSchema);
 // });
 
 //RESTful Routes
+//HOME
 app.get('/',(req,res)=>{
-    // res.render('home');
     res.redirect('/blogs');
 });
-
+//INDEX
 app.get('/blogs',(req,res)=>{
     Blog.find({},(err,allBlogs)=>{
         if(err){
@@ -45,6 +45,31 @@ app.get('/blogs',(req,res)=>{
             res.render('index',{blogs: allBlogs});
         }
     });
+});
+//NEW
+app.get('/blogs/new',(req,res)=>{
+    console.log('about to render');
+    res.render('new');
+    console.log('rendered!');
+    
+});
+app.post('/blogs',(req,res)=>{
+    // console.log("here");
+    // console.log('req:', req);
+    
+    // var newBlog={
+    //     title: req.title,
+    //     // image: req.image,
+    //     body: req.body
+    // }
+    Blog.create(req.body.blog,(err,newBlog)=>{
+        if(err){
+            console.log('ERROR: ',err);
+        }else{
+            console.log("Successfully created: ",newBlog);
+        }
+    });
+    res.redirect('/');
 });
 
 app.listen(3000,()=>{
