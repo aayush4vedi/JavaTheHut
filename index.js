@@ -1,22 +1,12 @@
 var express     = require('express'),
     bodyParser  = require('body-parser'),
     app         = express(),
-    mongoose     = require('mongoose');
-
-
+    mongoose    = require('mongoose'),
+    Hotel       = require('./models/hotel')
 
 mongoose.connect('mongodb://localhost/yelp_hotel');    
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine','ejs');
-
-
-var hotelSchema = new mongoose.Schema({
-    name: String,
-    image: String,
-    description: String
-});
-var Hotel = mongoose.model('Hotel', hotelSchema);
-
 
 app.get('/', (req,res)=>{ 
     res.render('home'); 
