@@ -17,6 +17,12 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <button href="/blogs/<%= blog._id%>/edit" class="ui yellow button">Edit</button>
+            <form action="/blogs/<%= blog._id %>?_method=DELETE" method="POST" id="delete">
+                <button class="ui button red" type="submit">Delete</button>
+            </form>
+        </div>
     </div>
 </div>
     

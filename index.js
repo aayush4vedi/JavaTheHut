@@ -1,12 +1,14 @@
 var express    = require('express'),
     app        = express(),
     mongoose   = require('mongoose'),
-    bodyParser = require('body-parser');
+    bodyParser = require('body-parser'),
+    methodOverrid = require('method-override');
 
 //App config    
 mongoose.connect('mongodb://localhost/blog_app');    
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(methodOverrid('_method'));
 app.set('view engine','ejs');
 
 //Mongoose Model- Config
@@ -65,11 +67,48 @@ app.get('/blogs/:id',(req,res)=>{
     Blog.findById(req.params.id,(err, found)=>{
         if(err){
             console.log(err);
+            res.redirect('/');
         }else{
             res.render('show', {blog: found})
         }
     });
 });
+//EDIT
+app.get('/blogs/:id/edit',(req,res)=>{
+    Blog.findById(req.params.id,(err, found)=>{
+        if(err){
+            console.log(err);
+            res.redirect('/');
+        }else{
+            res.render('edit', {blog: found})
+        }
+    });
+});
+//UPDATE
+app.put('/blogs/:id',(req,res)=>{
+    Blog.findByIdAndUpdate(req.params.id, req.body.blog, (err,updateBlog)=>{
+        if(err){
+            console.log(err);
+            res.redirect('/');
+        }else{
+            res.redirect('/blogs/' + req.params.id );
+        }
+    });
+});
+//DESTROY
+app.delete('/blogs/:id',(req,res)=>{
+    Blog.findByIdAndDelete(req.params.id, (err,deleteBlog)=>{
+        if(err){
+            console.log(err);
+            res.redirect('/');
+        }else{
+            res.redirect('/blogs');
+        }
+    });
+});
+
+
+
 
 //SERVER
 app.listen(3000,()=>{
