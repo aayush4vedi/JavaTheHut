@@ -7,4 +7,11 @@
 <p><%=hotel.description  %></p>
 <img src="<%=hotel.image%>" alt="">
 
+<% hotel.comments.forEach((comment)=>{ %>
+    <p>
+        <strong> <%= comment.author %> </strong> - <%= comment.text %>
+    </p>
+<% }) %>
+
+
 <% include partials/footer %>

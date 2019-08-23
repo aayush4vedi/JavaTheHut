@@ -1,10 +1,14 @@
-var mongoose     = require('mongoose'),
-    Comment      = require('./comment');
+var mongoose     = require('mongoose');
 
 var hotelSchema = new mongoose.Schema({
-    name: String,
-    image: String,
-    description: String
-    // comment      : Comment[]
+    name          : String,
+    image         : String,
+    description   : String,
+    comments      : [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref : "Comment"
+        }
+    ]
 });
-module.exports = mongoose.model('Hotel', hotelSchema);
+module.exports = mongoose.model('Hotel', hotelSchema); 

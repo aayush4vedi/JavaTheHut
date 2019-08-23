@@ -42,12 +42,14 @@ app.post('/hotels', (req,res)=>{
 app.get('/hotels/new', (req,res)=>{
     res.render('new');
 });
+//SHOW
 app.get('/hotels/:id',(req,res)=>{
-    Hotel.findById(req.params.id, (err,found)=>{
+    Hotel.findById(req.params.id).populate('comments').exec((err,found)=>{
         if(err){
             console.log(err);
         }else{
             res.render('show',{hotel: found});
+            console.log('added comments to: ',found);
         }
     });
 });

@@ -28,12 +28,12 @@ function seedDB(){
         }else{
             console.log("Removed Hotels!");
             //Add few hotels
-            data.forEach((hotel)=>{
-                Hotel.create(hotel, (err,data)=>{
+            data.forEach((seed)=>{
+                Hotel.create(seed, (err,hotel)=>{
                     if(err){
                         console.log(err);
                     }else{
-                        console.log("Added a hotel");
+                        console.log("Added a hotel: ", hotel.name);
                         //create comment for this hotel: FIXME: callback hell
                         Comment.create(
                             {
