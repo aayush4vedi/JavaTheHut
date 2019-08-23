@@ -2,8 +2,10 @@ var express     = require('express'),
     bodyParser  = require('body-parser'),
     app         = express(),
     mongoose    = require('mongoose'),
-    Hotel       = require('./models/hotel')
+    Hotel       = require('./models/hotel'),
+    seedDB      = require('./seeds')
 
+seedDB();
 mongoose.connect('mongodb://localhost/yelp_hotel');    
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine','ejs');
