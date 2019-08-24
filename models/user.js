@@ -1,26 +1,36 @@
-var mongoose                 = require('mongoose'),
-    passportLocalMongoose    = require('passport-local-mongoose'),
-    Hash                     = require('password-hash');
+var mongoose = require('mongoose');
+    bcrypt   = require('bcrypt-nodejs');
 
+// define the schema for our user model
 var userSchema = mongoose.Schema({
-    username : String,
-    password : String
-});
-userSchema.plugin(passportLocalMongoose); //Doesn't work at all!
+    local            : {
+        username        : String,
+        password     : String,
+    },
+    facebook         : {
+        id           : String,
+        token        : String,
+        name         : String,
+        email        : String
+    },
+    google           : {
+        id           : String,
+        token        : String,
+        email        : String,
+        name         : String
+    }
 
-userSchema.statics.authenticate = function(username, password, callback) {
-	this.findOne({ username: username }, function(error, user) {
-		if (user && Hash.verify(password, user.password)) {
-			callback(null, user);
-		} else if (user || !error) {
-			// Email or password was invalid (no MongoDB error)
-			error = new Error("Your username or password is invalid. Please try again.");
-			callback(error, null);
-		} else {
-			// Something bad happened with MongoDB. You shouldn't run into this often.
-			callback(error, null);
-		}
-	});
+});
+
+// methods ======================
+// generating a hash
+userSchema.methods.generateHash = function(password) {
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+};
+
+// checking if password is valid
+userSchema.methods.validPassword = function(password) {
+    return bcrypt.compareSync(password, this.local.password);
 };
 
 module.exports =  mongoose.model('User', userSchema)

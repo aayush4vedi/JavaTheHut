@@ -1,54 +1,42 @@
-var express                 = require('express'),
-    bodyParser              = require('body-parser'),
-    app                     = express(),
-    mongoose                = require('mongoose'),
-    User                    = require('./models/User')
-    Hotel                   = require('./models/hotel'),
-    Comment                 = require('./models/comment'),
-    seedDB                  = require('./seeds'),
-    passport                = require('passport'),
-    PassportLocalStrategy   = require('passport-local')
+var express        = require('express'),
+    app            = express(),
+    port           = process.env.PORT || 3000,
+    mongoose       = require('mongoose'),
+    passport       = require('passport'),
+    flash          = require('connect-flash'),   
+    morgan         = require('morgan'),
+    cookieParser   = require('cookie-parser'),
+    bodyParser     = require('body-parser'),
+    session        = require('express-session'),    
+    configDB       = require('./config/database.js'),
+    User           = require('./models/User')
+    Hotel          = require('./models/hotel'),
+    Comment        = require('./models/comment'),
+    seedDB         = require('./seeds'),
 
-mongoose.connect('mongodb://localhost/yelp_hotel');    
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.static(__dirname+ '/public'));
-app.set('view engine','ejs');
-seedDB();
 
-//PASSPORT Configure
-app.use(require('express-session')({
-    secret            : "The Secret Sentence ",
-    resave            : false,
-    saveUninitialized : false
-}));
-var authStrategy = new PassportLocalStrategy({
-	usernameField: 'username',
-	passwordField: 'password'
-}, function(username, password, done) {
-	User.authenticate(username, password, function(error, user){
-		done(error, user, error ? { message: error.message } : null);
-	});
-});
+// configuration ===============================================================
+mongoose.connect(configDB.url); // connect to our database
 
-var authSerializer = function(user, done) {
-	done(null, user.id);
-};
+require('./config/passport')(passport); // pass passport for configuration
 
-var authDeserializer = function(id, done) {
-	User.findById(id, function(error, user) {
-		done(error, user);
-	});
-};
+// set up our express application
+app.use(morgan('dev')); // log every request to the console
+app.use(cookieParser()); // read cookies (needed for auth)
+app.use(bodyParser()); // get information from html forms
 
-passport.use(authStrategy);
-passport.serializeUser(authSerializer);
-passport.deserializeUser(authDeserializer);
+app.set('view engine', 'ejs'); // set up ejs for templating
 
+// required for passport
+app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
 app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
 
 // ==========================
 //ROUTES
 // ==========================
+
 
 app.get('/', (req,res)=>{ 
     res.render('home'); 
@@ -133,26 +121,40 @@ app.post('/hotels/:id/comments',(req,res)=>{
 //============================
 //REGISTER
 app.get('/register',(req,res)=>{
-    res.render('register');
+    res.render('auth/register');
 });
 //SIGN-UP
-app.post('/register',(req,res)=>{
-    //1st parameter: username(no password here because we don't store passwords in DB)
-    //2nd parameter: password(to be stored as hash)
-    //3rd parameter: callback function
-    var newUser = new User({username: req.body.username});
-    User.register( newUser, req.body.password, (err,user)=>{
-        if(err){
-            console.log(err);
-            return res.render('register');
-        }
-        //you can change the strategy here('facebook','google','twitter')...
-        passport.authenticate('local')(req,res,()=>{
-            res.redirect('/hotels');
-        });
-    });
+app.post('/register', passport.authenticate('local-signup', {
+    successRedirect : '/hotels', // redirect to the secure profile section
+    failureRedirect : '/register', // redirect back to the signup page if there is an error
+    failureFlash : true // allow flash messages
+}));
+//LOGIN
+app.get('/login',(req,res)=>{
+    res.render('auth/login');
+});
+app.post('/login', passport.authenticate('local-login', {
+    successRedirect : '/hotels', // redirect to the secure profile section
+    failureRedirect : '/login', // redirect back to the signup page if there is an error
+    failureFlash : true // allow flash messages
+}));
+//LOGOUT
+app.get('/logout', function(req, res) {
+    req.logout();
+    res.redirect('/');
 });
 
-app.listen(3000,()=>{
+// ROUTE MIDDLEWARE to make sure a user is logged in
+function isLoggedIn(req, res, next) {
+    // if user is authenticated in the session, carry on 
+    if (req.isAuthenticated())
+        return next();
+    // if they aren't redirect them to the home page
+    res.redirect('/');
+}
+
+
+// launch ======================================================================
+app.listen(port,()=>{
     console.log('I love you 3000');
 });
