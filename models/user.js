@@ -7,6 +7,4 @@ var userSchema = mongoose.Schema({
 });
 userSchema.plugin(passportLocalMongoose);
 
-module.exports = {
-    userSchema
-}
+module.exports = userSchema
