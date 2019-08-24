@@ -32,7 +32,10 @@ app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secre
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
-
+app.use((req,res,next)=>{
+    res.locals.currUser = req.user;
+    next();
+})
 // ==========================
 //ROUTES
 // ==========================
@@ -82,7 +85,7 @@ app.get('/hotels/:id',(req,res)=>{
 // COMMENTS ROUTES
 // ============================
 //CREATE
-app.get('/hotels/:id/comments/new',(req,res)=>{
+app.get('/hotels/:id/comments/new',isLoggedIn,(req,res)=>{
     Hotel.findById(req.params.id, (err, hotel)=>{
         if(err){
             console.log(err);
