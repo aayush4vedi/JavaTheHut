@@ -22,7 +22,7 @@ app.use(passport.session());
 
 //coming from passport-local-mongoose package
 //responsible for reading, unencrypting, decrypting data from sessions
-
+passport.use(new localStrategy(User.authenticate()));
 // DEF: serializeUser is used to store id of the user in the session,
 // passport.serializeUser(User.serializeUser());
 passport.serializeUser(function(user, cb) {
@@ -69,6 +69,15 @@ app.post('/register',(req,res)=>{
         });
     });
 });
+//LOGIN ROUTES
+app.get('/login',(req,res)=>{
+    res.render('login'); 
+});
+//using the middleware(to be run before function)
+app.post('/login',passport.authenticate('local',{
+    successRedirect: '/secret',
+    failureRedirect: '/login'
+}),(req,res)=>{});
 
 
 app.listen(3000, ()=>{
