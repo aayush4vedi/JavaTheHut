@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SearchBox = ()=>{
+const SearchBox = ({searchChange})=>{
     return(
         <div className="pa2">
         <input 
@@ -8,6 +8,7 @@ const SearchBox = ()=>{
             type="text" 
             name="ranger" 
             placeholder="Search Ranger"
+            onChange= {searchChange}
         />
         </div>
     );
