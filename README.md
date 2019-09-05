@@ -23,7 +23,7 @@ To build something like these(in given order):
 * [ ] [Coffee](https://us.camposcoffee.com/) - small animations
 * [ ] [Resume Builder](https://www.wozber.com/us) - animations medium level
 * [ ] [News](https://www.bundle.app/en/contact) - awestruck! if you can made this, you are an expert aleread:**Challange**
-* [ ] [Locomotive](https://locomotive.ca/en/play) & [Orkestra](https://orkestra.ca/en/homepage) - these have everything you want to become : [ ] [article](https://www.awwwards.com/in-the-mind-of-orkestra-building-a-website-that-kills-the-traditional-agency-model.html) how did they make it.
+* [ ] [Locomotive](https://locomotive.ca/en/play) & [Orkestra](https://orkestra.ca/en/homepage) - these have everything you want to become : [article](https://www.awwwards.com/in-the-mind-of-orkestra-building-a-website-that-kills-the-traditional-agency-model.html) how did they make it.
 ### Mobile Sites:
 * [ ] Mobile UI interactive site: [article](https://medium.muz.li/ui-interactions-of-the-week-174-a80537babf54) -try with React
 * [ ] Mobile site(bottom navigation): [Article](https://www.smashingmagazine.com/2019/08/bottom-navigation-pattern-mobile-web-pages/) - React 
