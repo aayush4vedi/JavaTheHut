@@ -1,0 +1,10 @@
+* {margin:0; 
+    padding:0; 
+    box-sizing: border-box;
+}
+#landing {
+    color: white;
+    background-image: url(./media/iphone.jpg);
+    background-repeat: no-repeat;
+    background-size: 1000px 500px;
+}

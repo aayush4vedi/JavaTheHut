@@ -18,8 +18,9 @@ about
 ## Build List
 To build something like these(in given order):
 ### Websites:
-* [ ] [Template](https://toi.io/) - very simple
+* [ ] [Landing Page](https://demo.tutorialzine.com/2016/06/freebie-landing-page-template-with-flexbox/) - first learn the standards
 * [ ] [Phone](https://www.revols.com/) -very simple(1)
+* [ ] [Template](https://toi.io/) - very simple
 * [ ] [Coffee](https://us.camposcoffee.com/) - small animations
 * [ ] [Resume Builder](https://www.wozber.com/us) - animations medium level
 * [ ] [News](https://www.bundle.app/en/contact) - awestruck! if you can made this, you are an expert aleread:**Challange**
