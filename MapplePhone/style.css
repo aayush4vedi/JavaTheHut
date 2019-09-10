@@ -177,19 +177,20 @@ label {
         display: block;
         cursor: pointer;
 	}
-	nav {
+	.menu {
         text-align: center;
         width: 100%;
         display: none;
     }
-    nav a {
+    .menu a {
         display: block;
         border-bottom: 1px solid #EAEAEB;
         margin: 0;
      
     }
 
-	#toggle:checked + header nav {
+	#toggle:checked + header{
+        flex-direction: column;	
         display: block;
     }
 }
