@@ -4,6 +4,8 @@
 * [Code](https://github.com/aayush4vedi/Chrome-Extensions/tree/master/DogFace)
 
 ## HelloWorld
+<img src="google-chrome.jpg" width="20px">
+
 * Basic google-chrome tutorial
 * [Code](https://github.com/aayush4vedi/Chrome-Extensions/tree/master/HelloWorld)
 
