@@ -1,10 +1,10 @@
 # Awesome Chrome Extensions Here
-## DogFace
+
+## DogFace :dog:
 * Replaces all the `img`s on page with cute random doggos
 * [Code](https://github.com/aayush4vedi/Chrome-Extensions/tree/master/DogFace)
 
-## HelloWorld
-<img src="google-chrome.jpg" width="20px">
+## HelloWorld  <img src="./HelloWorld/google-chrome.jpg" width="20px">
 
 * Basic google-chrome tutorial
 * [Code](https://github.com/aayush4vedi/Chrome-Extensions/tree/master/HelloWorld)
