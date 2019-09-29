@@ -19,3 +19,9 @@ This repo is the collection of full-fledged services build for the mankind.
     * Something is weirdly wrong with contact page.
     * Scrolling is bad for its health
     * Unimaginative `Drawer`
+    * Take ideas from:
+        * https://paulhanna1933.github.io/
+
+<br>
+## Shopping Cart
+* Take ideas from [here](https://www.youtube.com/watch?v=KLCnTjB0w_o)
