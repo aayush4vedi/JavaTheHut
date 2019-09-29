@@ -8,8 +8,8 @@ class App extends Component{
   render(){
     return (
       <div style={{height: '822px', position: 'relative'}}>
-        <Layout style={{background: 'url(https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80) center / cover'}}>
-            <Header transparent title="Title" style={{color: 'white'}}>
+        <Layout>
+            <Header class="header-color" transparent title="Title" style={{color: 'white'}}>
                 <Navigation>
                     <Link to="/resume">Resume</Link>
                     <Link to="/projects">Projects</Link>
