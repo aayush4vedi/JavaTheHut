@@ -1,7 +1,7 @@
 .header-color{
-  background: #1D976C;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #93F9B9, #1D976C);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: #1D976C;  
+  background: -webkit-linear-gradient(to right, #93F9B9, #1D976C);  
+  background: linear-gradient(to right, #93F9B9, #1D976C); 
 
 }
 
@@ -25,10 +25,10 @@
   padding-top: 18%;
 }
 .banner{
-  background: #1D976C;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #93F9B9, #1D976C);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #93F9B9, #1D976C); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  opacity: 0.8;
+  background: #1D976C;  
+  background: -webkit-linear-gradient(to right, #93F9B9, #1D976C);  
+  background: linear-gradient(to right, #93F9B9, #1D976C); 
+  opacity: 0.9;
   width: 50%;
   margin: auto;
   border-radius: 5px;
@@ -59,4 +59,14 @@
 }
 .social-links i:hover{
   opacity: 1;
+}
+.project-cards{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 80%;
+  margin: auto;
+}
+.project-card{
+  
 }

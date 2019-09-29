@@ -14,7 +14,7 @@ class LandingPage extends Component{
                 <div className="banner">
                   <h1>I love making cool shit.</h1>
                   <hr/>
-                  <p>Node | React | Python | Go | Php</p>
+                  <p>Node | React | Python | Go | Rails | Php</p>
                   <div className="social-links">
                     <a href="https://github.com/aayush4vedi">
                       <i class="fab fa-github" area-hidden="true"></i>
