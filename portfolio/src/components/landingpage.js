@@ -7,7 +7,7 @@ class LandingPage extends Component{
             <Grid className="landing-page-grid">
               <Cell col={12}>
                 <img
-                  src = 'https://cdn1.iconfinder.com/data/icons/flat-character-color-1/60/flat-design-character_1-512.png'
+                  src = 'https://raw.githubusercontent.com/aayush4vedi/Inators/master/portfolio/Media/dp.png'
                   alt = 'avatar'
                   className = 'avatar-img'
                 />
