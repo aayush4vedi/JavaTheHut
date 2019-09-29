@@ -4,6 +4,14 @@
   background: linear-gradient(to right, #93F9B9, rgb(19, 129, 91)); 
 
 }
+.page-content{
+  align-content: center;
+  text-align: center;
+}
+.page-content hr{
+  width: 20%;
+  margin: auto;
+}
 
 .landing-page-grid{
   background: linear-gradient(to right, #414345, #232526),url(https://miro.medium.com/max/6000/1*9eOnB3K7wZa1Dc1kVBHhUA.png);
@@ -40,7 +48,8 @@
   padding: 20px;
 }
 .banner hr{
-  width: 100%;
+  width: 80%;
+  margin: auto;
 }
 .banner p{
   color: white;
@@ -60,6 +69,9 @@
 }
 .social-links i:hover{
   opacity: 1;
+}
+.project-tabs{
+  height: 50em;
 }
 .project-cards{
   display: flex;
@@ -82,7 +94,7 @@
   text-align: center;
   justify-content: center;
   width: 80%;
-  height: 550px;
+  height: 50em;
   background: white;
   color: black;
   margin-bottom: 20px;

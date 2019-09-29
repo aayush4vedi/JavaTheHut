@@ -15,3 +15,7 @@ This repo is the collection of full-fledged services build for the mankind.
 * Build using `React` & `MaterialUI`:
     * `react-mdl`(Material Design Lite)
     * `react-router-dom`
+* **Issues**
+    * Something is weirdly wrong with contact page.
+    * Scrolling is bad for its health
+    * Unimaginative `Drawer`
