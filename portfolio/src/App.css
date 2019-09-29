@@ -1,7 +1,7 @@
 .header-color{
   background: #1D976C;  
-  background: -webkit-linear-gradient(to right, #93F9B9, #1D976C);  
-  background: linear-gradient(to right, #93F9B9, #1D976C); 
+  background: -webkit-linear-gradient(to right, #93F9B9, rgb(19, 129, 91));  
+  background: linear-gradient(to right, #93F9B9, rgb(19, 129, 91)); 
 
 }
 
@@ -22,7 +22,7 @@
 
 .avatar-img{
   height: 250px;
-  padding-top: 18%;
+  padding-top: 15%;
 }
 .banner{
   background: #1D976C;  
@@ -37,6 +37,7 @@
   color: white;
   font-size: 40px;
   font-weight: bold;
+  padding: 20px;
 }
 .banner hr{
   width: 100%;
@@ -67,6 +68,41 @@
   width: 80%;
   margin: auto;
 }
-.project-card{
-  
+
+.contact-body {
+  margin: auto;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  padding-top: 2em;
+}
+
+.contact-grid {
+  text-align: center;
+  justify-content: center;
+  width: 80%;
+  height: 550px;
+  background: white;
+  color: black;
+  margin-bottom: 20px;
+}
+
+.contact-grid h2 {
+  font-family: 'Anton', sans-serif;
+}
+
+.contact-grid p {
+  font-family: 'Oxygen', sans-serif;
+}
+
+.contact-grid hr {
+  border-top: 5px dotted black;
+  width: 50%;
+  margin: auto;
+}
+
+.contact-list i {
+  font-size: 66px;
+  padding-right: 5rem;
 }

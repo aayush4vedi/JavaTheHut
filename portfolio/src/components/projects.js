@@ -4,7 +4,7 @@ import {Tabs, Tab, Grid, Cell, Card, CardText, CardTitle, Button, CardActions, C
 class Projects extends Component{
   constructor(props) {
       super(props)
-      this.state = { activeTab: 0 };
+      this.state = { activeTab: 1 };
   }
 
   toggleCategories(){
@@ -86,7 +86,7 @@ class Projects extends Component{
 
           {/*  #Project3 */}
           <Card shadow={5} style={{width: '320px', height: '320px', margin: 'auto'}}>
-            <CardTitle expand style={{color: '#fff', background: 'url(http://www.getmdl.io/assets/demos/dog.png) bottom right 15% no-repeat #fff3d9'}}>#Project3</CardTitle>
+            <CardTitle expand style={{color: '#fff', background: 'url(http://www.getmdl.io/assets/demos/dog.png) bottom right 15% no-repeat  #46B6AC'}}>#Project3</CardTitle>
             <CardText>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 Aenan convallis.
