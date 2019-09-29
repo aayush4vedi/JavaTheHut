@@ -9,7 +9,7 @@ class App extends Component{
     return (
       <div style={{height: '822px', position: 'relative'}}>
         <Layout>
-            <Header class="header-color" transparent title="Title" style={{color: 'white'}} Link to='/'>
+            <Header class="header-color" transparent title={<Link to="/" style={{color: 'white',textDecoration: 'none'}}>Title</Link>}>
                 <Navigation>
                     <Link to="/">Home</Link>
                     <Link to="/resume">Resume</Link>
