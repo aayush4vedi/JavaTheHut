@@ -10,14 +10,11 @@ class EventListItem extends Component {
         <Segment>
           <Item.Group>
             <Item>
-              <Item.Image size="tiny" circular />
-              {/* <Item.Image size="tiny" circular src={event.hostPhotoURL}/> */}
+              <Item.Image size="tiny" circular src={event.hostPhotoURL}/>
               <Item.Content>
-                <Item.Header as="a">event title</Item.Header>
-                {/* <Item.Header as="a">{event.title}</Item.Header> */}
+                <Item.Header as="a">{event.title}</Item.Header>
                 <Item.Description>
-                  Hosted by 
-                  {/* Hosted by <a>{event.hostedBy}</a> */}
+                  Hosted by <a>{event.hostedBy}</a>
                 </Item.Description>
               </Item.Content>
             </Item>
@@ -25,22 +22,20 @@ class EventListItem extends Component {
         </Segment>
         <Segment>
           <span>
-            <Icon name="clock" /> event.date |
-            <Icon name="marker" /> event.venue
-            {/* <Icon name="clock" /> {event.date} |
-            <Icon name="marker" /> {event.venue} */}
+            <Icon name="clock" /> {event.date} |
+            <Icon name="marker" /> {event.venue}
           </span>
         </Segment>
         <Segment secondary>
           <List horizontal>
-          {/* {event.attendees.map((attendee) => (
+          {event.attendees.map((attendee) => (
             <EventListAttendee key={attendee.id} attendee={attendee}/>
-          ))} */}
+          ))}
 
           </List>
         </Segment>
         <Segment clearing>
-        {/* <span>{event.description}</span> */}
+        <span>{event.description}</span>
           <Button as="a" color="teal" floated="right" content="View" />
         </Segment>
       </Segment.Group>
