@@ -14,7 +14,7 @@ class NavBar extends Component {
                         name='Events'
                         />
                     <Menu.Item>
-                        <Button floated="right" positive inverted content="Create Event"/>
+                        <Button floated="right" inverted color='teal' content="Create Event"/>
                     </Menu.Item>
                     <Menu.Item position="right">
                         <Button basic inverted content="login"></Button>
