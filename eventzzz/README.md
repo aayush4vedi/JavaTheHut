@@ -12,3 +12,8 @@
 - React Cropper
 - Date FNX
 - React Datepicker
+
+# Notes:
+* Where state should live<br>
+    <img src = './public/wherestateshouldlive.png' height= '400px'>
+* 
