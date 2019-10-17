@@ -24,7 +24,7 @@ PS: Don't forget to eat at the Big Diner where Madame Butterfly serves food with
                 |                   |
                 |                   ------------[Signed up links]
                 |
-    --------------------------------------------------------------------
+    ------------.--------------------------------------------------------
     |           |                       |                  |            |
 [Dashboard]  [Adventure Details]   [Create Adventure]   [SignIn]    [SignUp]
   /dashboard   /adv/:id                /create           /signin       /signup
@@ -38,6 +38,7 @@ PS: Don't forget to eat at the Big Diner where Madame Butterfly serves food with
 * Client/Browser:
     * React
     * Redux
+    * Materialize css
 * Server/Firebase:
     * Firestore DB
     * Firebase Auth
