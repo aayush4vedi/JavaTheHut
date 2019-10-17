@@ -1,33 +1,36 @@
-import React from 'react'
+import React from 'react';
+import AdventureSummary from './AdventureSummary';
 
 const AdventureList = () => {
+  let adventures = [
+    {
+      'title': 'Playing piano at my home',
+      'char': 'Oswald',
+      'when' : '3rd September, 7pm'
+    },
+    {
+      'title': 'Getting 3 marshmellos with my tea',
+      'char': 'Henry',
+      'when' : '3rd September, 4pm'
+    },
+    {
+      'title': 'Riding bicycle',
+      'char': 'Daisy',
+      'when' : '3rd September, 2am'
+    }
+  ]
+  let items = adventures.map( (adv) =>{
+    return(
+      <AdventureSummary
+        title = {adv.title}
+        char = {adv.char}
+        when = {adv.when}
+      />
+    )
+  })
   return (
     <div className="adventure-list section">
-
-      <div className="card z-depth-0 adventure-summary">
-        <div className="card-content grey-text text-darken-3">
-          <span className="card-title ">Playing piano at my home</span>
-          <p>Posted by Oswald</p>
-          <p className="grey-text">3rd September, 2am</p>
-        </div>
-      </div>
-
-      <div className="card z-depth-0 adventure-summary">
-        <div className="card-content grey-text text-darken-3">
-          <span className="card-title ">Getting 3 marshmellos with my tea.</span>
-          <p>Posted by The Henry</p>
-          <p className="grey-text">3rd September, 2am</p>
-        </div>
-      </div>
-
-      <div className="card z-depth-0 adventure-summary">
-        <div className="card-content grey-text text-darken-3">
-          <span className="card-title ">Riding bicycle</span>
-          <p>Posted by The Daisy</p>
-          <p className="grey-text">3rd September, 2am</p>
-        </div>
-      </div>
-      
+        {items}
     </div>
   )
 }
