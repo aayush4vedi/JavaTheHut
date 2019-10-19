@@ -1,13 +1,12 @@
 import React from 'react'
 
-const AdventureSummary = (props) =>  {
-    const { title, char, when} = props;
+const AdventureSummary = ({adventure}) =>  {
     return (
         <div className="card z-depth-0 project-summary">
             <div className="card-content grey-text text-darken-3">
-                <span className="card-title">{title}</span>
-                <p>Posted by: {char}</p>
-                <p className="grey-text">{when}m</p>
+                <span className="card-title">{adventure.title}</span>
+                <p>Posted by: {adventure.char}</p>
+                <p className="grey-text">{adventure.when}</p>
             </div>
         </div>
     )
