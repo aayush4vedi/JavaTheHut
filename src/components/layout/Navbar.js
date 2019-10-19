@@ -7,7 +7,7 @@ const Navbar =() => {
         <div>
             <nav class="nav-wrapper darken-3">
                 <div class="container">
-                <a href="#" class="brand-logo">Adventures in BigCity</a>
+                <a href="/" class="brand-logo">Adventures in BigCity</a>
                     <SignedInLinks/>
                     <SignedOutLinks/>
                 </div>

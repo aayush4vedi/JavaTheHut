@@ -3,6 +3,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import Navbar from './components/layout/Navbar'
 import Dashboard from './components/dashboard/Dashboard'
 import AdventureDetails from './components/adventures/AdventureDetails'
+import CreateAdventure from './components/adventures/CreateAdventure'
 import SignIn from './components/auth/SignIn'
 import SignUp from './components/auth/SignUp'
 
@@ -15,6 +16,7 @@ class App extends Component {
           <Switch>
             <Route exact path='/'component={Dashboard} />
             <Route path='/adv/:id'component={AdventureDetails} />
+            <Route path='/create'component={CreateAdventure} />
             <Route path='/signin' component={SignIn} />
             <Route path='/signup' component={SignUp} />
           </Switch>
