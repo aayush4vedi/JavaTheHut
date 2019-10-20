@@ -18,11 +18,11 @@ PS: Don't forget to eat at the Big Diner where Madame Butterfly serves food with
 
 # Project Architecture
 ```
-                                    ------------[Signed in links]
+                                    |-----------[Signed in links]
                                     |            
             [App(root)]------------[Nav]
                 |                   |
-                |                   ------------[Signed up links]
+                |                   |-----------[Signed up links]
                 |
     ------------.--------------------------------------------------------
     |           |                       |                  |            |
@@ -32,6 +32,9 @@ PS: Don't forget to eat at the Big Diner where Madame Butterfly serves food with
     ---------------[Notifications]
     |
     ---------------[Adventure List]
+                        |
+                        |
+                  [Adventure Summary]s
 
 ```
 # Tools
