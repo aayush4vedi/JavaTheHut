@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { createAdventure } from '../../store/actions/adventureActions'
 
-class CreateProject extends Component {
+class createAdventure extends Component {
   state = {
     title: '',
     content: ''
