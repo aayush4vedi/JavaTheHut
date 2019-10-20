@@ -1,6 +1,6 @@
 import React from 'react';
 import AdventureSummary from './AdventureSummary';
-import { Route, BrowserRouter, Switch, NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 const AdventureList = ({adventures}) => {
   let items = adventures.map( (adv) =>{

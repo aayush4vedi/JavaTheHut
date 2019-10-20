@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { createAdventure } from '../../store/actions/adventureActions'
 
-class createAdventure extends Component {
+class CreateAdventure extends Component {
   state = {
     title: '',
     content: ''
@@ -14,8 +14,9 @@ class createAdventure extends Component {
   }
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log(this.state);
-    this.props.createProject(this.state);
+    // console.log(this.state);
+    this.props.createAdventures(this.state);
+    this.props.history.push('/');
   }
   render() {
     return (
@@ -41,8 +42,8 @@ class createAdventure extends Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    createProject: (project) => dispatch(createProject(project))
+    createAdventure: (project) => dispatch(createAdventure(project))
   }
 }
 
-export default connect(null, mapDispatchToProps)(createAdventure)
+export default connect(null, mapDispatchToProps)(CreateAdventure)
