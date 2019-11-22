@@ -8,7 +8,10 @@ var Schema = mongoose.Schema;
 
 var orderSchema = new Schema({
     orderID         : { type: String, default: uuid.v1 },     //TODO: Make it auto-increemting IDs
-    when            : Time,                                   //FIXME:
+    date            : {
+                            type: Date,  
+                            default: Date.now
+                        },                                  
     status          : [{
                             status : String,
                             Time   : Time                      //FIXME:

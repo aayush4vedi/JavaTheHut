@@ -17,7 +17,7 @@ var dishSchema = new Schema({
                       }],
     category        : {type: Schema.Types.ObjectId, ref: 'Category'},
     price           : Number,                                 //TODO: function to set price
-    canCook         : Boolean,
+    nonServing      : { type: Boolean, default:false},
     veg             : Boolean,
     eta             : Number,                                 //of minutes
     likes           : Number,                                 //TODO: write function for these two's calculation
