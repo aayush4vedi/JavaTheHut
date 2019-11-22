@@ -15,11 +15,7 @@ var dishSchema = new Schema({
                         good        : Good,
                         quantity    : Number
                       }],
-    category        : { 
-                        type: String, 
-                        enum: ['Chinese','South Indian', 'North Indian','Punjabi','Itallian', 'All'] , //TODO: make it dynamic
-                        default: 'All' 
-                      },
+    category        : {type: Schema.Types.ObjectId, ref: 'Category'},
     price           : Number,                                 //TODO: function to set price
     canCook         : Boolean,
     veg             : Boolean,
