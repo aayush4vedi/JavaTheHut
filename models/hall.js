@@ -7,17 +7,15 @@ import Table from './table'
 //===============
 var Schema = mongoose.Schema;
 
-var hallSchema = new Schema({
-    hallID         : { type: String, default: uuid.v1 },     //TODO: Make it auto-increemting IDs
+var HallSchema = new Schema({
+    // hallID         : { type: String, default: uuid.v1 },     //restaurant specefic ID's to be implemented later
     tables         : [{Table, Location}]                     //FIXME: this is super wrong
 })
 
-var Hall = mongoose.model('Hall', hallSchema);
 
 //===============
 //    Methods
 //===============
-/************** Assertions ********************/
 
 /************** Getters ********************/
 
@@ -25,6 +23,8 @@ var Hall = mongoose.model('Hall', hallSchema);
 
 /************** Others ********************/
 
+//compile the Model
+var Hall = mongoose.model('Hall', HallSchema);
 
 module.exports = {
     Hall

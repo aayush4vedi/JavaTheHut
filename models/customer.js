@@ -1,17 +1,70 @@
 var mongoose = require('mongoose');
-import Order from './order'
 
 var Schema = mongoose.schema;
 
-var customerSchema = new Schema({
-    customerID      : { type: String, default: uuid.v1 },     //TODO: Make it auto-increemting IDs
+var CustomerSchema = new Schema({
     name            : String,
-    email           : String,                                 //TODO: write assertion
-    contactNumber   : Number,                                 //TODO: write assertion
-    prevOrders      : [Order]
+    email           : String,                                 
+    phone           : String,                                 
+    // prevOrders      : [Order]   //Not doing rn
 })
 
-var Customer = mongoose.model('Customer',customerSchema)
+//===============
+//    Methods
+//===============
+
+
+/************** Assertions ********************/
+//Assertion for email
+
+//Assertion for phone
+/************** Getters ********************/
+// get name
+CustomerSchema
+.virtual('name')
+.get(function () {
+    return this.name;  
+});
+
+// get email
+CustomerSchema
+.virtual('email')
+.get(function () {
+    return this.email;  
+});
+
+// get phone
+CustomerSchema
+.virtual('phone')
+.get(function () {
+    return this.phone;  
+});
+
+/************** Setters ********************/
+// set name
+CustomerSchema
+.virtual('name')
+.set(function () {
+    this.name = name ;  
+});
+
+// set email
+CustomerSchema
+.virtual('email')
+.set(function () {
+    this.email = email ;  
+});
+
+// set phone
+CustomerSchema
+.virtual('phone')
+.set(function () {
+    this.phone = phone ;  
+});
+
+
+//compile the Model
+var Customer = mongoose.model('Customer',CustomerSchema)
 
 module.exports ={
     Customer

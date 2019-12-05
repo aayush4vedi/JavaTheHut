@@ -9,7 +9,7 @@ var Schema = mongoose.Schema;
 
 var restaurantSchema = new Schema({
     restaurantID         : { type: String, default: uuid.v1 },     //TODO: Make it auto-increemting IDs
-    halls                : [Hall],
+    halls                : [{type: Schema.Types.ObjectId, ref: 'Hall'}],
     planID               : Number,                                  //TODO: decide it later
     name                 : String,                                  //TODO: add more fields                     
 })

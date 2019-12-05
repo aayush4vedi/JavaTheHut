@@ -1,34 +1,37 @@
-var mongoose = require('mongoose');
-var uuid = require('node-uuid');
+//************** v2  stuff */
 
-//===============
-//     Structure
-//===============
-var Schema = mongoose.Schema;
+// var mongoose = require('mongoose');
 
-var feedbackSchema = new Schema({
-    feedbackID     : { type: String, default: uuid.v1 },     //TODO: Make it auto-increemting IDs
-    order          : {type: Schema.Types.ObjectId, ref: 'Order'},
-    serverStars    : Number,
-    comments       : String,
-    likedDishes    : [Dish],
-    dislikedDish   : [Dish]
-})
+// //===============
+// //     Structure
+// //===============
+// var Schema = mongoose.Schema;
 
-var Feedback = mongoose.model('Feedback', feedbackSchema);
-
-//===============
-//    Methods
-//===============
-/************** Assertions ********************/
-
-/************** Getters ********************/
-
-/************** Setters ********************/
-
-/************** Others ********************/
+// var FeedbackSchema = new Schema({
+//     order          : {type: Schema.Types.ObjectId, ref: 'Order'},
+//     // serverStars    : Number,             //v2 stuff
+//     comments       : String,
+//     // likedDishes    : [{type: Schema.Types.ObjectId, ref: 'Dish'}],    //v2 stuff
+//     // dislikedDish   : [{type: Schema.Types.ObjectId, ref: 'Dish'}]     //v2 stuff
+// })
 
 
-module.exports = {
-    Feedback
-}
+// //===============
+// //    Methods
+// //===============
+// /************** Assertions ********************/
+
+// /************** Getters ********************/
+
+// /************** Setters ********************/
+
+// /************** Utils ********************/
+// //submit feedback
+
+
+// //compile the Model
+// var Feedback = mongoose.model('Feedback', FeedbackSchema);
+
+// module.exports = {
+//     Feedback
+// }

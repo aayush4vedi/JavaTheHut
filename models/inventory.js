@@ -6,24 +6,25 @@ var uuid = require('node-uuid');
 //===============
 var Schema = mongoose.Schema;
 
-var inventorySchema = new Schema({
-    inventoryID          : { type: String, default: uuid.v1 },     //TODO: Make it auto-increemting IDs
+var InventorySchema = new Schema({
+    // inventoryID          : { type: String, default: uuid.v1 },     //restaurant specefic ID's to be implemented later
     goods               : [{type: Schema.Types.ObjectId, ref: 'Good'}]
 })
 
-var Inventory = mongoose.model('Inventory', inventorySchema);
 
 //===============
 //    Methods
 //===============
-/************** Assertions ********************/
 
 /************** Getters ********************/
+InventorySchema
+.virtual('goods')
+.get(function () {
+    return this.goods;  
+});
 
-/************** Setters ********************/
-
-/************** Others ********************/
-
+//compile the Model
+var Inventory = mongoose.model('Inventory', InventorySchema);
 
 module.exports = {
     Inventory

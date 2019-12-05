@@ -13,8 +13,8 @@ var tableSchema = new Schema({
     capacity        : Number,
     free            : Boolean,
     location        : [Number],                               //TODO: figure out how to store location in hall
-    hall            : [Hall],
-    restaurant      : [Restaurant]                     
+    hall            : {type: Schema.Types.ObjectId, ref: 'Hall'},
+    restaurant      : {type: Schema.Types.ObjectId, ref: 'Restaurant'}                  
 })
 
 var Table = mongoose.model('Table', tableSchema);
