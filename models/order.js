@@ -7,10 +7,7 @@ var Schema = mongoose.Schema;
 
 var OrderSchema = new Schema({
     // orderID         : { type: String, default: uuid.v1 },     //restaurant specefic ID's to be implemented later
-    date            : {
-                            type: Date,  
-                            default: Date.now
-                        },                                  
+    date            : { type: Date, default: Date.now},                                  
     status          : [{
                             status : {type : String,enum : ['Uninitiated','Placed','Accepted','Cooking','Serving','Cancelled'],default : 'Uninitiated'},
                             time   : {type: Date, default: Date.now}              

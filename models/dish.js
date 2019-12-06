@@ -12,12 +12,12 @@ var DishSchema = new Schema({
     description     : String,
     ingredients     : [String],                               //Major ingredients: to be manually entered for luring customers:Enter ' ' separated items 
     goods           : [{                                      // To be entered as key-val pairs
-                        good        : Good,
-                        quantity    : Number
+                        good        : {type: Schema.Types.ObjectId, ref: 'Good'},
+                        quantity    : {type: Number, default: '1'}  // xUnits(grams)
                       }],
     category        : {type: Schema.Types.ObjectId, ref: 'Category'},
     price           : { type: Number, default:0},                                 
-    isServing      :  {type: Boolean, default:false},
+    isServing       : {type: Boolean, default:false},
     veg             : {type: Boolean, default:true},                            //function returns string: 'veg'/'non-veg'
     eta             : {type: Number, default:15},       //in minutes                                 //of minutes
     // likes           : { type: Number, default:1},    //v2 stuff                              

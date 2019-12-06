@@ -7,7 +7,7 @@ var BookingSchema = new Schema({
     customer       : {type: Schema.Types.ObjectId, ref: 'Customer'},  
     table          : [{type: Schema.Types.ObjectId, ref: 'Table'}], 
     checkInTime    : {type: Date, default:Date.now()},         //mongooes' Date is actually a timestamp
-    stayingMinutes    : {type: Number, default:30},               //of minutes
+    stayingMinutes : {type: Number, default:30},               //of minutes
 })
 
 //===============
