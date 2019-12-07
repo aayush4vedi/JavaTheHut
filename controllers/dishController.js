@@ -50,6 +50,10 @@ var dish_mark_is_serving_post = (req,res) =>{
     res.send('NOT IMPLEMENTED: dish_mark_is_serving_post');
 }
 
+// display all dishes of given Category
+var dish_for_cateogry_id_get = (req,res) =>{
+    res.send('NOT IMPLEMENTED: dish_for_cateogry_id_get');
+}
 
 module.exports = {
     dish_list,
@@ -60,5 +64,6 @@ module.exports = {
     dish_edit_put,
     dish_delete_delete,
     dish_mark_is_serving_get,
-    dish_mark_is_serving_post
+    dish_mark_is_serving_post,
+    dish_for_cateogry_id_get
 }

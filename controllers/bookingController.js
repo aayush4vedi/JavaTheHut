@@ -37,7 +37,7 @@ var booking_delete_delete = (req,res) =>{
     res.send('NOT IMPLEMENTED: booking_delete_delete');
 }
 
-//===================CRUD controllers================//
+//===================Utils controllers================//
 //Display all bookings by customerID on GET #6
 var booking_for_customer_get = (req,res) =>{
     res.send('NOT IMPLEMENTED: booking_for_customer_get');
