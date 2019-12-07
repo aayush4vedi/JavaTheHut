@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 //import Controller Module
-var bill_controller = require('../controllers/billController');
+var bill_controller = require('../../controllers/billController');
 
 //List all bills GET  #1
 router.get('/', bill_controller.bill_list);

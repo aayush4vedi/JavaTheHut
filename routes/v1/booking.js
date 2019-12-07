@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 //import Controller Module
-var booking_controller = require('../controllers/bookingController');
+var booking_controller = require('../../controllers/bookingController');
 
 //List all bookings GET  #1
 router.get('/', booking_controller.booking_list);

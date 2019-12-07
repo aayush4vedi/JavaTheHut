@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 //import Controller Module
-var dine_controller = require('../controllers/dineController');
+var dine_controller = require('../../controllers/dineController');
 
 //List all dines GET  #1
 router.get('/', dine_controller.dine_list);

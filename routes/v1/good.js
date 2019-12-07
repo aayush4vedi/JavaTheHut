@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 //import Controller Module
-var good_controller = require('../controllers/goodController');
+var good_controller = require('../../controllers/goodController');
 
 //List all goods GET  #1
 router.get('/', good_controller.good_list);

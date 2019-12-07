@@ -1,10 +1,6 @@
-var app = express();
 var router = express.Router();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
+var v1 = router; 
 
 // Import Routes
 var employeeRouter = require('./employee');
@@ -22,20 +18,24 @@ var goodRouter = require('./good');
 
 
 //Add routes to middleware chain
-app.use('/employee', employeeRouter);
-app.use('/table', tableRouter);
-app.use('/hall', hallRouter);
-app.use('/restaurant', restaurantRouter);
-app.use('/customer', customerRouter);
-app.use('/booking', bookingRouter);
-app.use('/dish', dishRouter);
-app.use('/category', categoryRouter);
-app.use('/order', orderRouter);
-app.use('/dine', dineRouter);
-app.use('/bill', billRouter);
-app.use('/good', goodRouter);
+v1.use('/employee', employeeRouter);
+v1.use('/table', tableRouter);
+v1.use('/hall', hallRouter);
+v1.use('/restaurant', restaurantRouter);
+v1.use('/customer', customerRouter);
+v1.use('/booking', bookingRouter);
+v1.use('/dish', dishRouter);
+v1.use('/category', categoryRouter);
+v1.use('/order', orderRouter);
+v1.use('/dine', dineRouter);
+v1.use('/bill', billRouter);
+v1.use('/good', goodRouter);
+
+module.exports = {
+  v1
+}
 
 // Listen to port 5000
 app.listen(3000, function () {
-  console.log("Mr Gustau's, I love you 3000! -Remy");
+  console.log("Mr Gusteau's, I love you 3000! -Remy");
 });

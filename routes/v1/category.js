@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 //import Controller Module
-var category_controller = require('../controllers/categoryController');
+var category_controller = require('../../controllers/categoryController');
 
 //List all categorys GET  #1
 router.get('/', category_controller.category_list);

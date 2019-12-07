@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 //import Controller Module
-var dish_controller = require('../controllers/dishController');
+var dish_controller = require('../../controllers/dishController');
 
 //List all dishs GET  #1
 router.get('/', dish_controller.dish_list);

@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 //import Controller Module
-var table_controller = require('../controllers/tableController');
+var table_controller = require('../../controllers/tableController');
 
 //List all tables GET  #1
 router.get('/', table_controller.table_list);

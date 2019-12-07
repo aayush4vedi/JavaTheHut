@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 //import Controller Module
-var employee_controller = require('../controllers/employeeController');
+var employee_controller = require('../../controllers/employeeController');
 
 //List all employees GET  #1
 router.get('/', employee_controller.employee_list);

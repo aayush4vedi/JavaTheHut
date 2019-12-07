@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 //import Controller Module
-var order_controller = require('../controllers/orderController');
+var order_controller = require('../../controllers/orderController');
 
 //List all orders GET  #1
 router.get('/', order_controller.order_list);

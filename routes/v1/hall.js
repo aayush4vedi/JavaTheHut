@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 //import Controller Module
-var hall_controller = require('../controllers/hallController');
+var hall_controller = require('../../controllers/hallController');
 
 //List all halls GET  #1
 router.get('/', hall_controller.hall_list);
