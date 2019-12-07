@@ -54,8 +54,8 @@ var booking_for_date_get = (req,res) =>{
 }
 
 //Display all bookings by date & tableID on GET #9
-var booking_for_tableID_date_get = (req,res) =>{
-    res.send('NOT IMPLEMENTED: booking_for_tableID_date_get');
+var booking_for_table_date_get = (req,res) =>{
+    res.send('NOT IMPLEMENTED: booking_for_table_date_get');
 }
 
 module.exports = {
