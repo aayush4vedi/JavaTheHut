@@ -7,13 +7,10 @@ var Schema = mongoose.Schema;
 
 var OrderSchema = new Schema({
     // orderID         : { type: String, default: uuid.v1 },     //restaurant specefic ID's to be implemented later
-    date            : { type: Date, default: Date.now},                                  
     status          : [{
                             status : {type : String,enum : ['Uninitiated','Placed','Accepted','Cooking','Serving','Cancelled'],default : 'Uninitiated'},
                             time   : {type: Date, default: Date.now}              
                     }],
-    booking         : {type: Schema.Types.ObjectId, ref: 'Booking'},    
-    server          : {type: Schema.Types.ObjectId, ref: 'Server'},    
     items           : [{
                         dish      : {type: Schema.Types.ObjectId, ref: 'Dish'},    
                         quantity  : Number                     
@@ -21,26 +18,15 @@ var OrderSchema = new Schema({
     cancellationReqs: [{
                         dish  : {type: Schema.Types.ObjectId, ref: 'Dish'},
                         stauts: {type: String, enum: ['Null','Pending','Accepted','Rejected'], default: 'Null'}
-                    }],    
-    bill            : {type: Schema.Types.ObjectId, ref: 'Bill'},
-    isComplete      : {type: Boolean, default: false}
+                    }]
 })
 
 
 //===============
 //    Methods
 //===============
-/************** Assertions ********************/
-
 
 /************** Getters ********************/
-//get date
-OrderSchema
-.virtual('date')
-.get(function () {
-    return this.date;  
-});
-
 //get status
 OrderSchema
 .virtual('status')
@@ -48,19 +34,6 @@ OrderSchema
     return this.status;  
 });
 
-//get booking_id
-OrderSchema
-.virtual('booking')
-.get(function () {
-    return this.booking._id;  
-});
-
-//get server_id
-OrderSchema
-.virtual('server')
-.get(function () {
-    return this.server._id;  
-});
 
 //get items in order
 OrderSchema
@@ -69,28 +42,8 @@ OrderSchema
     return this.items;  
 });
 
-//get bill details
-OrderSchema
-.virtual('bill')
-.get(function () {
-    return this.bill;  
-});
 
-//get payment status
-OrderSchema
-.virtual('payment-status')
-.get(function () {
-    return this.bill.payment-status;  
-});
-
-//get is-completed status
-OrderSchema
-.virtual('is-completed')
-.get(function () {
-    return this.isComplete ? "Yes" : "No";  
-});
-
-// get cancellation requests:
+// get cancellation requests on items:
 //send the status in params
 OrderSchema
 .virtual('cancellationrequests')
@@ -106,41 +59,25 @@ OrderSchema
 
 
 /************** Setters ********************/
-//set date
-OrderSchema
-.virtual('date')
-.set(function () {
-    this.date = date;  
-});
 
 //set(update) status{status,Date.now}
 OrderSchema
 .virtual('status')
-.set(function (status) { //here status is a string
-    this.status.staus = status;
-    this.status.time  = Date.now;
+.set((status) =>{ //here status is a string
+    this.status.status = status;
+    this.status.time   = Date.now;
 });
 
-//set items
+//set items: add items in some quantities
 OrderSchema
 .virtual('items')
-.set(function (items) { //items:{dish, quantity}
+.set((items) => { //items:{dish, quantity}
     var newItems = items.map(item => {
         newItems.push(item);
     });
     this.items.push(newItems);  
 });
 
-//mark isComplete
-OrderSchema
-.virtual('mark-complete')
-.set(function () {
-    if(this.payment-status){
-        this.isComplete = true;
-    }else{
-        throw new Error("Unpaid order can't be marked completed!");
-    }
-});
 
 /************** Utils ********************/
 //function to check if a dist exists in items ordered:
@@ -162,7 +99,7 @@ OrderSchema
 });
 
 
-//take cancellation desicion
+//take cancellation desicion=>if yes, make quantity=0
 OrderSchema
 .virtual('take-cancellation-decision')
 .set(function (decision) {
@@ -173,6 +110,7 @@ OrderSchema
         });
     }
 });
+
 
 //compile the Model
 var Order = mongoose.model('Order', OrderSchema);

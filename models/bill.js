@@ -72,15 +72,15 @@ BillSchema
 //mark as Paid
 BillSchema
 .virtual('payable-amount')
-.set(function () {
-    return this.isPaid = true;  
+.set(() => {
+    this.isPaid = true;  
 });
 
 /************** Utils ********************/
 //calculate tax
 BillSchema
 .virtual('tax-percentage')
-.get(function (taxPercentage) {
+.get((taxPercentage) =>{
     var taxAmount = (taxPercentage * this.orderAmount)/100;
     this.taxAmount = taxAmount;  
 });

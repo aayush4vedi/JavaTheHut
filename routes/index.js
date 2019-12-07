@@ -16,10 +16,9 @@ var bookingRouter = require('./booking');
 var dishRouter = require('./dish');
 var categoryRouter = require('./category');
 var orderRouter = require('./order');
+var dineRouter = require('./dine');
 var billRouter = require('./bill');
 var goodRouter = require('./good');
-var xRouter = require('./x');
-var xRouter = require('./x');
 
 
 //Add routes to middleware chain
@@ -32,12 +31,11 @@ app.use('/booking', bookingRouter);
 app.use('/dish', dishRouter);
 app.use('/category', categoryRouter);
 app.use('/order', orderRouter);
+app.use('/dine', dineRouter);
 app.use('/bill', billRouter);
 app.use('/good', goodRouter);
-app.use('/x', xRouter);
-app.use('/x', xRouter);
 
 // Listen to port 5000
 app.listen(3000, function () {
-  console.log('Mr Gustau, I love you 3000! -Remy');
+  console.log("Mr Gustau's, I love you 3000! -Remy");
 });

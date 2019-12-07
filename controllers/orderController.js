@@ -7,7 +7,7 @@ var order_list = (req,res)=>{
     res.send('NOT IMPLEMENTED: order_list');
 }
 
-//Display order crete form on GET #2.1
+//Display order create form on GET #2.1
 var order_create_get = (req,res) =>{
     res.send('NOT IMPLEMENTED: order_create_get');
 }
@@ -37,7 +37,15 @@ var order_delete_delete = (req,res) =>{
     res.send('NOT IMPLEMENTED: order_delete_delete');
 }
 
+//Display Cancellation form GET #6.1
+var order_cancellation_get = (req,res) =>{
+    res.send('NOT IMPLEMENTED: order_cancellation_get');
+}
 
+//Display Cancellation form POST #6.2
+var order_cancellation_post = (req,res) =>{
+    res.send('NOT IMPLEMENTED: order_cancellation_post');
+}
 
 module.exports = {
     order_list,
@@ -46,5 +54,7 @@ module.exports = {
     order_details,
     order_edit_get,
     order_edit_put,
-    order_delete_delete
+    order_delete_delete,
+    order_cancellation_get,
+    order_cancellation_post
 }
