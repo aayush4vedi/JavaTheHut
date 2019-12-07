@@ -1,4 +1,4 @@
-var hall = require('../models/hall')
+var Hall = require('../models/hall')
 
 //===================CRUD controllers================//
 

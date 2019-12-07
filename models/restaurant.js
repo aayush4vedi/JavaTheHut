@@ -75,12 +75,13 @@ RestaurantSchema
     this.activePlanID = activePlanID;
 });
 
-//set all halls
-RestaurantSchema
-.virtual('halls')
-.set(function (halls) {  
-    this.halls = halls;
-});
+// ==<will be handled by hallController >===
+// //set all halls
+// RestaurantSchema
+// .virtual('halls')
+// .set(function (halls) {  
+//     this.halls = halls;
+// });
 
 //set contact number
 RestaurantSchema
