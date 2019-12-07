@@ -36,10 +36,6 @@ var employee_delete_delete = (req,res) =>{
     res.send('NOT IMPLEMENTED: employee_delete_delete');
 }
 
-//Handle employee update form on POST #5.2
-var employee_delete_post = (req,res) =>{
-    res.send('NOT IMPLEMENTED: employee_delete_post');
-}
 
 //=================Utils controllers================//
 
@@ -62,7 +58,6 @@ module.exports ={
     employee_edit_get,
     employee_edit_put,
     employee_delete_delete,
-    employee_delete_post,
     employee_mark_attendance_get,
     employee_mark_attendance_post
 }
