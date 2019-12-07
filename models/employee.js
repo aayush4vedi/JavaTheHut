@@ -80,7 +80,6 @@ EmployeeSchema
 });
 
 //get speciality
-// get speciality
 EmployeeSchema
 .virtual('speciality')
 .set(function () {
@@ -178,20 +177,6 @@ EmployeeSchema
     }
 });
 
-//set attendance:
-//mark present
-EmployeeSchema
-.virtual('mark-present')
-.set(function () {
-    this.attendance = true;  
-});
-
-//mark absent
-EmployeeSchema
-.virtual('mark-absent')
-.set(function () {
-    this.attendance = false;  
-});
 
 //******v2 stuff */
 //increase rating
@@ -224,6 +209,22 @@ EmployeeSchema
 //forget password
 
 //v2 stuff========calculate rating
+
+
+//set attendance:
+//1.mark present
+EmployeeSchema
+.virtual('mark-present')
+.set(function () {
+    this.attendance = true;  
+});
+
+//2.mark absent
+EmployeeSchema
+.virtual('mark-absent')
+.set(function () {
+    this.attendance = false;  
+});
 
 
 //compile the Model
