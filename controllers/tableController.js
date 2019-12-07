@@ -45,17 +45,17 @@ var table_location_get = (req,res) =>{
     res.send('NOT IMPLEMENTED: table_location_get');
 }
 
-//show availability: GET
+//show availability: GET #7.1
 var table_availability_get = (req,res) =>{
     res.send('NOT IMPLEMENTED: table_availability_get');
 }
 
-//update availabiltity: GET
+//update availabiltity- show form: GET #7.2
 var table_update_availability_get = (req,res) =>{
     res.send('NOT IMPLEMENTED: table_update_availability_get');
 }
 
-//update availabiltity: PUT
+//update availabiltity: PUT #7.3
 var table_update_availability_put = (req,res) =>{
     res.send('NOT IMPLEMENTED: table_update_availability_put');
 }
