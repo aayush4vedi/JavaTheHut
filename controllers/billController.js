@@ -40,12 +40,12 @@ var bill_delete_delete = (req,res) =>{
 
 //=================Utils controllers================//
 
-//Show update-payment-status form GET
+//Show update-payment-status form GET #6.1
 var bill_update_payment_status_get = (req,res) =>{
     res.send('NOT IMPLEMENTED: bill_update_payment_status_get');
 }
 
-//Show update-payment-status form POST
+//Show update-payment-status form PUT #6.2
 var bill_update_payment_status_post = (req,res) =>{
     res.send('NOT IMPLEMENTED: bill_update_payment_status_post');
 }
