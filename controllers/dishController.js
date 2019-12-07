@@ -32,7 +32,7 @@ var dish_edit_put = (req,res) =>{
     res.send('NOT IMPLEMENTED: dish_edit_put');
 }
 
-//Display dish update form on DELETE #5.1
+//Display dish update form on DELETE #5
 var dish_delete_delete = (req,res) =>{
     res.send('NOT IMPLEMENTED: dish_delete_delete');
 }
@@ -50,7 +50,7 @@ var dish_mark_is_serving_post = (req,res) =>{
     res.send('NOT IMPLEMENTED: dish_mark_is_serving_post');
 }
 
-// display all dishes of given Category
+// display all dishes of given Category #7
 var dish_for_cateogry_id_get = (req,res) =>{
     res.send('NOT IMPLEMENTED: dish_for_cateogry_id_get');
 }
