@@ -47,14 +47,15 @@ HallSchema
     this.name = name;
 });
 
-//add a new table
-HallSchema
-.virtual('tables')
-.set(function (tables) {  
-    tables.forEach(table => {
-        this.tables.push(table);
-    });
-});
+//==<won't this be handled in tableController?>==
+// //add a new table
+// HallSchema
+// .virtual('tables')
+// .set(function (tables) {  
+//     tables.forEach(table => {
+//         this.tables.push(table);
+//     });
+// });
 
 //set restaurant
 HallSchema
