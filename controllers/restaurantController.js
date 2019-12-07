@@ -46,6 +46,5 @@ module.exports = {
     restaurant_details,
     restaurant_edit_get,
     restaurant_edit_put,
-    restaurant_delete_delete,
-    restaurant_all_tables_get
+    restaurant_delete_delete
 }

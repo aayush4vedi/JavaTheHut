@@ -37,7 +37,26 @@ var booking_delete_delete = (req,res) =>{
     res.send('NOT IMPLEMENTED: booking_delete_delete');
 }
 
+//===================CRUD controllers================//
+//Display all bookings by customerID on GET #6
+var booking_for_customer_get = (req,res) =>{
+    res.send('NOT IMPLEMENTED: booking_for_customer_get');
+}
 
+//Display all bookings by tableID on GET #7
+var booking_for_table_get = (req,res) =>{
+    res.send('NOT IMPLEMENTED: booking_for_table_get');
+}
+
+//Display all bookings by date on GET #8
+var booking_for_date_get = (req,res) =>{
+    res.send('NOT IMPLEMENTED: booking_for_date_get');
+}
+
+//Display all bookings by date & tableID on GET #9
+var booking_for_tableID_date_get = (req,res) =>{
+    res.send('NOT IMPLEMENTED: booking_for_tableID_date_get');
+}
 
 module.exports = {
     booking_list,
@@ -47,5 +66,8 @@ module.exports = {
     booking_edit_get,
     booking_edit_put,
     booking_delete_delete,
-    booking_all_tables_get
+    booking_for_customer_get,
+    booking_for_table_get,
+    booking_for_date_get,
+    booking_for_tableID_date_get
 }

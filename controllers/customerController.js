@@ -46,7 +46,6 @@ module.exports = {
     customer_details,
     customer_edit_get,
     customer_edit_put,
-    customer_delete_delete,
-    customer_all_tables_get
+    customer_delete_delete
 }
 
