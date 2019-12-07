@@ -1,7 +1,7 @@
 var Employee = require('../models/employee');
 
 //===================CRUD controllers================//
-//List all Employees #1
+//List all Employees GET  #1
 var employee_list = (req,res)=>{
     res.send('NOT IMPLEMENTED: employee_list');
 }
