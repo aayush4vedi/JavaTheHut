@@ -29,178 +29,30 @@ var DishSchema = new Schema({
 //    Methods
 //===============
 
-/************** Getters ********************/
-//get name
-DishSchema
-.virtual('name')
-.get(function () {
-    return this.name;  
-});
-
-//get description
-DishSchema
-.virtual('description')
-.get(function () {
-    return this.description;  
-});
-
-//get ingredients
-DishSchema
-.virtual('ingredients')
-.get(function () {
-    return this.ingredients;  
-});
-
-//get goods
-DishSchema
-.virtual('goods')
-.get(function () {
-    return this.goods;  
-});
-
-//get category
-DishSchema
-.virtual('category')
-.get(function () {
-    return this.category;  
-});
-
-//get price
-DishSchema
-.virtual('price')
-.get(function () {
-    return this.price;  
-});
-
-//get serving status
-DishSchema
-.virtual('is-serving')
-.get(function () {
-    return this.isServing;  
-});
-
-//get veg/non-veg type
-DishSchema
-.virtual('type')
-.get(function () {
-    return this.veg == true? 'veg':'non-veg';  
-});
-
-//get eta
-DishSchema
-.virtual('eta')
-.get(function () {
-    return this.eta  
-});
-
-//get likes
-DishSchema
-.virtual('likes')
-.get(function () {
-    return this.likes 
-});
-
-//get dislikes
-DishSchema
-.virtual('dislikes')
-.get(function () {
-    return this.dislikes 
-});
-
-
 /************** Setters ********************/
-//set name
-DishSchema
-.virtual('name')
-.set(function (name) {  
-    this.name = name;
-});
-
-//set description
-DishSchema
-.virtual('description')
-.set(function (description) {  
-    this.description = description;
-});
 
 //set ingredients
 DishSchema
-.virtual('ingredients')
+.virtual('set-ingredients')
 .set(function (ingredients) {
     var ingredients = ingredients.split(' ');
     this.ingredients = ingredients;
 });
 
-//set goods
-DishSchema
-.virtual('goods')
-.set(function (goods) {  
-    this.goods = goods;
-});
+// ===< v2 stuff >=====
+// //increase likes
+// DishSchema
+// .virtual('liked')
+// .set(function () {  
+//     this.likes = 1+ this.likes;
+// });
 
-//set category
-DishSchema
-.virtual('category')
-.set(function (category) {  
-    this.category =category;
-});
-
-
-//set price
-DishSchema
-.virtual('price')
-.set(function (price) {  
-    this.price =price;
-});
-
-//set serving status- On
-DishSchema
-.virtual('serving-on')
-.set(function () {  
-    this.isServing = true;
-});
-
-//set serving status- Off
-DishSchema
-.virtual('serving-off')
-.set(function () {  
-    this.isServing = false;
-});
-
-//set type: veg
-DishSchema
-.virtual('type-veg')
-.set(function () {  
-    this.veg = true;
-});
-
-//set type: non-veg
-DishSchema
-.virtual('type-nonveg')
-.set(function () {  
-    this.veg = false;
-});
-
-//set eta
-DishSchema
-.virtual('eta')
-.set(function (eta) {  
-    this.eta = eta;
-});
-
-//increase likes
-DishSchema
-.virtual('liked')
-.set(function () {  
-    this.likes = 1+ this.likes;
-});
-
-//increase dislikes
-DishSchema
-.virtual('disliked')
-.set(function () {  
-    this.dislikes = 1+ this.dislikes;
-});
+// //increase dislikes
+// DishSchema
+// .virtual('disliked')
+// .set(function () {  
+//     this.dislikes = 1+ this.dislikes;
+// });
 
 
 /************** Others ********************/

@@ -37,49 +37,10 @@ var EmployeeSchema = new Schema({
 //assertion for govIdNumber
 
 /************** Getters ********************/
-//get name
-EmployeeSchema.virtual('name').get(function () {
-    return this.name;  
-});
 
-//get email
+//get speciality: TODO: remove this
 EmployeeSchema
-.virtual('email')
-.get(function () {
-    return this.email;  
-});
-
-//get phone 
-EmployeeSchema
-.virtual('phone')
-.get(function () {
-    return this.phone;  
-});
-
-//get govIDNumber
-EmployeeSchema
-.virtual('govIDNumber')
-.get(function () {
-    return this.govIDNumber;  
-});
-
-//get salary
-EmployeeSchema
-.virtual('salary')
-.get(function () {
-    return this.salary;  
-});
-
-//get role
-EmployeeSchema
-.virtual('role')
-.get(function () {
-    return this.role;  
-});
-
-//get speciality
-EmployeeSchema
-.virtual('speciality')
+.virtual('get-speciality')
 .set(function () {
     if(this.role != 'Chef'){
         return "Not a cook";
@@ -88,9 +49,9 @@ EmployeeSchema
     }
 });
 
-//get tables
+//get tables TODO: remove this
 EmployeeSchema
-.virtual('tables')
+.virtual('get-tables')
 .get(function () {
     if(this.role != 'Server'){
         return "Not a Server";
@@ -106,67 +67,12 @@ EmployeeSchema
 //     return this.rating;  
 // });
 
-//get attendance
-EmployeeSchema
-.virtual('attendance')
-.get(function () {
-    return this.attendance == true ? "Present" : "Absent";  
-});
-
 
 /************** Setters ********************/
-//set name
-EmployeeSchema
-.virtual('name')
-.set(function (name) {
-    this.name = name;  
-});
 
-//set email
+//set tables: assign more tables to Server. 
 EmployeeSchema
-.virtual('email')
-.set(function (email) {
-    this.email = email;  
-});
-
-//set phone 
-EmployeeSchema
-.virtual('phone')
-.set(function (phone) {
-    this.phone = phone;  
-});
-
-//set govIDNumber
-EmployeeSchema
-.virtual('gov-id-number')
-.set(function (govIDNumber) {
-    this.govIDNumber = govIDNumber;  
-});
-
-//set salary
-EmployeeSchema
-.virtual('salary')
-.set(function (salary) {
-    this.salary = salary;  
-});
-
-//set role
-EmployeeSchema
-.virtual('role')
-.set(function (role) {
-    this.role = role;  
-});
-
-// set speciality
-EmployeeSchema
-.virtual('speciality')
-.set(function (speciality) {
-    this.speciality = speciality;  
-});
-
-//set tables: assign new tables to Server
-EmployeeSchema
-.virtual('tables')
+.virtual('add-tables')
 .set(function (tables) {
     if(this.role != 'Server'){
         return "Not a Server: Adding tables to wrong employee type";
@@ -212,18 +118,10 @@ EmployeeSchema
 //set attendance:
 //1.mark present
 EmployeeSchema
-.virtual('mark-present')
-.set(function () {
-    this.attendance = true;  
+.virtual('mark-attendance')
+.set((attendance)=> {
+    this.attendance = attendance;  
 });
-
-//2.mark absent
-EmployeeSchema
-.virtual('mark-absent')
-.set(function () {
-    this.attendance = false;  
-});
-
 
 //compile the Model
 var Employee = mongoose.model('Employee', EmployeeSchema);

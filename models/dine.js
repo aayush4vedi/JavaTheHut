@@ -23,70 +23,17 @@ var DineSchema = new Schema({
 //    Methods
 //===============
 
-/************** Getters ********************/
-//get orders
-DineSchema
-.virtual('orders')
-.get(function () {
-    return this.orders;  
-});
-
-//get status
-DineSchema
-.virtual('status')
-.get(function () {
-    return this.status;  
-});
-
-//get bill
-DineSchema
-.virtual('bill')
-.get(function () {
-    return this.bill;  
-});
-
-//get booking
-DineSchema
-.virtual('booking')
-.get(function () {
-    return this.booking;  
-});
-
-//get server
-DineSchema
-.virtual('server')
-.get(function () {
-    return this.server;  
-});
-
-//get customer
-DineSchema
-.virtual('customer')
-.get(function () {
-    return this.customer;  
-});
-
-//get booking
-DineSchema
-.virtual('booking')
-.get(function () {
-    return this.booking;  
-});
-
 /************** Setters ********************/
 //set orders(add more)
 DineSchema
-.virtual('orders')
-.set((orders)=> { 
-    var newOrder = orders.map(order => {
-        newOrder.push(order);
-    });
-    this.orders.push(newOrder);  
+.virtual('new-order')
+.set((newOrders)=> { 
+    this.orders.push(newOrders);  
 });
 
 //set status
 DineSchema
-.virtual('status')   //status{status,time}
+.virtual('set-status')   //status{status,time}
 .set(function (status) { 
     this.status.status = status;
     this.status.time  = Date.now;
@@ -94,38 +41,11 @@ DineSchema
 
 //set bill status(status is Boolean)
 DineSchema
-.virtual('bill')
+.virtual('bill-status')
 .set((status) => { 
     this.bill.isPaid = status;
 });
 
-//set booking
-DineSchema
-.virtual('booking')
-.set((booking) => { 
-    this.booking = booking;
-});
-
-//set server
-DineSchema
-.virtual('server')
-.set((server) => { 
-    this.server = server;
-});
-
-//set customer
-DineSchema
-.virtual('customer')
-.set((customer) => { 
-    this.customer = customer;
-});
-
-//set table
-DineSchema
-.virtual('table')
-.set((table) => { 
-    this.table = table;
-});
 
 /************** Utils ********************/
 
