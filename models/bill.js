@@ -21,40 +21,6 @@ var BillSchema = new Schema({
 //===============
 
 /************** Getters ********************/
-//get payment stauts
-BillSchema
-.virtual('payment-status')
-.get(function () {
-    return this.isPaid == true? "paid" : "unpaid";  
-});
-
-//get orderID
-BillSchema
-.virtual('order-id')
-.get(function () {
-    return this.order._id;  
-});
-
-//get orderAmount
-BillSchema
-.virtual('order-amount')
-.get(function () {
-    return this.orderAmount;  
-});
-
-//get taxAmount
-BillSchema
-.virtual('tax-amount')
-.get(function () {
-    return this.taxAmount;  
-});
-
-//get serviceCharge
-BillSchema
-.virtual('service-charge')
-.get(function () {
-    return this.serviceCharge;  
-});
 
 //get payableAmount
 BillSchema
@@ -69,12 +35,6 @@ BillSchema
 });
 
 /************** Setters ********************/
-//mark as Paid
-BillSchema
-.virtual('payable-amount')
-.set(() => {
-    this.isPaid = true;  
-});
 
 /************** Utils ********************/
 //calculate tax
@@ -87,7 +47,7 @@ BillSchema
 
 //calculate service charge
 BillSchema
-.virtual('tax-percentage')
+.virtual('service-charge-percentage')
 .get(function (serviceChargePercentage) {
     var serviceChargeAmount = (serviceChargePercentage * this.orderAmount)/100;
     this.serviceChargeAmount = serviceChargeAmount;  

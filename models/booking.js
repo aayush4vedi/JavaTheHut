@@ -13,64 +13,6 @@ var BookingSchema = new Schema({
 //===============
 //    Methods
 //===============
-/************** Getters ********************/
-//get customer
-BookingSchema
-.virtual('customer')
-.get(function () {
-    return this.customer;  
-});
-
-//get tables
-BookingSchema
-.virtual('tables')
-.get(function () {
-    return this.table;  
-});
-
-//get checkInTime
-BookingSchema
-.virtual('checkInTime')
-.get(function () {
-    return this.checkInTime;  
-});
-
-//get stayingMinutes
-BookingSchema
-.virtual('stayingMinutes')
-.get(function () {
-    return this.stayingMinutes;  
-});
-
-
-/************** Setters ********************/
-//set customer 
-BookingSchema
-.virtual('customer')
-.set(function (customer) {
-    this.customer = customer;  
-});
-
-//set tables
-BookingSchema
-.virtual('tables')
-.set(function (tables) {
-    this.tables = tables;  
-});
-
-//set checkInTime
-BookingSchema
-.virtual('checkInTime')
-.set(function (checkInTime) {
-    this.checkInTime = checkInTime;  
-});
-
-//set stayingMinutes
-BookingSchema
-.virtual('stayingMinutes')
-.set(function (stayingMinutes) {
-    this.stayingMinutes = stayingMinutes;  
-});
 
 
 //compile the Model

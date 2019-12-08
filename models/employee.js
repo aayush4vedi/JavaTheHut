@@ -38,9 +38,7 @@ var EmployeeSchema = new Schema({
 
 /************** Getters ********************/
 //get name
-EmployeeSchema
-.virtual('name')
-.get(function () {
+EmployeeSchema.virtual('name').get(function () {
     return this.name;  
 });
 
@@ -112,7 +110,7 @@ EmployeeSchema
 EmployeeSchema
 .virtual('attendance')
 .get(function () {
-    return this.rating == true ? "Present" : "Absent";  
+    return this.attendance == true ? "Present" : "Absent";  
 });
 
 

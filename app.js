@@ -1,8 +1,19 @@
-var app = express();
+var express          = require('express'),
+    mongoose         = require('mongoose')
 
-var v1 = require('./routes/v1');
+var app              = express()
+var v1               = require('./routes/v1');
 
-// view engine setup
+// app config
+//mongo DB: 
+// username: aayush
+// password: aayush
+//URL: mongodb+srv://aayush:<password>@cluster0-s6tov.mongodb.net/test?retryWrites=true&w=majority
+var mongoDB = 'mongodb+srv://aayush:aayush@cluster0-s6tov.mongodb.net/local_library?retryWrites=true&w=majority';
+mongoose.connect(mongoDB, { useNewUrlParser: true });
+//Get the default connection
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 

@@ -15,21 +15,6 @@ var CategorySchema = new Schema({
 //    Methods
 //===============
 
-/************** Getters ********************/
-//Get Name
-CategorySchema
-.virtual('name')
-.get(function () {
-    return this.name;  
-});
-
-/************** Setters ********************/
-//Set Name
-CategorySchema
-.virtual('name')
-.set(function (name) {  
-    this.name = name;
-});
 
 //compile the Model
 var Category = mongoose.model('Category', CategorySchema);
