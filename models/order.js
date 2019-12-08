@@ -27,27 +27,12 @@ var OrderSchema = new Schema({
 //===============
 
 /************** Getters ********************/
-//get status
-OrderSchema
-.virtual('status')
-.get(function () {
-    return this.status;  
-});
-
-
-//get items in order
-OrderSchema
-.virtual('items')
-.get(function () {
-    return this.items;  
-});
-
 
 // get cancellation requests on items:
 //send the status in params
 OrderSchema
 .virtual('cancellationrequests')
-.get(function (reqStatus) { 
+.get( (reqStatus) => { 
     var cancellationReq = [];
     this.cancellationReqs.forEach(req => {
         if(req.status == reqStatus){
@@ -62,7 +47,7 @@ OrderSchema
 
 //set(update) status{status,Date.now}
 OrderSchema
-.virtual('status')
+.virtual('set-status')
 .set((status) =>{ //here status is a string
     this.status.status = status;
     this.status.time   = Date.now;
@@ -82,15 +67,15 @@ OrderSchema
 /************** Utils ********************/
 //function to check if a dist exists in items ordered:
 function dishExists(dishName) {
-    return this.items.some(function(item) {
-      return item.dish === dishrname;
+    return this.items.some((item)=> {
+      return item.dish === dishName;
     }); 
   }
 
 //request cancellation for an item in order
 OrderSchema
 .virtual('make-cancellation-req')
-.set(function (dish) {
+.set((dish) => {
     if(dishExists(dish)){
         this.reqCancellationReq.dish.status = 'Pending'
     }else{
@@ -102,7 +87,7 @@ OrderSchema
 //take cancellation desicion=>if yes, make quantity=0
 OrderSchema
 .virtual('take-cancellation-decision')
-.set(function (decision) {
+.set((decision) => {
     var cancellationReq = this.cancellationrequests('Pending');
     if(cancellationReq.length >0){
         cancellationReq.forEach(req => {

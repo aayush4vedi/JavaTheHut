@@ -26,69 +26,21 @@ var TableSchema = new Schema({
 
 //check space clashing before adding a new seat
 
-/************** Getters ********************/
-//get capacity
-TableSchema
-.virtual('capacity')
-.get(function () {
-    return this.capacity;  
-});
-
-//get availability
-TableSchema
-.virtual('is-available')
-.get(function () {
-    return this.available;  
-});
-
-//get location
-TableSchema
-.virtual('location')
-.get(function () {
-    return this.location;  
-});
-
-//get (located in which) hall_id
-TableSchema
-.virtual('hall')
-.get(function () {
-    return this.hall._id;  
-});
 
 /************** Setters ********************/
-// set capacity
-TableSchema
-.virtual('capacity')
-.set(function (capacity) {  
-    this.capacity = capacity;
-});
 
 //set availability(while making booking):
 //mark free
 TableSchema
 .virtual('freed')
-.set(function () {  
+.set(() => {  
     this.available = true;
 });
 //mark booked
 TableSchema
 .virtual('booked')
-.set(function () {  
+.set(() => {   
     this.available = false;
-});
-
-//set location
-TableSchema
-.virtual('location')
-.set(function (location) {  
-    this.location = location;
-});
-
-//set located in which hall
-TableSchema
-.virtual('hall-id')
-.set(function (hallID) {  
-    this.hall._id = hallID;
 });
 
 

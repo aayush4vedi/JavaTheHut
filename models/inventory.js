@@ -16,12 +16,6 @@ var InventorySchema = new Schema({
 //    Methods
 //===============
 
-/************** Getters ********************/
-InventorySchema
-.virtual('goods')
-.get(function () {
-    return this.goods;  
-});
 
 //compile the Model
 var Inventory = mongoose.model('Inventory', InventorySchema);

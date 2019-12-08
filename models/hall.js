@@ -17,53 +17,6 @@ var HallSchema = new Schema({
 //    Methods
 //===============
 
-/************** Getters ********************/
-//get name
-HallSchema
-.virtual('name')
-.get(function () {
-    return this.name;  
-});
-
-//get tables
-HallSchema
-.virtual('tables')
-.get(function () {
-    return this.tables;  
-});
-
-//get restaurant
-HallSchema
-.virtual('restaurant')
-.get(function () {
-    return this.restaurant;  
-});
-
-/************** Setters ********************/
-//set name
-HallSchema
-.virtual('name')
-.set(function (name) {  
-    this.name = name;
-});
-
-//==<won't this be handled in tableController?>==
-// //add a new table
-// HallSchema
-// .virtual('tables')
-// .set(function (tables) {  
-//     tables.forEach(table => {
-//         this.tables.push(table);
-//     });
-// });
-
-//set restaurant
-HallSchema
-.virtual('restaurant')
-.set(function (restaurant) {  
-    this.restaurant = restaurant;
-});
-
 /************** Utils ********************/
 // check if it's valid location to add new table
 

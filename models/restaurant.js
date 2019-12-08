@@ -22,58 +22,7 @@ var Restaurant = mongoose.model('Restaurant', RestaurantSchema);
 /************** Assertions ********************/
 //validate contact
 
-/************** getters ********************/
-//get name
-RestaurantSchema
-.virtual('name')
-.get(function () {
-    return this.name;  
-});
-
-//get active plan ID
-RestaurantSchema
-.virtual('active-plan-id')
-.get(function () {
-    return this.activePlanID;  
-});
-
-//get halls(add more)
-RestaurantSchema
-.virtual('halls')
-.set(function (halls) {  
-    halls.forEach(hall => {
-        this.halls.push(hall);
-    });
-});
-
-//get contact number
-RestaurantSchema
-.virtual('contact')
-.get(function () {
-    return this.contact;  
-});
-
-//get address
-RestaurantSchema
-.virtual('address')
-.get(function () {
-    return this.address;  
-});
-
 /************** Getters ********************/
-//set name
-RestaurantSchema
-.virtual('name')
-.set(function (name) {  
-    this.name = name;
-});
-
-//set active plan ID
-RestaurantSchema
-.virtual('active-plan-id')
-.set(function (activePlanID) {  
-    this.activePlanID = activePlanID;
-});
 
 // ==<will be handled by hallController >===
 // //set all halls
@@ -83,19 +32,15 @@ RestaurantSchema
 //     this.halls = halls;
 // });
 
-//set contact number
+//set halls(add more)
 RestaurantSchema
-.virtual('halls')
-.set(function (contact) {  
-    this.contact = contact;
+.virtual('add-halls')
+.set(function (halls) {  
+    halls.forEach(hall => {
+        this.halls.push(hall);
+    });
 });
 
-//set address
-RestaurantSchema
-.virtual('address')
-.set(function (address) {  
-    this.address = address;
-});
 
 
 /************** Others ********************/
