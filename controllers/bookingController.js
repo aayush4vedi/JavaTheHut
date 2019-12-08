@@ -69,5 +69,5 @@ module.exports = {
     booking_for_customer_get,
     booking_for_table_get,
     booking_for_date_get,
-    booking_for_tableID_date_get
+    booking_for_table_date_get
 }

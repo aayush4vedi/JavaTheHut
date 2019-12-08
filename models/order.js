@@ -55,11 +55,8 @@ OrderSchema
 
 //set items: add items in some quantities
 OrderSchema
-.virtual('items')
-.set((items) => { //items:{dish, quantity}
-    var newItems = items.map(item => {
-        newItems.push(item);
-    });
+.virtual('add-items')
+.set((newItems) => { //items:{dish, quantity}
     this.items.push(newItems);  
 });
 

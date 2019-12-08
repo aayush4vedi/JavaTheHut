@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var Schema = mongoose.schema;
+var Schema = mongoose.Schema;
 
 var BookingSchema = new Schema({
     // bookingID      : { type: String, default: uuid.v1 },     //restaurant specefic ID's to be implemented later 
