@@ -63,12 +63,12 @@ var category_create_post = [
 //Display details(+ it's all dishes) for a specefic category #3 : TODO: this form will have delete button for dishes as well(dishController)
 var category_details = (req,res,next)=>{
     async.parallel({
-        category: function (callback) {
+        category: (callback) =>{
             Category.findById(req.params.id)
                 .exec(callback)
         },
-        category_dishes: function (callback) {
-            Book.find({ 'dish': req.params.id }, 'name description ingredients price isServing veg eta')
+        category_dishes: (callback) =>{
+            Dish.find({ 'category': req.params.id }, 'name description ingredients price isServing veg eta')
                 .exec(callback)
         },
     },(err, results) => {

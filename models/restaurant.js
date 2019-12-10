@@ -10,7 +10,7 @@ var RestaurantSchema = new Schema({
     name                 : String,
     activePlanID         : {type: Number, default:1},                                  
     halls                : [{type: Schema.Types.ObjectId, ref: 'Hall'}],
-    contact              : String,
+    phone                : String,
     address              : String                                                   
 })
 
@@ -34,7 +34,7 @@ var Restaurant = mongoose.model('Restaurant', RestaurantSchema);
 
 //set halls(add more)
 RestaurantSchema
-.virtual('add-halls')
+.virtual('addhalls')
 .set(function (halls) {  
     halls.forEach(hall => {
         this.halls.push(hall);

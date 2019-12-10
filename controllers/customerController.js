@@ -1,5 +1,9 @@
 var Customer = require('../models/customer')
 
+
+const { body, validationResult } = require('express-validator/check');
+const { sanitizeBody } = require('express-validator/filter');
+
 //===================CRUD controllers================//
 
 //List all customers #1
@@ -48,7 +52,7 @@ var customer_create_post = [
         }
         else {
             // Save customer.
-            customer.save(function (err) {
+            customer.save( (err)=> {
                 if (err) { return next(err); }
                 // Successful - redirect 
                 res.redirect('/');      //TODO: add redirect url here
