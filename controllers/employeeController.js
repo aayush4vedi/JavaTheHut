@@ -1,4 +1,7 @@
-var Employee = require('../models/employee');
+var Employee = require('../models/employee')
+
+const { body, validationResult } = require('express-validator/check');
+const { sanitizeBody } = require('express-validator/filter');
 
 //===================CRUD controllers================//
 //List all Employees GET  #1

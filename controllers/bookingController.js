@@ -1,5 +1,8 @@
 var Booking = require('../models/booking')
 
+const { body, validationResult } = require('express-validator/check');
+const { sanitizeBody } = require('express-validator/filter');
+
 //===================CRUD controllers================//
 
 //List all bookings #1

@@ -2,6 +2,9 @@ var Hall        = require('../models/hall'),
     Table       = require('../models/table'),
     Restaurant  = require('../models/restaurant')
 
+const { body, validationResult } = require('express-validator/check');
+const { sanitizeBody } = require('express-validator/filter');
+
 //===================CRUD controllers================//
 
 //List all halls #1
