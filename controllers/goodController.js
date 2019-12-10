@@ -109,6 +109,7 @@ var good_edit_put = [
                 threshold: req.body.threshold,
                 defaultPurchase: req.body.defaultPurchase,
                 quantityInStock: req.body.naquantityInStockme,
+                _id:  req.params.id
             }
         );
 

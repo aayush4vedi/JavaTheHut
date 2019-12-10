@@ -42,7 +42,7 @@ var category_create_post = [
             return;
         }
         else {
-            Category.save(function (err) {
+            category.save(function (err) {
                 if (err) { return next(err); }
                 res.redirect('/');      //TODO: add redirect url here
             });
@@ -98,7 +98,7 @@ var category_edit_put = [
             }
         );
         if (!errors.isEmpty()) {
-            res.render('category_form', { title: 'Update Category', category: category, errors: errors.array() });
+            res.render('category_create', { title: 'Update Category', category: category, errors: errors.array() });
             return;
         }
         else {

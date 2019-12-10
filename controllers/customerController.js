@@ -110,7 +110,7 @@ var customer_edit_put = [
             }
         );
         if (!errors.isEmpty()) {
-            res.render('customer_form', { title: 'Update Customer', customer: customer, errors: errors.array() });
+            res.render('customer_create', { title: 'Update Customer', customer: customer, errors: errors.array() });
             return;
         }
         else {

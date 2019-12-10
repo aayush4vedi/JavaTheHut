@@ -1,4 +1,5 @@
-var Table = require('../models/table')
+var Table = require('../models/table'),
+    Hall  = require('../models/hall')
 
 const { body, validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
@@ -64,8 +65,8 @@ var table_details = (req,res, next)=>{
             Table.findById(req.params.id)
                 .exec(callback)
         },
-        table_table: (callback) => {
-            Table.find({ 'table': req.params.id }, 'name')
+        table_hall: (callback) => {
+            Hall.find({ 'table': req.params.id }, 'name')
                 .exec(callback)
         }
     },(err, results) => {
@@ -75,7 +76,7 @@ var table_details = (req,res, next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('table_detail', { title: 'Table Detail', table: results.table, table_table: results.table_table});
+        res.render('table_detail', { title: 'Table Detail', table: results.table, table_hall: results.table_hall});
     });
 
 }
@@ -112,7 +113,8 @@ var table_edit_put = [
                 capacity: req.body.capacity,
                 available: req.body.available,
                 location: req.body.location,
-                table: req.body.table
+                table: req.body.table,
+                _id:  req.params.id
             }
         );
 

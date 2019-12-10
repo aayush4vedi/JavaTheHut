@@ -112,11 +112,12 @@ var hall_edit_put = [
             {
                 name: req.body.name,
                 tables: req.body.tables,
-                restaurant: req.body.restaurant
+                restaurant: req.body.restaurant,
+                _id:  req.params.id
             }
         );
         if (!errors.isEmpty()) {
-            res.render('hall_form', { title: 'Update Hall', hall: hall, errors: errors.array() });
+            res.render('hall_create', { title: 'Update Hall', hall: hall, errors: errors.array() });
             return;
         }
         else {
