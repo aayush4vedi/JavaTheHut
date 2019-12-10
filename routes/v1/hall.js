@@ -22,9 +22,6 @@ router.put('/:id/edit', hall_controller.hall_edit_put);
 //Display hall update form on DELETE #5
 router.delete('/:id', hall_controller.hall_delete_delete);
 
-//Display all tables in a hall #6
-router.get('/:id/tables', hall_controller.hall_all_tables_get);
-
 //Display details for a specefic hall #3 : Must come in end
 router.get('/:id', hall_controller.hall_details);
 

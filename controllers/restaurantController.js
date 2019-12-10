@@ -38,7 +38,6 @@ var restaurant_create_post = [
 
     (req,res,next)=>{
         const errors = validationResult(req);
-
         var restaurant = new Restaurant(
             {
                 name: req.body.name,
@@ -54,10 +53,8 @@ var restaurant_create_post = [
             return;
         }
         else {
-            // Save restaurant.
             restaurant.save(function (err) {
                 if (err) { return next(err); }
-                // Successful - redirect 
                 res.redirect('/');      //TODO: add redirect url here
             });
         }
@@ -76,13 +73,12 @@ var restaurant_details = (req,res, next)=>{
                 .exec(callback)
         },
     },(err, results) => {
-        if (err) { return next(err); } // Error in API usage.
-        if (results.restaurant == null) { // No results.
+        if (err) { return next(err); } 
+        if (results.restaurant == null) { 
             var err = new Error('Restaurant not found');
             err.status = 404;
             return next(err);
         }
-        // Successful, so render.
         res.render('restaurant_detail', { title: 'Restaurant Detail', restaurant: results.restaurant, restaurnat_halls: results.restaurnat_halls });
     });
 }
@@ -91,12 +87,11 @@ var restaurant_details = (req,res, next)=>{
 var restaurant_edit_get = (req,res,next)=>{
     Restaurant.findById(req.params.id, (err, restaurant)=> {
         if (err) { return next(err); }
-        if (restaurant == null) { // No results.
+        if (restaurant == null) { 
             var err = new Error('Restaurant not found');
             err.status = 404;
             return next(err);
         }
-        // Success.
         res.render('restaurant_edit', { title: 'Update Restaurant', restaurant: restaurant });
     });
 }
