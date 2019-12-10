@@ -18,12 +18,12 @@ var hall_list = (req,res, next)=>{
         })
 }
 
-//Display hall crete form on GET #2.1
+//Display hall create form on GET #2.1
 var hall_create_get = (req,res,next)=>{
     res.render('hall_create', {title: 'Hall Create'});
 }
 
-//Handle hall crete form on POST #2.2
+//Handle hall create form on POST #2.2
 var hall_create_post = [
     body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('tables').isLength({ min: 3 }).trim().withMessage('Invalid length'),
@@ -44,7 +44,7 @@ var hall_create_post = [
         );
 
         if (!errors.isEmpty()) {
-            res.render('restaurant_create', {title: 'Restaurant Create'});
+            res.render('hall_create', {title: 'Hall Create'});
             return;
         }
         else {

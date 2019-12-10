@@ -7,37 +7,134 @@ const { sanitizeBody } = require('express-validator/filter');
 
 //List all tables #1
 var table_list = (req,res, next)=>{
-    res.send('NOT IMPLEMENTED: table_list');
+    Table.find()
+        .exec((err, list_table) =>{
+            if(err){
+                return next(err)
+            }
+            res.render('table_list', { title: 'Table List', table_list: list_table})
+        })
 }
 
 //Display table crete form on GET #2.1
 var table_create_get = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: table_create_get');
+    res.render('table_create', {title: 'Table Create'});
 }
 
 //Handle table crete form on POST #2.2
-var table_create_post = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: table_create_post');
-}
+var table_create_post = [
+    body('capacity').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('available').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('location').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('table').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+
+    sanitizeBody('capacity').escape(),
+    sanitizeBody('available').escape(),
+    sanitizeBody('location').escape(),
+    sanitizeBody('table').escape(),
+
+    (req,res,next)=>{
+        const errors = validationResult(req);
+        var table = new Table(
+            {
+                capacity: req.body.capacity,
+                available: req.body.available,
+                location: req.body.location,
+                table: req.body.table
+            }
+        );
+
+        if (!errors.isEmpty()) {
+            res.render('table_create', {title: 'Table Create'});
+            return;
+        }
+        else {
+            table.save(function (err) {
+                if (err) { return next(err); }
+                res.redirect('/');      //TODO: add redirect url here
+            });
+        }
+    }
+]
 
 //Display details for a specefic table #3
 var table_details = (req,res, next)=>{
-    res.send('NOT IMPLEMENTED: table_details');
+    async.parallel({
+        table: (callback) => {
+            Table.findById(req.params.id)
+                .exec(callback)
+        },
+        table_table: (callback) => {
+            Table.find({ 'table': req.params.id }, 'name')
+                .exec(callback)
+        }
+    },(err, results) => {
+        if (err) { return next(err); } 
+        if (results.table == null) { 
+            var err = new Error('Table not found');
+            err.status = 404;
+            return next(err);
+        }
+        res.render('table_detail', { title: 'Table Detail', table: results.table, table_table: results.table_table});
+    });
+
 }
 
 //Display table update form on GET #4.1
 var table_edit_get = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: table_edit_get');
+    Table.findById(req.params.id, (err, table)=> {
+        if (err) { return next(err); }
+        if (table == null) { 
+            var err = new Error('Table not found');
+            err.status = 404;
+            return next(err);
+        }
+        res.render('table_edit', { title: 'Update Table', table: table });
+    });
 }
 
 //Handle table update form on PUT #4.2
-var table_edit_put = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: table_edit_put');
-}
+var table_edit_put = [
+    body('capacity').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('available').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('location').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('table').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+
+    sanitizeBody('capacity').escape(),
+    sanitizeBody('available').escape(),
+    sanitizeBody('location').escape(),
+    sanitizeBody('table').escape(),
+
+    (req,res,next)=>{
+        const errors = validationResult(req);
+        var table = new Table(
+            {
+                capacity: req.body.capacity,
+                available: req.body.available,
+                location: req.body.location,
+                table: req.body.table
+            }
+        );
+
+        if (!errors.isEmpty()) {
+            res.render('table_create', {title: 'Table Create'});
+            return;
+        }
+        else {
+            Table.findByIdAndUpdate(function (err) {
+                if (err) { return next(err); }
+                res.redirect('/');      //TODO: add redirect url here
+            });
+        }
+    }
+]
 
 //Display table update form on DELETE #5.1
 var table_delete_delete = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: table_delete_delete');
+    Table.findByIdAndRemove(req.body.restaurantid, function deleteTable(err) {
+        if (err) { return next(err); }
+        res.redirect('/');      //TODO: add redirect url here
+    })
 }
 
 
