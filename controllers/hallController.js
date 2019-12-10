@@ -22,9 +22,9 @@ var hall_create_get = (req,res,next)=>{
 
 //Handle hall crete form on POST #2.2
 var hall_create_post = [
-    body('name').isLength({ min: 3 }).trim().withMessage('Name must be >= 3 characters.'),
-    body('tables').isLength({ min: 3 }).trim().withMessage('Name must be >= 3 characters.'),
-    body('restaurant').isLength({ min: 3 }).trim().withMessage('Name must be >= 3 characters.'),
+    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('tables').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('restaurant').isLength({ min: 3 }).trim().withMessage('Invalid length'),
 
     sanitizeBody('name').escape(),
     sanitizeBody('tables').escape(),
@@ -95,9 +95,9 @@ var hall_edit_get = (req,res,next)=>{
 
 //Handle hall update form on PUT #4.2
 var hall_edit_put = [
-    body('name').isLength({ min: 3 }).trim().withMessage('Name must be >= 3 characters.'),
-    body('tables').isLength({ min: 3 }).trim().withMessage('Name must be >= 3 characters.'),
-    body('restaurant').isLength({ min: 3 }).trim().withMessage('Name must be >= 3 characters.'),
+    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('tables').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('restaurant').isLength({ min: 3 }).trim().withMessage('Invalid length'),
 
     sanitizeBody('name').escape(),
     sanitizeBody('tables').escape(),

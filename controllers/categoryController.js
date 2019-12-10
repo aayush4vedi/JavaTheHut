@@ -25,19 +25,12 @@ var category_create_get = (req,res,next)=>{
 
 //Handle category crete form on POST #2.2
 var category_create_post = [
-    // Validate fields.
-    body('name').isLength({ min: 3 }).trim().withMessage('Name must be >= 3 characters.'),
-
-    // Sanitize fields.
+    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    
     sanitizeBody('name').escape(),
 
-    // Process request after validation and sanitization
     (req,res,next)=>{
-
-        // Extract the validation errors from a request.
         const errors = validationResult(req);
-
-        // Create Category object with escaped and trimmed data
         var category = new Category(
             {
                 name: req.body.name
@@ -45,15 +38,12 @@ var category_create_post = [
         );
 
         if (!errors.isEmpty()) {
-            // There are errors. Render form again with sanitized values/errors messages.
             res.render('category_create', {title: 'Category Create'});
             return;
         }
         else {
-            // Save category.
-            category.save(function (err) {
+            Category.save(function (err) {
                 if (err) { return next(err); }
-                // Successful - redirect 
                 res.redirect('/');      //TODO: add redirect url here
             });
         }
@@ -72,13 +62,12 @@ var category_details = (req,res,next)=>{
                 .exec(callback)
         },
     },(err, results) => {
-        if (err) { return next(err); } // Error in API usage.
-        if (results.category == null) { // No results.
+        if (err) { return next(err); } 
+        if (results.category == null) { 
             var err = new Error('Category not found');
             err.status = 404;
             return next(err);
         }
-        // Successful, so render.
         res.render('category_detail', { title: 'Category Detail', category: results.category, category_dishes: results.category_dishes });
     });
 }
@@ -87,19 +76,18 @@ var category_details = (req,res,next)=>{
 var category_edit_get = (req,res,next)=>{
     Category.findById(req.params.id, (err, category)=> {
         if (err) { return next(err); }
-        if (category == null) { // No results.
+        if (category == null) { 
             var err = new Error('Category not found');
             err.status = 404;
             return next(err);
         }
-        // Success.
         res.render('category_edit', { title: 'Update Category', category: category });
     });
 }
 
 //Handle category update form on PUT #4.2
 var category_edit_put = [
-    body('name').isLength({ min: 3 }).trim().withMessage('Name must be >= 3 characters.'),
+    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     sanitizeBody('name').escape(),
     (req, res, next) => {
         const errors = validationResult(req);
