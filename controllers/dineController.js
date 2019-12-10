@@ -15,7 +15,7 @@ var dine_create_get = (req,res,next)=>{
     res.send('NOT IMPLEMENTED: dine_create_get');
 }
 
-//Handle dine crete form on POST #2.2
+//Handle dine create form on POST #2.2
 var dine_create_post = (req,res,next)=>{
     res.send('NOT IMPLEMENTED: dine_create_post');
 }

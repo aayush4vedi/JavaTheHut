@@ -7,10 +7,10 @@ var dish_controller = require('../../controllers/dishController');
 //List all dishs GET  #1
 router.get('/', dish_controller.dish_list);
 
-//Display dish crete form on GET #2.1
+//Display dish create form on GET #2.1
 router.get('/create', dish_controller.dish_create_get);
 
-//Handle dish crete form on POST #2.2
+//Handle dish create form on POST #2.2
 router.post('/create', dish_controller.dish_create_post);
 
 //Display dish update form on GET #4.1

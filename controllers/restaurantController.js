@@ -17,12 +17,12 @@ var restaurant_list = (req,res, next)=>{
         })
 }
 
-//Display restaurant crete form on GET #2.1
+//Display restaurant create form on GET #2.1
 var restaurant_create_get = (req,res,next)=>{
     res.render('restaurant_create', {title: 'Restaurant Create'});
 }
 
-//Handle restaurant crete form on POST #2.2
+//Handle restaurant create form on POST #2.2
 var restaurant_create_post = [
     body('name').isLength({ min: 3 }).trim().withMessage('Name must be >= 3 characters.'),
     body('activePlanID').isLength({ min: 1 }).trim().withMessage('Invalid input is entered'),

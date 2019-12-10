@@ -7,10 +7,10 @@ var bill_controller = require('../../controllers/billController');
 //List all bills GET  #1
 router.get('/', bill_controller.bill_list);
 
-//Display bill crete form on GET #2.1
+//Display bill create form on GET #2.1
 router.get('/create', bill_controller.bill_create_get);
 
-//Handle bill crete form on POST #2.2
+//Handle bill create form on POST #2.2
 router.post('/create', bill_controller.bill_create_post);
 
 //Display bill update form on GET #4.1

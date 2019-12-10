@@ -17,12 +17,12 @@ var table_list = (req,res, next)=>{
         })
 }
 
-//Display table crete form on GET #2.1
+//Display table create form on GET #2.1
 var table_create_get = (req,res,next)=>{
     res.render('table_create', {title: 'Table Create'});
 }
 
-//Handle table crete form on POST #2.2
+//Handle table create form on POST #2.2
 var table_create_post = [
     body('capacity').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('available').isLength({ min: 3 }).trim().withMessage('Invalid length'),

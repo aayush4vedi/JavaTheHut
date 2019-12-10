@@ -7,10 +7,10 @@ var restaurant_controller = require('../../controllers/restaurantController');
 //List all restaurants GET  #1
 router.get('/', restaurant_controller.restaurant_list);
 
-//Display restaurant crete form on GET #2.1
+//Display restaurant create form on GET #2.1
 router.get('/create', restaurant_controller.restaurant_create_get);
 
-//Handle restaurant crete form on POST #2.2
+//Handle restaurant create form on POST #2.2
 router.post('/create', restaurant_controller.restaurant_create_post);
 
 //Display restaurant update form on GET #4.1

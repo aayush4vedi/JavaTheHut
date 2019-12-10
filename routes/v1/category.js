@@ -7,10 +7,10 @@ var category_controller = require('../../controllers/categoryController');
 //List all categorys GET  #1
 router.get('/', category_controller.category_list);
 
-//Display category crete form on GET #2.1
+//Display category create form on GET #2.1
 router.get('/create', category_controller.category_create_get);
 
-//Handle category crete form on POST #2.2
+//Handle category create form on POST #2.2
 router.post('/create', category_controller.category_create_post);
 
 //Display category update form on GET #4.1

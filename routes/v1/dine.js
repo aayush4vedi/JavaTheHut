@@ -7,10 +7,10 @@ var dine_controller = require('../../controllers/dineController');
 //List all dines GET  #1
 router.get('/', dine_controller.dine_list);
 
-//Display dine crete form on GET #2.1
+//Display dine create form on GET #2.1
 router.get('/create', dine_controller.dine_create_get);
 
-//Handle dine crete form on POST #2.2
+//Handle dine create form on POST #2.2
 router.post('/create', dine_controller.dine_create_post);
 
 //Display dine update form on GET #4.1

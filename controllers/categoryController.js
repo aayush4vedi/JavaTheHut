@@ -18,12 +18,12 @@ var category_list = (req,res,next)=>{
         })
 }
 
-//Display category crete form on GET #2.1
+//Display category create form on GET #2.1
 var category_create_get = (req,res,next)=>{
     res.render('category_create', {title: 'Category Create'});
 }
 
-//Handle category crete form on POST #2.2
+//Handle category create form on POST #2.2
 var category_create_post = [
     body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     

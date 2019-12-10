@@ -17,12 +17,12 @@ var order_list = (req,res,next)=>{
         })
 }
 
-//Display order crete form on GET #2.1
+//Display order create form on GET #2.1
 var order_create_get = (req,res,next)=>{
     res.render('order_create', {title: 'Order Create'});
 }
 
-//Handle order crete form on POST #2.2
+//Handle order create form on POST #2.2
 var order_create_post = [
     body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('items').isLength({ min: 3 }).trim().withMessage('Invalid length'),

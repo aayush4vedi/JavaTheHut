@@ -17,12 +17,12 @@ var customer_list = (req,res, next)=>{
     })
 }
 
-//Display customer crete form on GET #2.1
+//Display customer create form on GET #2.1
 var customer_create_get = (req,res,next)=>{
     res.render('customer_create', {title: 'Customer Create'});
 }
 
-//Handle customer crete form on POST #2.2
+//Handle customer create form on POST #2.2
 var customer_create_post = [
     body('name').isLength({ min: 3 }).trim().withMessage('Name must be >= 3 characters.'),
     body('email').isLength({ min: 10 }).trim().withMessage('Email must be >= 10 characters.'),

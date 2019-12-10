@@ -7,10 +7,10 @@ var good_controller = require('../../controllers/goodController');
 //List all goods GET  #1
 router.get('/', good_controller.good_list);
 
-//Display good crete form on GET #2.1
+//Display good create form on GET #2.1
 router.get('/create', good_controller.good_create_get);
 
-//Handle good crete form on POST #2.2
+//Handle good create form on POST #2.2
 router.post('/create', good_controller.good_create_post);
 
 //Display good update form on GET #4.1

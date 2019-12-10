@@ -10,12 +10,12 @@ var booking_list = (req,res, next)=>{
     res.send('NOT IMPLEMENTED: booking_list');
 }
 
-//Display booking crete form on GET #2.1
+//Display booking create form on GET #2.1
 var booking_create_get = (req,res,next)=>{
     res.send('NOT IMPLEMENTED: booking_create_get');
 }
 
-//Handle booking crete form on POST #2.2
+//Handle booking create form on POST #2.2
 var booking_create_post = (req,res,next)=>{
     res.send('NOT IMPLEMENTED: booking_create_post');
 }

@@ -10,12 +10,12 @@ var dish_list = (req,res, next)=>{
     res.send('NOT IMPLEMENTED: dish_list');
 }
 
-//Display dish crete form on GET #2.1
+//Display dish create form on GET #2.1
 var dish_create_get = (req,res,next)=>{
     res.send('NOT IMPLEMENTED: dish_create_get');
 }
 
-//Handle dish crete form on POST #2.2
+//Handle dish create form on POST #2.2
 var dish_create_post = (req,res,next)=>{
     res.send('NOT IMPLEMENTED: dish_create_post');
 }

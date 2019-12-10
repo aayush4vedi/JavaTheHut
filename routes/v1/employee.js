@@ -7,10 +7,10 @@ var employee_controller = require('../../controllers/employeeController');
 //List all employees GET  #1
 router.get('/', employee_controller.employee_list);
 
-//Display employee crete form on GET #2.1
+//Display employee create form on GET #2.1
 router.get('/create', employee_controller.employee_create_get);
 
-//Handle employee crete form on POST #2.2
+//Handle employee create form on POST #2.2
 router.post('/create', employee_controller.employee_create_post);
 
 //Display employee update form on GET #4.1

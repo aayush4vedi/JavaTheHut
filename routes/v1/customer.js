@@ -7,10 +7,10 @@ var customer_controller = require('../../controllers/customerController');
 //List all customers GET  #1
 router.get('/', customer_controller.customer_list);
 
-//Display customer crete form on GET #2.1
+//Display customer create form on GET #2.1
 router.get('/create', customer_controller.customer_create_get);
 
-//Handle customer crete form on POST #2.2
+//Handle customer create form on POST #2.2
 router.post('/create', customer_controller.customer_create_post);
 
 //Display customer update form on GET #4.1

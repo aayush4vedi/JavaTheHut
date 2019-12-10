@@ -7,10 +7,10 @@ var order_controller = require('../../controllers/orderController');
 //List all orders GET  #1
 router.get('/', order_controller.order_list);
 
-//Display order crete form on GET #2.1
+//Display order create form on GET #2.1
 router.get('/create', order_controller.order_create_get);
 
-//Handle order crete form on POST #2.2
+//Handle order create form on POST #2.2
 router.post('/create', order_controller.order_create_post);
 
 //Display order update form on GET #4.1

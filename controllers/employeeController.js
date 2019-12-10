@@ -1,42 +1,183 @@
-var Employee = require('../models/employee')
+var Employee = require('../models/employee'),
+    Category = require('../models/category'),
+    Table    = require('../models/table')
 
 const { body, validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
 
 //===================CRUD controllers================//
 //List all Employees GET  #1
-var employee_list = (req,res, next)=>{
-    res.send('NOT IMPLEMENTED: employee_list');
+var employee_list = (req,res,next)=>{
+    Employee.find()
+        .exec((err, list_employee) =>{
+            if(err){
+                return next(err)
+            }
+            res.render('employee_list', { title: 'Employee List', employee_list: list_employee})
+        })
 }
 
-//Display employee crete form on GET #2.1
+//Display employee create form on GET #2.1
 var employee_create_get = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: employee_create_get');
+    res.render('employee_create', {title: 'Employee Create'});
 }
 
-//Handle employee crete form on POST #2.2
-var employee_create_post = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: employee_create_post');
-}
+//Handle employee create form on POST #2.2
+var employee_create_post = [
+    body('username').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('password').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('email').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('phone').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('govIDNumber').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('salary').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('role').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('speciality').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('tables').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('attendance').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    
+    sanitizeBody('username').escape(),
+    sanitizeBody('password').escape(),
+    sanitizeBody('name').escape(),
+    sanitizeBody('email').escape(),
+    sanitizeBody('phone').escape(),
+    sanitizeBody('govIDNumber').escape(),
+    sanitizeBody('salary').escape(),
+    sanitizeBody('speciality').escape(),
+    sanitizeBody('tables').escape(),
+    sanitizeBody('attendance').escape(),
 
-//Display details for a specefic employee #3
-var employee_details = (req,res, next)=>{
-    res.send('NOT IMPLEMENTED: employee_details');
+    (req,res,next)=>{
+        const errors = validationResult(req);
+        var employee = new Employee(
+            {
+                username : req.body.username,
+                password : req.body.password,
+                name : req.body.name,
+                email : req.body.email,
+                phone : req.body.phone,
+                govIDNumber : req.body.govIDNumber,
+                salary : req.body.salary,
+                speciality : req.body.speciality,
+                tables : req.body.tables,
+                attendance : req.body.attendance
+            }
+        );
+
+        if (!errors.isEmpty()) {
+            res.render('employee_create', {title: 'Employee Create'});
+            return;
+        }
+        else {
+            employee.save(function (err) {
+                if (err) { return next(err); }
+                res.redirect('/');      //TODO: add redirect url here
+            });
+        }
+    }
+]
+
+//Display details for a specefic employee #3 
+var employee_details = (req,res,next)=>{
+    async.parallel({
+        employee: (callback) =>{
+            Employee.findById(req.params.id)
+                .exec(callback)
+        },
+        employee_speciality: (callback) =>{
+            Category.find({ 'employee': req.params.id }, 'name')
+                .exec(callback)
+        },
+        employee_tables: (callback) =>{
+            Table.find({ 'employee': req.params.id }, 'name')
+                .exec(callback)
+        }
+    },(err, results) => {
+        if (err) { return next(err); } 
+        if (results.employee == null) { 
+            var err = new Error('Employee not found');
+            err.status = 404;
+            return next(err);
+        }
+        res.render('employee_detail', { title: 'Employee Detail', employee: results.employee, employee_speciality: results.employee_speciality, employee_tables: results.employee_tables });
+    });
 }
 
 //Display employee update form on GET #4.1
 var employee_edit_get = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: employee_edit_get');
+    Employee.findById(req.params.id, (err, employee)=> {
+        if (err) { return next(err); }
+        if (employee == null) { 
+            var err = new Error('Employee not found');
+            err.status = 404;
+            return next(err);
+        }
+        res.render('employee_edit', { title: 'Update Employee', employee: employee });
+    });
 }
 
 //Handle employee update form on PUT #4.2
-var employee_edit_put = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: employee_edit_put');
-}
+var employee_edit_put = [
+    body('username').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('password').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('email').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('phone').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('govIDNumber').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('salary').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('role').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('speciality').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('tables').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('attendance').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    
+    sanitizeBody('username').escape(),
+    sanitizeBody('password').escape(),
+    sanitizeBody('name').escape(),
+    sanitizeBody('email').escape(),
+    sanitizeBody('phone').escape(),
+    sanitizeBody('govIDNumber').escape(),
+    sanitizeBody('salary').escape(),
+    sanitizeBody('speciality').escape(),
+    sanitizeBody('tables').escape(),
+    sanitizeBody('attendance').escape(),
 
-//Display employee update form on DELETE #5.1
+    (req,res,next)=>{
+        const errors = validationResult(req);
+        var employee = new Employee(
+            {
+                username : req.body.username,
+                password : req.body.password,
+                name : req.body.name,
+                email : req.body.email,
+                phone : req.body.phone,
+                govIDNumber : req.body.govIDNumber,
+                salary : req.body.salary,
+                speciality : req.body.speciality,
+                tables : req.body.tables,
+                attendance : req.body.attendance,
+                _id : req.params.id
+            }
+        );
+
+        if (!errors.isEmpty()) {
+            res.render('employee_create', {title: 'Employee Create'});
+            return;
+        }
+        else {
+            Employee.findByIdAndUpdate(req.params.id, employee, {}, (err)=> {
+                if (err) { return next(err); }
+                res.redirect('/');      //TODO: add redirect url here
+            });
+        }
+    }
+]
+
+//Display employee update form on DELETE #5
 var employee_delete_delete = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: employee_delete_delete');
+    Employee.findByIdAndRemove(req.body.employeeid, function deleteEmployee(err) {
+        if (err) { return next(err); }
+        res.redirect('/');      //TODO: add redirect url here
+    })
 }
 
 

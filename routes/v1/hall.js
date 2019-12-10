@@ -7,10 +7,10 @@ var hall_controller = require('../../controllers/hallController');
 //List all halls GET  #1
 router.get('/', hall_controller.hall_list);
 
-//Display hall crete form on GET #2.1
+//Display hall create form on GET #2.1
 router.get('/create', hall_controller.hall_create_get);
 
-//Handle hall crete form on POST #2.2
+//Handle hall create form on POST #2.2
 router.post('/create', hall_controller.hall_create_post);
 
 //Display hall update form on GET #4.1

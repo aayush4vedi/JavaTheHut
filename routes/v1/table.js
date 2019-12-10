@@ -7,10 +7,10 @@ var table_controller = require('../../controllers/tableController');
 //List all tables GET  #1
 router.get('/', table_controller.table_list);
 
-//Display table crete form on GET #2.1
+//Display table create form on GET #2.1
 router.get('/create', table_controller.table_create_get);
 
-//Handle table crete form on POST #2.2
+//Handle table create form on POST #2.2
 router.post('/create', table_controller.table_create_post);
 
 //Display table update form on GET #4.1

@@ -7,10 +7,10 @@ var booking_controller = require('../../controllers/bookingController');
 //List all bookings GET  #1
 router.get('/', booking_controller.booking_list);
 
-//Display booking crete form on GET #2.1
+//Display booking create form on GET #2.1
 router.get('/create', booking_controller.booking_create_get);
 
-//Handle booking crete form on POST #2.2
+//Handle booking create form on POST #2.2
 router.post('/create', booking_controller.booking_create_post);
 
 //Display booking update form on GET #4.1

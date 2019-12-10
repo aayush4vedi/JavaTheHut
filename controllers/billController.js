@@ -10,12 +10,12 @@ var bill_list = (req,res, next)=>{
     res.send('NOT IMPLEMENTED: bill_list');
 }
 
-//Display bill crete form on GET #2.1
+//Display bill create form on GET #2.1
 var bill_create_get = (req,res,next)=>{
     res.send('NOT IMPLEMENTED: bill_create_get');
 }
 
-//Handle bill crete form on POST #2.2
+//Handle bill create form on POST #2.2
 var bill_create_post = (req,res,next)=>{
     res.send('NOT IMPLEMENTED: bill_create_post');
 }

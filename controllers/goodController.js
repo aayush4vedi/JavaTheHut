@@ -16,12 +16,12 @@ var good_list = (req,res, next)=>{
     })
 }
 
-//Display good crete form on GET #2.1
+//Display good create form on GET #2.1
 var good_create_get = (req,res,next)=>{
     res.render('good_create', {title: 'Good Create'});
 }
 
-//Handle good crete form on POST #2.2
+//Handle good create form on POST #2.2
 var good_create_post = [
     body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('linkToPurchase').isLength({ min: 3 }).trim().withMessage('Invalid length'),

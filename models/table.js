@@ -15,7 +15,7 @@ var TableSchema = new Schema({
                         z: {type: Number, default:0},       // for multiple hall restaurants
                      },                               
     hall            : {type: Schema.Types.ObjectId, ref: 'Hall'}
-})
+}) //TODO: add employee, sr_no(name) in model and controller methods
 
 
 //===============
