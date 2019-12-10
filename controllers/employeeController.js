@@ -2,37 +2,37 @@ var Employee = require('../models/employee');
 
 //===================CRUD controllers================//
 //List all Employees GET  #1
-var employee_list = (req,res)=>{
+var employee_list = (req,res, next)=>{
     res.send('NOT IMPLEMENTED: employee_list');
 }
 
 //Display employee crete form on GET #2.1
-var employee_create_get = (req,res) =>{
+var employee_create_get = (req,res,next)=>{
     res.send('NOT IMPLEMENTED: employee_create_get');
 }
 
 //Handle employee crete form on POST #2.2
-var employee_create_post = (req,res) =>{
+var employee_create_post = (req,res,next)=>{
     res.send('NOT IMPLEMENTED: employee_create_post');
 }
 
 //Display details for a specefic employee #3
-var employee_details = (req,res)=>{
+var employee_details = (req,res, next)=>{
     res.send('NOT IMPLEMENTED: employee_details');
 }
 
 //Display employee update form on GET #4.1
-var employee_edit_get = (req,res) =>{
+var employee_edit_get = (req,res,next)=>{
     res.send('NOT IMPLEMENTED: employee_edit_get');
 }
 
 //Handle employee update form on PUT #4.2
-var employee_edit_put = (req,res) =>{
+var employee_edit_put = (req,res,next)=>{
     res.send('NOT IMPLEMENTED: employee_edit_put');
 }
 
 //Display employee update form on DELETE #5.1
-var employee_delete_delete = (req,res) =>{
+var employee_delete_delete = (req,res,next)=>{
     res.send('NOT IMPLEMENTED: employee_delete_delete');
 }
 
@@ -40,12 +40,12 @@ var employee_delete_delete = (req,res) =>{
 //=================Utils controllers================//
 
 //Display mark attendance form on GET #6.1
-var employee_mark_attendance_get = (req,res) =>{
+var employee_mark_attendance_get = (req,res,next)=>{
     res.send('NOT IMPLEMENTED: employee_mark_attendance_get');
 }
 
 //Display mark attendance form on POST #6.2
-var employee_mark_attendance_post = (req,res) =>{
+var employee_mark_attendance_post = (req,res,next)=>{
     res.send('NOT IMPLEMENTED: employee_mark_attendance_post');
 }
 

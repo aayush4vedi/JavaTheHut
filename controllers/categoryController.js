@@ -1,40 +1,133 @@
-var Category = require('../models/category')
+var Category    = require('../models/category'),
+    Dish        = require('../models/dish'),
+    async       = require('async')
+
+const { body, validationResult } = require('express-validator/check');
+const { sanitizeBody } = require('express-validator/filter');
 
 //===================CRUD controllers================//
 
 //List all categorys #1
-var category_list = (req,res)=>{
-    res.send('NOT IMPLEMENTED: category_list');
+var category_list = (req,res,next)=>{
+    Category.find()
+        .exec((err, list_category) =>{
+            if(err){
+                return next(err)
+            }
+            res.render('category_list', { title: 'Category List', category_list: list_category})
+        })
 }
 
 //Display category crete form on GET #2.1
-var category_create_get = (req,res) =>{
-    res.send('NOT IMPLEMENTED: category_create_get');
+var category_create_get = (req,res,next)=>{
+    res.render('category_create', {title: 'Category Create'});
 }
 
 //Handle category crete form on POST #2.2
-var category_create_post = (req,res) =>{
-    res.send('NOT IMPLEMENTED: category_create_post');
-}
+var category_create_post = [
+    // Validate fields.
+    body('name').isLength({ min: 3 }).trim().withMessage('Name must be >= 3 characters.'),
 
-//Display details for a specefic category #3
-var category_details = (req,res)=>{
-    res.send('NOT IMPLEMENTED: category_details');
+    // Sanitize fields.
+    sanitizeBody('name').escape(),
+
+    // Process request after validation and sanitization
+    (req,res,next)=>{
+
+        // Extract the validation errors from a request.
+        const errors = validationResult(req);
+
+        // Create Category object with escaped and trimmed data
+        var category = new Category(
+            {
+                name: req.body.name
+            }
+        );
+
+        if (!errors.isEmpty()) {
+            // There are errors. Render form again with sanitized values/errors messages.
+            res.render('category_create', {title: 'Category Create'});
+            return;
+        }
+        else {
+            // Save category.
+            category.save(function (err) {
+                if (err) { return next(err); }
+                // Successful - redirect 
+                res.redirect('/');      //TODO: add redirect url here
+            });
+        }
+    }
+]
+
+//Display details(+ it's all dishes) for a specefic category #3 : TODO: this form will have delete button for dishes as well(dishController)
+var category_details = (req,res,next)=>{
+    async.parallel({
+        category: function (callback) {
+            Category.findById(req.params.id)
+                .exec(callback)
+        },
+        category_dishes: function (callback) {
+            Book.find({ 'dish': req.params.id }, 'name description ingredients price isServing veg eta')
+                .exec(callback)
+        },
+    },(err, results) => {
+        if (err) { return next(err); } // Error in API usage.
+        if (results.category == null) { // No results.
+            var err = new Error('Category not found');
+            err.status = 404;
+            return next(err);
+        }
+        // Successful, so render.
+        res.render('category_detail', { title: 'Category Detail', category: results.category, category_dishes: results.category_dishes });
+    });
 }
 
 //Display category update form on GET #4.1
-var category_edit_get = (req,res) =>{
-    res.send('NOT IMPLEMENTED: category_edit_get');
+var category_edit_get = (req,res,next)=>{
+    Category.findById(req.params.id, (err, category)=> {
+        if (err) { return next(err); }
+        if (category == null) { // No results.
+            var err = new Error('Category not found');
+            err.status = 404;
+            return next(err);
+        }
+        // Success.
+        res.render('category_edit', { title: 'Update Category', category: category });
+    });
 }
 
 //Handle category update form on PUT #4.2
-var category_edit_put = (req,res) =>{
-    res.send('NOT IMPLEMENTED: category_edit_put');
-}
+var category_edit_put = [
+    body('name').isLength({ min: 3 }).trim().withMessage('Name must be >= 3 characters.'),
+    sanitizeBody('name').escape(),
+    (req, res, next) => {
+        const errors = validationResult(req);
+        var category = new Category(
+            {
+                name: req.body.name,
+                _id:  req.params.id
+            }
+        );
+        if (!errors.isEmpty()) {
+            res.render('category_form', { title: 'Update Category', category: category, errors: errors.array() });
+            return;
+        }
+        else {
+            Category.findByIdAndUpdate(req.params.id, category, {}, (err)=> {
+                if (err) { return next(err); }
+                res.redirect('/');      //TODO: add redirect url here
+            });
+        }
+    }
+]
 
 //Display category update form on DELETE #5
-var category_delete_delete = (req,res) =>{
-    res.send('NOT IMPLEMENTED: category_delete_delete');
+var category_delete_delete = (req,res,next)=>{
+    Category.findByIdAndRemove(req.body.categoryid, function deleteCategory(err) {
+        if (err) { return next(err); }
+        res.redirect('/');      //TODO: add redirect url here
+    })
 }
 
 

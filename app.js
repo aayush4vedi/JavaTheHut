@@ -1,6 +1,7 @@
 var express          = require('express'),
     mongoose         = require('mongoose'),
-    path             = require('path');
+    path             = require('path'),
+    createError      = require('http-errors');
 
 var app              = express()
 var v1               = require('./routes/v1');
@@ -21,6 +22,11 @@ app.set('view engine', 'ejs');
 
 //Add more versioning here
 app.use('/fooder/v1', v1);
+
+// catch 404 and forward to error handler
+app.use((req, res, next) =>{
+    next(createError(404));
+});   
 
 // Listen to port 5000
 app.listen(3000, function () {
