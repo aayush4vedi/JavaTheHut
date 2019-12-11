@@ -25,14 +25,14 @@ var bill_create_get = (req,res,next)=>{
 var bill_create_post = [
     body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('dine').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('orderAmount').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('dineAmount').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('taxAmount').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('serviceCharge').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('payableAmount').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('name').escape(),
     sanitizeBody('dine').escape(),
-    sanitizeBody('orderAmount').escape(),
+    sanitizeBody('dineAmount').escape(),
     sanitizeBody('taxAmount').escape(),
     sanitizeBody('serviceCharge').escape(),
     sanitizeBody('payableAmount').escape(),
@@ -44,7 +44,7 @@ var bill_create_post = [
                 name: req.body.name,
                 order: req.body.order,
                 dine: req.body.dine,
-                orderAmount: req.body.orderAmount,
+                dineAmount: req.body.dineAmount,
                 taxAmount: req.body.taxAmount,
                 serviceCharge: req.body.serviceCharge,
                 payableAmount: req.body.payableAmount
@@ -103,14 +103,14 @@ var bill_edit_get = (req,res,next)=>{
 var bill_edit_put = [
     body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('dine').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('orderAmount').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('dineAmount').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('taxAmount').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('serviceCharge').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('payableAmount').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('name').escape(),
     sanitizeBody('dine').escape(),
-    sanitizeBody('orderAmount').escape(),
+    sanitizeBody('dineAmount').escape(),
     sanitizeBody('taxAmount').escape(),
     sanitizeBody('serviceCharge').escape(),
     sanitizeBody('payableAmount').escape(),
@@ -122,7 +122,7 @@ var bill_edit_put = [
                 name: req.body.name,
                 order: req.body.order,
                 dine: req.body.dine,
-                orderAmount: req.body.orderAmount,
+                dineAmount: req.body.dineAmount,
                 taxAmount: req.body.taxAmount,
                 serviceCharge: req.body.serviceCharge,
                 payableAmount: req.body.payableAmount
