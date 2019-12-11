@@ -1,4 +1,5 @@
-var Good = require('../models/good')
+var Good        = require('../models/good'),
+    async       = require('async')
 
 const { body, validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');

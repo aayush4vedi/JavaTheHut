@@ -1,5 +1,7 @@
-var Table = require('../models/table'),
-    Hall  = require('../models/hall')
+var Table       = require('../models/table'),
+    Hall        = require('../models/hall'),
+    Employee    = require('../models/employee'),
+    async       = require('async')
 
 const { body, validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');

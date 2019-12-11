@@ -1,5 +1,6 @@
 var Order           = require('../models/order'),
-    DishInstance    = require('../models/dishInstance')
+    DishInstance    = require('../models/dishInstance'),
+    async       = require('async')
 
 const { body, validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
@@ -62,7 +63,7 @@ var order_details = (req,res,next)=>{
             Order.findById(req.params.id)
                 .exec(callback)
         },
-        order_dishInstances: (callback) =>{
+        items : (callback) =>{
             DishInstance.find({ 'order': req.params.id }, 'name quantity')
                 .exec(callback)
         },
@@ -73,7 +74,7 @@ var order_details = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('order_detail', { title: 'Order Detail', order: results.order, order_dishInstances: results.order_dishInstances });
+        res.render('order_detail', { title: 'Order Detail', order: results.order, items: results.items});
     });
 }
 
@@ -93,13 +94,20 @@ var order_edit_get = (req,res,next)=>{
 //Handle order update form on PUT #4.2
 var order_edit_put = [
     body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('items').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('cancellationReqs').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    
     sanitizeBody('name').escape(),
-    (req, res, next) => {
+    sanitizeBody('items').escape(),
+    sanitizeBody('cancellationReqs').escape(),
+
+    (req,res,next)=>{
         const errors = validationResult(req);
         var order = new Order(
             {
-                name: req.body.name,
-                _id:  req.params.id
+                status: req.body.status,
+                items: req.body.items,
+                cancellationReqs: req.body.cancellationReqs,
             }
         );
         if (!errors.isEmpty()) {
