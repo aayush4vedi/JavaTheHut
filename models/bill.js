@@ -8,13 +8,13 @@ var Schema = mongoose.Schema;
 var BillSchema = new Schema({
     // billID         : { type: String, default: uuid.v1 },     //restaurant specefic ID's to be implemented later
     isPaid         : { type: Boolean, default: false},
-    order          : {type: Schema.Types.ObjectId, ref: 'Order'},
-    orderAmount    : { type: Number, default: 0},
+    dine           : {type: Schema.Types.ObjectId, ref: 'Dine'},
+    dineAmount     : { type: Number, default: 0},
     taxAmount      : { type: Number, default: 0},
     serviceCharge  : { type: Number, default: 0},
     payableAmount  : { type: Number, default: 0}
 })
-
+//TODO: Update everywhere::orderAmount is changed to dineAmount
 
 //===============
 //    Methods

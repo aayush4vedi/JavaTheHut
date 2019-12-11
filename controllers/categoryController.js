@@ -7,7 +7,7 @@ const { sanitizeBody } = require('express-validator/filter');
 
 //===================CRUD controllers================//
 
-//List all categorys #1
+//List all categories #1
 var category_list = (req,res,next)=>{
     Category.find()
         .exec((err, list_category) =>{
