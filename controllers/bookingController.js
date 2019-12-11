@@ -1,4 +1,7 @@
-var Booking = require('../models/booking')
+var Booking     = require('../models/booking'),
+    Customer    = require('../models/customer'),
+    Dine        = require('../models/dine'),
+    async       = require('async')
 
 const { body, validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
@@ -69,6 +72,10 @@ var booking_details = (req,res,next)=>{
         },
         booking_dine: (callback) =>{
             Dine.find({ 'booking': req.params.id }, 'orders status bill')
+                .exec(callback)
+        },
+        booking_customer: (callback) =>{
+            Customer.find({ 'booking': req.params.id }, 'name')
                 .exec(callback)
         }
     },(err, results) => {

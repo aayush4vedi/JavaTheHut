@@ -14,7 +14,7 @@ var DineSchema = new Schema({
                         },
     bill            : {type: Schema.Types.ObjectId, ref: 'Bill'},
     booking         : {type: Schema.Types.ObjectId, ref: 'Booking'},    
-    server          : {type: Schema.Types.ObjectId, ref: 'Server'},    
+    server          : {type: Schema.Types.ObjectId, ref: 'Employee'},    
     customer        : {type: Schema.Types.ObjectId, ref: 'Customer'}
 })
 

@@ -1,4 +1,6 @@
-var Bill = require('../models/bill')
+var Bill = require('../models/bill'),
+    Dine = require('../models/dine'),
+    async       = require('async')
 
 const { body, validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
