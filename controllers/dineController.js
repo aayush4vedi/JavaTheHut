@@ -2,7 +2,7 @@ var Dine        = require('../models/dine'),
     Order       = require('../models/order'),
     Bill        = require('../models/bill'),
     Booking     = require('../models/booking'),
-    Server      = require('../models/employee'),
+    Employee    = require('../models/employee'),
     Customer    = require('../models/customer'),
     async       = require('async')
     
