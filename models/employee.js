@@ -23,7 +23,7 @@ var EmployeeSchema = new Schema({
     tables          : [{type: Schema.Types.ObjectId, ref: 'Table'}],  
     attendance      : {type: Boolean, default: true}                                
     // rating          : {type: Number, default: 3},       //scale-size:5  //TO be done in v2                       
-})
+}) 
 
 
 //===============

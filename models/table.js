@@ -7,6 +7,7 @@ var Schema = mongoose.Schema;
 
 var TableSchema = new Schema({
     // tableID         : { type: String, default: uuid.v1 },     //restaurant specefic ID's to be implemented later
+    name            : {type: String, default: 'Table1'},
     capacity        : {type: Number, default:4},
     available       : {type: Boolean, default:true},
     location        : {                                 //doing coordinates for now(UI will show size acc. to capacity but locaion is fixed)
@@ -14,8 +15,9 @@ var TableSchema = new Schema({
                         y: {type: Number, default:0},
                         z: {type: Number, default:0},       // for multiple hall restaurants
                      },                               
-    hall            : {type: Schema.Types.ObjectId, ref: 'Hall'}
-}) //TODO: add employee, sr_no(name) in model and controller methods
+    hall            : {type: Schema.Types.ObjectId, ref: 'Hall'},
+    employee        : {type: Schema.Types.ObjectId, ref: 'Employee'}
+}) 
 
 
 //===============

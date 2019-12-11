@@ -24,24 +24,30 @@ var table_create_get = (req,res,next)=>{
 
 //Handle table create form on POST #2.2
 var table_create_post = [
+    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('capacity').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('available').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('location').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('table').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('employee').isLength({ min: 3 }).trim().withMessage('Invalid length'),
 
+    sanitizeBody('name').escape(),
     sanitizeBody('capacity').escape(),
     sanitizeBody('available').escape(),
     sanitizeBody('location').escape(),
     sanitizeBody('table').escape(),
+    sanitizeBody('employee').escape(),
 
     (req,res,next)=>{
         const errors = validationResult(req);
         var table = new Table(
             {
+                name: req.body.name,
                 capacity: req.body.capacity,
                 available: req.body.available,
                 location: req.body.location,
-                table: req.body.table
+                table: req.body.table,
+                employee: req.body.employee
             }
         );
 
@@ -68,6 +74,10 @@ var table_details = (req,res, next)=>{
         table_hall: (callback) => {
             Hall.find({ 'table': req.params.id }, 'name')
                 .exec(callback)
+        },
+        table_employee: (callback) => {
+            Employee.find({ 'table': req.params.id }, 'name')
+                .exec(callback)
         }
     },(err, results) => {
         if (err) { return next(err); } 
@@ -76,7 +86,7 @@ var table_details = (req,res, next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('table_detail', { title: 'Table Detail', table: results.table, table_hall: results.table_hall});
+        res.render('table_detail', { title: 'Table Detail', table: results.table, table_hall: results.table_hall, tabltable_employeee_hall: results.table_employee});
     });
 
 }
@@ -96,25 +106,30 @@ var table_edit_get = (req,res,next)=>{
 
 //Handle table update form on PUT #4.2
 var table_edit_put = [
+    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('capacity').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('available').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('location').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('table').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('employee').isLength({ min: 3 }).trim().withMessage('Invalid length'),
 
+    sanitizeBody('name').escape(),
     sanitizeBody('capacity').escape(),
     sanitizeBody('available').escape(),
     sanitizeBody('location').escape(),
     sanitizeBody('table').escape(),
+    sanitizeBody('employee').escape(),
 
     (req,res,next)=>{
         const errors = validationResult(req);
         var table = new Table(
             {
+                name: req.body.name,
                 capacity: req.body.capacity,
                 available: req.body.available,
                 location: req.body.location,
                 table: req.body.table,
-                _id:  req.params.id
+                employee: req.body.employee
             }
         );
 
@@ -123,7 +138,7 @@ var table_edit_put = [
             return;
         }
         else {
-            Table.findByIdAndUpdate(function (err) {
+            table.findByIdAndUpdate(function (err) {
                 if (err) { return next(err); }
                 res.redirect('/');      //TODO: add redirect url here
             });

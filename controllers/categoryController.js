@@ -26,14 +26,20 @@ var category_create_get = (req,res,next)=>{
 //Handle category create form on POST #2.2
 var category_create_post = [
     body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('employee').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('dish').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('name').escape(),
+    sanitizeBody('employee').escape(),
+    sanitizeBody('dish').escape(),
 
     (req,res,next)=>{
         const errors = validationResult(req);
         var category = new Category(
             {
-                name: req.body.name
+                name: req.body.name,
+                employee: req.body.employee,
+                dish: req.body.dish,
             }
         );
 
@@ -61,6 +67,10 @@ var category_details = (req,res,next)=>{
             Dish.find({ 'category': req.params.id }, 'name description ingredients price isServing veg eta')
                 .exec(callback)
         },
+        category_employee: (callback) =>{
+            Dish.find({ 'category': req.params.id }, 'name attendance')
+                .exec(callback)
+        }
     },(err, results) => {
         if (err) { return next(err); } 
         if (results.category == null) { 
@@ -68,7 +78,7 @@ var category_details = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('category_detail', { title: 'Category Detail', category: results.category, category_dishes: results.category_dishes });
+        res.render('category_detail', { title: 'Category Detail', category: results.category, category_dishes: results.category_dishes, category_employee: results.category_employee});
     });
 }
 
@@ -88,13 +98,20 @@ var category_edit_get = (req,res,next)=>{
 //Handle category update form on PUT #4.2
 var category_edit_put = [
     body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('employee').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('dish').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    
     sanitizeBody('name').escape(),
-    (req, res, next) => {
+    sanitizeBody('employee').escape(),
+    sanitizeBody('dish').escape(),
+
+    (req,res,next)=>{
         const errors = validationResult(req);
         var category = new Category(
             {
                 name: req.body.name,
-                _id:  req.params.id
+                employee: req.body.employee,
+                dish: req.body.dish,
             }
         );
         if (!errors.isEmpty()) {
