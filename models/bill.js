@@ -6,15 +6,13 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var BillSchema = new Schema({
-    // billID         : { type: String, default: uuid.v1 },     //restaurant specefic ID's to be implemented later
-    isPaid         : { type: Boolean, default: false},
-    dine           : {type: Schema.Types.ObjectId, ref: 'Dine'},
-    dineAmount     : { type: Number, default: 0},
+    isPaid         : { type: Boolean, default: false, required: true},
+    dine           : {type: Schema.Types.ObjectId, ref: 'Dine', required: true},
+    dineAmount     : { type: Number, default: 0, required: true},
     taxAmount      : { type: Number, default: 0},
     serviceCharge  : { type: Number, default: 0},
-    payableAmount  : { type: Number, default: 0}
+    payableAmount  : { type: Number, default: 0, required: true}
 })
-//TODO: Update everywhere::orderAmount is changed to dineAmount
 
 //===============
 //    Methods
@@ -24,10 +22,10 @@ var BillSchema = new Schema({
 
 //get payableAmount
 BillSchema
-.virtual('payable-amount')
+.virtual('payableamount')
 .get(function () {
-    if(this.orderAmount>0 && this.taxAmount  > 0 && this.serviceCharge >0 ){
-        var payableAmount = this.taxAmount + this.orderAmount + this.serviceCharge;
+    if(this.dineAmount>0 && this.taxAmount  > 0 && this.serviceCharge >0 ){
+        var payableAmount = this.taxAmount + this.dineAmount + this.serviceCharge;
         return payableAmount;  
     }else{
         throw new Error('Error in amount calculation');
@@ -39,15 +37,15 @@ BillSchema
 /************** Utils ********************/
 //calculate tax
 BillSchema
-.virtual('tax-percentage')
+.virtual('taxpercentage')
 .get((taxPercentage) =>{
-    var taxAmount = (taxPercentage * this.orderAmount)/100;
+    var taxAmount = (taxPercentage * this.dineAmount)/100;
     this.taxAmount = taxAmount;  
 });
 
 //calculate service charge
 BillSchema
-.virtual('service-charge-percentage')
+.virtual('servicechargepercentage')
 .get(function (serviceChargePercentage) {
     var serviceChargeAmount = (serviceChargePercentage * this.orderAmount)/100;
     this.serviceChargeAmount = serviceChargeAmount;  

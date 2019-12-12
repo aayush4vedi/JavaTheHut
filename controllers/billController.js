@@ -25,14 +25,14 @@ var bill_create_get = (req,res,next)=>{
 
 //Handle bill create form on POST #2.2
 var bill_create_post = [
-    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('dine').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('dineAmount').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('taxAmount').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('serviceCharge').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('payableAmount').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('isPaid').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('dine').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('dineAmount').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('taxAmount').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('serviceCharge').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('payableAmount').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     
-    sanitizeBody('name').escape(),
+    sanitizeBody('isPaid').escape(),
     sanitizeBody('dine').escape(),
     sanitizeBody('dineAmount').escape(),
     sanitizeBody('taxAmount').escape(),
@@ -43,7 +43,7 @@ var bill_create_post = [
         const errors = validationResult(req);
         var bill = new Bill(
             {
-                name: req.body.name,
+                isPaid: req.body.isPaid,
                 order: req.body.order,
                 dine: req.body.dine,
                 dineAmount: req.body.dineAmount,
@@ -103,14 +103,13 @@ var bill_edit_get = (req,res,next)=>{
 
 //Handle bill update form on PUT #4.2
 var bill_edit_put = [
-    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('dine').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('dineAmount').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('taxAmount').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('serviceCharge').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('payableAmount').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     
-    sanitizeBody('name').escape(),
+    sanitizeBody('isPaid').escape(),
     sanitizeBody('dine').escape(),
     sanitizeBody('dineAmount').escape(),
     sanitizeBody('taxAmount').escape(),
@@ -121,20 +120,20 @@ var bill_edit_put = [
         const errors = validationResult(req);
         var bill = new Bill(
             {
-                name: req.body.name,
+                isPaid: req.body.isPaid,    //form must input a boolean value
                 order: req.body.order,
                 dine: req.body.dine,
                 dineAmount: req.body.dineAmount,
                 taxAmount: req.body.taxAmount,
                 serviceCharge: req.body.serviceCharge,
-                payableAmount: req.body.payableAmount
+                payableAmount: req.body.payableAmount,
+                _id:req.params.id
             }
         );
         if (!errors.isEmpty()) {
             res.render('bill_create', { title: 'Update Bill', bill: bill, errors: errors.array() });
             return;
-        }
-        else {
+        }else {
             Bill.findByIdAndUpdate(req.params.id, bill, {}, (err)=> {
                 if (err) { return next(err); }
                 res.redirect('/');      //TODO: add redirect url here
@@ -151,17 +150,6 @@ var bill_delete_delete = (req,res,next)=>{
     })
 }
 
-//=================Utils controllers================//
-
-//Show update-payment-status form GET #6.1
-var bill_update_payment_status_get = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: bill_update_payment_status_get');
-}
-
-//Show update-payment-status form PUT #6.2
-var bill_update_payment_status_post = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: bill_update_payment_status_post');
-}
 
 module.exports = {
     bill_list,
@@ -170,7 +158,5 @@ module.exports = {
     bill_details,
     bill_edit_get,
     bill_edit_put,
-    bill_delete_delete,
-    bill_update_payment_status_get,
-    bill_update_payment_status_post
+    bill_delete_delete
 }
