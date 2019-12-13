@@ -22,22 +22,36 @@ var booking_list = (req,res,next)=>{
 
 //Display booking create form on GET #2.1
 var booking_create_get = (req,res,next)=>{
-    res.render('booking_create', {title: 'Booking Create'});
+    //Get list of all tables, to select from
+    TableInstance.find(callback)
+        .exec((err, all_tables) =>{
+            if(err){
+                return next(err)
+            }
+            res.render('booking_create', { title: 'Booking Create', all_tables: all_tables})
+        })
 }
 
 //Handle booking create form on POST #2.2
 var booking_create_post = [
+    (req, res, next) => {
+        if(!(req.body.tableInstance instanceof Array)){
+            if(typeof req.body.tableInstance==='undefined')
+            req.body.gentableInstancere=[];
+            else
+            req.body.tableInstance=new Array(req.body.tableInstance);
+        }
+        next();
+    },
+
+
     body('customer').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('dine').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('tableInstance').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     body('checkInTime').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('stayingMinutes').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     
-    sanitizeBody('customer').escape(),
-    sanitizeBody('dine').escape(),
-    sanitizeBody('tableInstance').escape(),
-    sanitizeBody('checkInTime').escape(),
-    sanitizeBody('stayingMinutes').escape(),
+    sanitizeBody('*').trim().escape(),
+    sanitizeBody('tableInstance.*').escape(),
 
     (req,res,next)=>{
         const errors = validationResult(req);
@@ -45,14 +59,20 @@ var booking_create_post = [
             {
                 customer: req.body.customer,
                 dine: req.body.dine,
-                tableInstance: req.body.tableInstance,
+                tableInstance: (typeof req.body.tableInstance==='undefined') ? [] : req.body.tableInstance,
                 checkInTime: req.body.checkInTime,
                 stayingMinutes: req.body.stayingMinutes
             }
         );
 
         if (!errors.isEmpty()) {
-            res.render('booking_create', {title: 'Booking Create'});
+            TableInstance.find(callback)
+                .exec((err, all_tables) =>{
+                    if(err){
+                        return next(err)
+                    }
+                    res.render('booking_create', { title: 'Booking Create', booking:booking, all_tables: all_tables,errors: errors.array()})
+                })
             return;
         }
         else {
@@ -64,7 +84,7 @@ var booking_create_post = [
     }
 ]
 
-//Display details(+ it's all dishes) for a specefic booking #3 : TODO: this form will have delete button for dishes as well(dishController)
+//Display details for a specefic booking #3 
 var booking_details = (req,res,next)=>{
     async.parallel({
         booking: (callback) =>{
@@ -96,30 +116,61 @@ var booking_details = (req,res,next)=>{
 
 //Display booking update form on GET #4.1
 var booking_edit_get = (req,res,next)=>{
-    Booking.findById(req.params.id, (err, booking)=> {
-        if (err) { return next(err); }
-        if (booking == null) { 
+    async.parallel({
+        booking: (callback)=>{
+            Booking.findById(req.params.id)
+                .populate('customer')
+                .populate('dine')
+                .tableInstance('tableInstance')
+                .exec(callback)
+        },
+        booking_dine: (callback) =>{
+            Dine.find({ 'booking': req.params.id }, 'orders status bill')
+                .exec(callback)
+        },
+        booking_customer: (callback) =>{
+            Customer.find({ 'booking': req.params.id }, 'name')
+                .exec(callback)
+        },
+        booking_tables: (callback) =>{
+            TableInstance.find({ 'booking': req.params.id })
+                .exec(callback)
+        }, 
+        //Get list of all tables, to select from
+        all_tables: (callback) =>{
+            TableInstance.find(callback)
+        }
+    },(err, results)=>{
+        if (err) { return next(err); } 
+        if (results.booking == null) { 
             var err = new Error('Booking not found');
             err.status = 404;
             return next(err);
         }
-        res.render('booking_edit', { title: 'Update Booking', booking: booking });
-    });
+        res.render('booking_edit', { title: 'Update Booking', booking: results.booking, booking_dine: results.booking_dine, booking_customer: results.booking_customer, booking_tables: results.booking_tables, all_tables: results.all_tables});
+
+    })
 }
 
 //Handle booking update form on PUT #4.2
 var booking_edit_put = [
+    (req, res, next) => {
+        if(!(req.body.tableInstance instanceof Array)){
+            if(typeof req.body.tableInstance==='undefined')
+            req.body.gentableInstancere=[];
+            else
+            req.body.tableInstance=new Array(req.body.tableInstance);
+        }
+        next();
+    },
+
     body('customer').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('dine').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('tableInstance').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('checkInTime').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('stayingMinutes').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     
-    sanitizeBody('customer').escape(),
-    sanitizeBody('dine').escape(),
-    sanitizeBody('tableInstance').escape(),
-    sanitizeBody('checkInTime').escape(),
-    sanitizeBody('stayingMinutes').escape(),
+    sanitizeBody('*').trim().escape(),
+    sanitizeBody('tableInstance.*').escape(),
 
     (req,res,next)=>{
         const errors = validationResult(req);
@@ -127,14 +178,21 @@ var booking_edit_put = [
             {
                 customer: req.body.customer,
                 dine: req.body.dine,
-                tatableInstanceble: req.body.tableInstance,
+                tableInstance: (typeof req.body.tableInstance==='undefined') ? [] : req.body.tableInstance,
                 checkInTime: req.body.checkInTime,
                 stayingMinutes: req.body.stayingMinutes,
-                _id : req.params.id
+                _id: req.params.id
             }
         );
+
         if (!errors.isEmpty()) {
-            res.render('booking_create', { title: 'Update Booking', booking: booking, errors: errors.array() });
+            TableInstance.find(callback)
+                .exec((err, all_tables) =>{
+                    if(err){
+                        return next(err)
+                    }
+                    res.render('booking_create', { title: 'Booking Create', booking:booking, all_tables: all_tables, errors: errors.array()})
+                })
             return;
         }
         else {
@@ -159,7 +217,7 @@ var booking_delete_delete = (req,res,next)=>{
 //Display all bookings by checkInTime &  checkOutTime on GET #8 
 //:: find all bookings overlapping withing this time => to get list of all the busy tables at time t
 var booking_for_time_get = (req,res,next)=>{
-    //TODO: optimise query
+    //TODO: optimise this query
     Booking.find({ 'checkInTime': req.params.checkInTime , 'checkOutTime': req.params.checkOutTime}, (err, booking)=> {
         if (err) { return next(err); }
         if (booking == null) { 

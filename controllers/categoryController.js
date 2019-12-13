@@ -26,11 +26,11 @@ var category_create_get = (req,res,next)=>{
 //Handle category create form on POST #2.2
 var category_create_post = [
     body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('employee').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('server').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('dish').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('name').escape(),
-    sanitizeBody('employee').escape(),
+    sanitizeBody('server').escape(),
     sanitizeBody('dish').escape(),
 
     (req,res,next)=>{
@@ -38,7 +38,7 @@ var category_create_post = [
         var category = new Category(
             {
                 name: req.body.name,
-                employee: req.body.employee,
+                server: req.body.server,
                 dish: req.body.dish,
             }
         );
@@ -67,7 +67,7 @@ var category_details = (req,res,next)=>{
             Dish.find({ 'category': req.params.id }, 'name description ingredients price isServing veg eta')
                 .exec(callback)
         },
-        category_employee: (callback) =>{
+        category_server: (callback) =>{
             Dish.find({ 'category': req.params.id }, 'name attendance')
                 .exec(callback)
         }
@@ -78,7 +78,7 @@ var category_details = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('category_detail', { title: 'Category Detail', category: results.category, category_dishes: results.category_dishes, category_employee: results.category_employee});
+        res.render('category_detail', { title: 'Category Detail', category: results.category, category_dishes: results.category_dishes, category_server: results.category_server});
     });
 }
 
@@ -98,11 +98,11 @@ var category_edit_get = (req,res,next)=>{
 //Handle category update form on PUT #4.2
 var category_edit_put = [
     body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('employee').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('server').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('dish').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('name').escape(),
-    sanitizeBody('employee').escape(),
+    sanitizeBody('server').escape(),
     sanitizeBody('dish').escape(),
 
     (req,res,next)=>{
@@ -110,7 +110,7 @@ var category_edit_put = [
         var category = new Category(
             {
                 name: req.body.name,
-                employee: req.body.employee,
+                server: req.body.server,
                 dish: req.body.dish,
             }
         );
