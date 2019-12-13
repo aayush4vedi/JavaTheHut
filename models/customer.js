@@ -5,9 +5,11 @@ var Schema = mongoose.Schema;
 var CustomerSchema = new Schema({
     name            : String,
     email           : String,                                 
-    phone           : String,                                 
+    phone           : String,
+    booking         : {type: Schema.Types.ObjectId, ref: 'Booking'}                                
     // prevOrders      : [Order]   //Not doing rn
 })
+//TODO: added `booking` in model.Modify controllers everywhere
 
 //===============
 //    Methods

@@ -132,6 +132,11 @@ var customer_delete_delete = (req,res,next)=>{
     })
 }
 
+//Display all bookings by customerID on GET #6
+var booking_for_customer_get = (req,res,next)=>{
+    res.send('NOT IMPLEMENTED: booking_for_customer_get');
+}
+
 
 
 module.exports = {

@@ -1,5 +1,5 @@
-var Bill = require('../models/bill'),
-    Dine = require('../models/dine'),
+var Bill        = require('../models/bill'),
+    Dine        = require('../models/dine'),
     async       = require('async')
 
 const { body, validationResult } = require('express-validator/check');

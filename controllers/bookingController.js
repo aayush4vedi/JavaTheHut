@@ -1,7 +1,8 @@
-var Booking     = require('../models/booking'),
-    Customer    = require('../models/customer'),
-    Dine        = require('../models/dine'),
-    async       = require('async')
+var Booking             = require('../models/booking'),
+    Customer            = require('../models/customer'),
+    Dine                = require('../models/dine'),
+    TableInstance       = require('../models/tableInstance'),
+    async               = require('async')
 
 const { body, validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
@@ -28,13 +29,13 @@ var booking_create_get = (req,res,next)=>{
 var booking_create_post = [
     body('customer').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('dine').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('table').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('tableInstance').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     body('checkInTime').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('stayingMinutes').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('customer').escape(),
     sanitizeBody('dine').escape(),
-    sanitizeBody('table').escape(),
+    sanitizeBody('tableInstance').escape(),
     sanitizeBody('checkInTime').escape(),
     sanitizeBody('stayingMinutes').escape(),
 
@@ -44,7 +45,7 @@ var booking_create_post = [
             {
                 customer: req.body.customer,
                 dine: req.body.dine,
-                table: req.body.table,
+                tableInstance: req.body.tableInstance,
                 checkInTime: req.body.checkInTime,
                 stayingMinutes: req.body.stayingMinutes
             }
@@ -77,6 +78,10 @@ var booking_details = (req,res,next)=>{
         booking_customer: (callback) =>{
             Customer.find({ 'booking': req.params.id }, 'name')
                 .exec(callback)
+        },
+        booking_tables: (callback) =>{
+            TableInstance.find({ 'booking': req.params.id })
+                .exec(callback)
         }
     },(err, results) => {
         if (err) { return next(err); } 
@@ -85,7 +90,7 @@ var booking_details = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('booking_detail', { title: 'Booking Detail', booking: results.booking, booking_dine: results.booking_dine});
+        res.render('booking_detail', { title: 'Booking Detail', booking: results.booking, booking_dine: results.booking_dine, booking_customer: results.booking_customer, booking_tables: results.booking_tables});
     });
 }
 
@@ -106,13 +111,13 @@ var booking_edit_get = (req,res,next)=>{
 var booking_edit_put = [
     body('customer').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('dine').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('table').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('tableInstance').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('checkInTime').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('stayingMinutes').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('customer').escape(),
     sanitizeBody('dine').escape(),
-    sanitizeBody('table').escape(),
+    sanitizeBody('tableInstance').escape(),
     sanitizeBody('checkInTime').escape(),
     sanitizeBody('stayingMinutes').escape(),
 
@@ -122,9 +127,10 @@ var booking_edit_put = [
             {
                 customer: req.body.customer,
                 dine: req.body.dine,
-                table: req.body.table,
+                tatableInstanceble: req.body.tableInstance,
                 checkInTime: req.body.checkInTime,
-                stayingMinutes: req.body.stayingMinutes
+                stayingMinutes: req.body.stayingMinutes,
+                _id : req.params.id
             }
         );
         if (!errors.isEmpty()) {
@@ -149,25 +155,24 @@ var booking_delete_delete = (req,res,next)=>{
 }
 
 //===================Utils controllers================//
-//Display all bookings by customerID on GET #6
-var booking_for_customer_get = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: booking_for_customer_get');
+
+//Display all bookings by checkInTime &  checkOutTime on GET #8 
+//:: find all bookings overlapping withing this time => to get list of all the busy tables at time t
+var booking_for_time_get = (req,res,next)=>{
+    //TODO: optimise query
+    Booking.find({ 'checkInTime': req.params.checkInTime , 'checkOutTime': req.params.checkOutTime}, (err, booking)=> {
+        if (err) { return next(err); }
+        if (booking == null) { 
+            var err = new Error('Booking not found');
+            err.status = 404;
+            return next(err);
+        }
+        //render the same list page
+        res.render('booking_list', { title: 'Listings all bookings in this time', booking: booking });
+    });
 }
 
-//Display all bookings by tableID on GET #7
-var booking_for_table_get = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: booking_for_table_get');
-}
-
-//Display all bookings by date on GET #8
-var booking_for_date_get = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: booking_for_date_get');
-}
-
-//Display all bookings by date & tableID on GET #9
-var booking_for_table_date_get = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: booking_for_table_date_get');
-}
+//Display all bookings by date & tableInstance on GET #9 => no usecase exists
 
 module.exports = {
     booking_list,
@@ -177,8 +182,5 @@ module.exports = {
     booking_edit_get,
     booking_edit_put,
     booking_delete_delete,
-    booking_for_customer_get,
-    booking_for_table_get,
-    booking_for_date_get,
-    booking_for_table_date_get
+    booking_for_time_get
 }
