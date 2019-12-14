@@ -18,7 +18,7 @@ var order_list = (req,res,next)=>{
             if(err){
                 return next(err)
             }
-            res.render('order_list', { title: 'Order List', order_list: list_order})
+            res.render('order_list', { title: 'Order List', orders: list_order})
         })
 }
 

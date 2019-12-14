@@ -1,0 +1,10 @@
+<h1><%= title %></h1>
+
+<form action="/order/<%= order._id %>?_method=PUT" method="POST">
+    <input name="order[status]" value="<%= order.status %>">
+    <input name="order[items]" value="<%= order.items %>">
+    <input name="order[dine]" value="<%= order.dine %>">
+    <input name="order[cancellationReqs]" value="<%= order.cancellationReqs %>">
+
+    <button type="submit">Submit</button>
+</form>
