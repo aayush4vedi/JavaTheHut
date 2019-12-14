@@ -10,6 +10,7 @@ const { sanitizeBody } = require('express-validator/filter');
 //List all restaurants #1
 var restaurant_list = (req,res, next)=>{
     Restaurant.find()
+        .populate('Hall')
         .exec((err, list_restaurant) =>{
             if(err){
                 return next(err)
@@ -20,7 +21,11 @@ var restaurant_list = (req,res, next)=>{
 
 //Display restaurant create form on GET #2.1
 var restaurant_create_get = (req,res,next)=>{
-    res.render('restaurant_create', {title: 'Restaurant Create'});
+    Hall.find()
+        .exec((err,halls)=>{
+            if (err) { return next(err); } 
+            res.render('restaurant_create', {title: 'Restaurant Create',  halls: halls});
+        })
 }
 
 //Handle restaurant create form on POST #2.2
@@ -29,13 +34,8 @@ var restaurant_create_post = [
     body('activePlanID').isLength({ min: 1 }).trim().withMessage('Invalid input is entered'),
     body('phone').isLength({ min: 3 }).trim().withMessage('Invalid input is entered'),
     body('address').isLength({ min: 3 }).trim().withMessage('Invalid input is entered'),
-    body('halls').isLength({ min: 3 }).trim().withMessage('Invalid input is entered'),
 
-    sanitizeBody('name').escape(),
-    sanitizeBody('activePlanID').escape(),
-    sanitizeBody('phone').escape(),
-    sanitizeBody('address').escape(),
-    sanitizeBody('halls').escape(),
+    sanitizeBody('*').escape(),
 
     (req,res,next)=>{
         const errors = validationResult(req);
@@ -50,7 +50,11 @@ var restaurant_create_post = [
         );
 
         if (!errors.isEmpty()) {
-            res.render('restaurant_create', {title: 'Restaurant Create'});
+            Hall.find()
+            .exec((err,halls)=>{
+                if (err) { return next(err); } 
+                res.render('restaurant_create', {title: 'Restaurant Create',  halls: halls});
+            })
             return;
         }
         else {
@@ -66,11 +70,13 @@ var restaurant_create_post = [
 var restaurant_details = (req,res, next)=>{
     async.parallel({
         restaurant: (callback) => {
-            Restaurant.findById(req.params.id)
+            Restaurant
+                .findById(req.params.id)
+                .populate('halls')
                 .exec(callback)
         },
-        restaurnat_halls: (callback) => {
-            Hall.find({ 'restaurant': req.params.id }, 'name')
+        all_halls: (callback) => {
+            Hall.find()
                 .exec(callback)
         },
     },(err, results) => {
@@ -80,20 +86,31 @@ var restaurant_details = (req,res, next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('restaurant_detail', { title: 'Restaurant Detail', restaurant: results.restaurant, restaurnat_halls: results.restaurnat_halls });
+        res.render('restaurant_detail', { title: 'Restaurant Detail', restaurant: results.restaurant, all_halls: results.all_halls });
     });
 }
 
 //Display restaurant update form on GET #4.1
 var restaurant_edit_get = (req,res,next)=>{
-    Restaurant.findById(req.params.id, (err, restaurant)=> {
-        if (err) { return next(err); }
-        if (restaurant == null) { 
+    async.parallel({
+        restaurant: (callback) => {
+            Restaurant
+                .findById(req.params.id)
+                .populate('halls')
+                .exec(callback)
+        },
+        all_halls: (callback) => {
+            Hall.find()
+                .exec(callback)
+        },
+    },(err, results) => {
+        if (err) { return next(err); } 
+        if (results.restaurant == null) { 
             var err = new Error('Restaurant not found');
             err.status = 404;
             return next(err);
         }
-        res.render('restaurant_edit', { title: 'Update Restaurant', restaurant: restaurant });
+        res.render('restaurant_edit', { title: 'Update Restaurant', restaurant: restaurant, all_halls: results.all_halls });
     });
 }
 
@@ -103,13 +120,8 @@ var restaurant_edit_put = [
     body('activePlanID').isLength({ min: 1 }).trim().withMessage('Invalid input is entered'),
     body('phone').isLength({ min: 3 }).trim().withMessage('Invalid input is entered'),
     body('address').isLength({ min: 3 }).trim().withMessage('Invalid input is entered'),
-    body('halls').isLength({ min: 3 }).trim().withMessage('Invalid input is entered'),
 
-    sanitizeBody('name').escape(),
-    sanitizeBody('activePlanID').escape(),
-    sanitizeBody('phone').escape(),
-    sanitizeBody('address').escape(),
-    sanitizeBody('halls').escape(),
+    sanitizeBody('*').escape(),
     (req, res, next) => {
         const errors = validationResult(req);
         var restaurant = new Restaurant(
@@ -123,7 +135,11 @@ var restaurant_edit_put = [
             }
         );
         if (!errors.isEmpty()) {
-            res.render('restaurant_form', { title: 'Update Restaurant', restaurant: restaurant, errors: errors.array() });
+            Hall.find()
+            .exec((err,halls)=>{
+                if (err) { return next(err); } 
+                res.render('restaurant_create', {title: 'Restaurant Create',  halls: halls});
+            })
             return;
         }
         else {

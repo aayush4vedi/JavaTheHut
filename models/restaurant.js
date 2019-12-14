@@ -22,29 +22,6 @@ var Restaurant = mongoose.model('Restaurant', RestaurantSchema);
 /************** Assertions ********************/
 //validate contact
 
-/************** Getters ********************/
-
-// ==<will be handled by hallController >===
-// //set all halls
-// RestaurantSchema
-// .virtual('halls')
-// .set(function (halls) {  
-//     this.halls = halls;
-// });
-
-//set halls(add more)
-RestaurantSchema
-.virtual('addhalls')
-.set(function (halls) {  
-    halls.forEach(hall => {
-        this.halls.push(hall);
-    });
-});
-
-
-
-/************** Others ********************/
-
 
 module.exports = {
     Restaurant
