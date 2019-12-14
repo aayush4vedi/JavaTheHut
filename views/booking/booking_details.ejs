@@ -1,0 +1,13 @@
+<h1><%= title %></h1>
+
+<% bookings.forEach((booking)=>{ %>
+    <h2><%= booking.customer.name %></h2>
+    <h2><%= booking.dine._id %></h2>
+    <h2><%= booking.dine.date %></h2>
+    <h2><%= booking.checkInTime %></h2>
+    <h2><%= booking.stayingMinutes %></h2>
+    <h2><%= booking.checkOutTime %></h2>
+    <% booking.tableInstance.forEach((tableInstance)=>{
+        <h2><%= tableInstance.table.name %></h2>
+    }) 
+<% }) %>
