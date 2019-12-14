@@ -2,8 +2,10 @@
 
 <form action="/hall/<%= hall._id %>?_method=PUT" method="POST">
     <input name="hall[name]" value="<%= hall.name %>">
-    <input name="hall[tables]" value="<%= hall.tables %>">
-    <input name="hall[restaurant]" value="<%= hall.restaurant %>">
+    <input name="hall[activePlanID]" value="<%= hall.activePlanID %>">
+    <input name="hall[halls]" value="<%= hall.halls %>">
+    <input name="hall[phone]" value="<%= hall.phone %>">
+    <input name="hall[address]" value="<%= hall.address %>">
 
     <button type="submit">Submit</button>
 </form>
