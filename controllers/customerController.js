@@ -1,4 +1,5 @@
 var Customer    = require('../models/customer'),
+    Booking     = require('../models/booking'),
     async       = require('async')
 
 
@@ -10,16 +11,19 @@ const { sanitizeBody } = require('express-validator/filter');
 //List all customers #1
 var customer_list = (req,res, next)=>{
     Customer.find()
-    .exec((err, list_customer) =>{
-        if(err){
-            return next(err)
-        }
-        res.render('customer_list', { title: 'Customer List', customer_list: list_customer})
-    })
+        .sort([['name', 'ascending']])
+        .populate('bookings')
+        .exec((err, list_customer) =>{
+            if(err){
+                return next(err)
+            }
+            res.render('customer_list', { title: 'Customer List', customer_list: list_customer})
+        })
 }
 
 //Display customer create form on GET #2.1
 var customer_create_get = (req,res,next)=>{
+    //bookings are created for existing customers.So new customer won't neeed it/
     res.render('customer_create', {title: 'Customer Create'});
 }
 
@@ -29,33 +33,24 @@ var customer_create_post = [
     body('email').isLength({ min: 10 }).trim().withMessage('Email must be >= 10 characters.'),
     body('phone').isLength({ min: 11 }).trim().withMessage('Phone must be >= 11 characters.'),
 
-    sanitizeBody('name').escape(),
-    sanitizeBody('email').escape(),
-    sanitizeBody('phone').escape(),
-
-    // Process request after validation and sanitization
+    sanitizeBody('*').escape(),
     (req,res,next)=>{
-
-        // Extract the validation errors from a request.
         const errors = validationResult(req);
-
-        // Create Customer object with escaped and trimmed data
         var customer = new Customer(
             {
-                name: req.body.name
+                name: req.body.name,
+                email: req.body.email,
+                phone: req.body.phone
             }
         );
 
         if (!errors.isEmpty()) {
-            // There are errors. Render form again with sanitized values/errors messages.
             res.render('customer_create', {title: 'Customer Create'});
             return;
         }
         else {
-            // Save customer.
             customer.save( (err)=> {
                 if (err) { return next(err); }
-                // Successful - redirect 
                 res.redirect('/');      //TODO: add redirect url here
             });
         }
@@ -64,29 +59,39 @@ var customer_create_post = [
 
 //Display details for a specefic customer #3
 var customer_details = (req,res, next)=>{
-    Customer.findById(req.params.id,(err, customer) => {
-        if (err) { return next(err); } // Error in API usage.
-        if (customer == null) { // No results.
-            var err = new Error('Customer not found');
-            err.status = 404;
-            return next(err);
-        }
-        // Successful, so render.
-        res.render('customer_detail', { title: 'Customer Detail', customer: customer});
-    });
+    Customer.findById(req.params.id)
+        .populate('booking')
+        .exec((err,customer)=>{
+            if (err) { return next(err); } 
+            if (customer == null) { 
+                var err = new Error('Customer not found');
+                err.status = 404;
+                return next(err);
+            }
+            res.render('customer_detail', { title: 'Customer Detail', customer: customer});
+        })
 }
 
 //Display customer update form on GET #4.1
 var customer_edit_get = (req,res,next)=>{
-    Customer.findById(req.params.id, (err, customer)=> {
-        if (err) { return next(err); }
-        if (customer == null) { // No results.
+    async.parallel({
+        customer: (callback) =>{
+            Customer.findById(req.params.id)
+                .populate('booking')
+                .exec(callback)
+        },
+        all_bookings: (callback) =>{
+            Booking.find()
+                .exec(callback)
+        }
+    },(err, results) => {
+        if (err) { return next(err); } 
+        if (customer == null) { 
             var err = new Error('Customer not found');
             err.status = 404;
             return next(err);
         }
-        // Success.
-        res.render('customer_edit', { title: 'Update Customer', customer: customer });
+        res.render('customer_edit', { title: 'Update Customer', category: results.category, all_bookings: results.all_bookings});
     });
 }
 
@@ -96,11 +101,8 @@ var customer_edit_put = [
     body('email').isLength({ min: 10 }).trim().withMessage('Email must be >= 10 characters.'),
     body('phone').isLength({ min: 11 }).trim().withMessage('Phone must be >= 11 characters.'),
 
-    sanitizeBody('name').escape(),
-    sanitizeBody('email').escape(),
-    sanitizeBody('phone').escape(),
-
-    (req, res, next) => {
+    sanitizeBody('*').escape(),
+    (req,res,next)=>{
         const errors = validationResult(req);
         var customer = new Customer(
             {
@@ -132,9 +134,18 @@ var customer_delete_delete = (req,res,next)=>{
     })
 }
 
-//Display all bookings by customerID on GET #6
+//Display all bookings(list) by customerID on GET #6
 var booking_for_customer_get = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: booking_for_customer_get');
+    Booking.find({'customer' : req.params.id})
+        .populate('customer')
+        .populate('dine')
+        .populate('tableInstance')
+        .exec((err, list_booking) =>{
+            if(err){
+                return next(err)
+            }
+            res.render('booking_list', { title: 'Booking List', booking_list: list_booking})
+        })
 }
 
 
@@ -146,6 +157,7 @@ module.exports = {
     customer_details,
     customer_edit_get,
     customer_edit_put,
-    customer_delete_delete
+    customer_delete_delete,
+    booking_for_customer_get
 }
 
