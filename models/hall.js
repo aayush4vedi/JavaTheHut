@@ -9,7 +9,7 @@ var HallSchema = new Schema({
     // hallID         : { type: String, default: uuid.v1 },     //restaurant specefic ID's to be implemented later
     name           : {type: String, default:'Main'},
     tables         : [{type: Schema.Types.ObjectId, ref: 'Table'}],            
-    restaurant     : [{type: Schema.Types.ObjectId, ref: 'Restaurant'}],                    
+    restaurant     : {type: Schema.Types.ObjectId, ref: 'Restaurant'},                    
 })
 
 
