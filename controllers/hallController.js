@@ -17,7 +17,7 @@ var hall_list = (req,res, next)=>{
             if(err){
                 return next(err)
             }
-            res.render('hall_list', { title: 'Hall List', hall_list: list_hall})
+            res.render('hall_list', { title: 'Hall List', halls: list_hall})
         })
 }
 

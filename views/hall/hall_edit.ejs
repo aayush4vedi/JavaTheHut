@@ -1,0 +1,9 @@
+<h1><%= title %></h1>
+
+<form action="/hall/<%= hall._id %>?_method=PUT" method="POST">
+    <input name="hall[name]" value="<%= hall.name %>">
+    <input name="hall[tables]" value="<%= hall.tables %>">
+    <input name="hall[restaurant]" value="<%= hall.restaurant %>">
+
+    <button type="submit">Submit</button>
+</form>

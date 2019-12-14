@@ -1,0 +1,11 @@
+<h1><%= title %></h1>
+
+<% halls.forEach((hall)=>{ %>
+    <h2><%= hall.name %></h2>
+    <h2><%= hall.restaurant %></h2>
+    <% hall.tables.forEach((table)=>{ %>
+        <h2><%= table.name %></h2>
+        <h2><%= table.capacity %></h2>
+    <% }) %>
+    <a href="/hall/<%= hall._id %>">Details</a>
+<% }) %>
