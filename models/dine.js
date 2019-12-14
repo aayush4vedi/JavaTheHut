@@ -16,7 +16,8 @@ var DineSchema = new Schema({
     booking         : {type: Schema.Types.ObjectId, ref: 'Booking'},    
     waiter          : {type: Schema.Types.ObjectId, ref: 'Employee'},    
     customer        : {type: Schema.Types.ObjectId, ref: 'Customer'},
-    tableInstances  : [{type: Schema.Types.ObjectId, ref: 'TableInstance'}]
+    tableInstances  : [{type: Schema.Types.ObjectId, ref: 'TableInstance'}],
+    date: TODO:
 })
 
 //===============

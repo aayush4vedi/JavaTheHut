@@ -13,12 +13,7 @@ var bill_list = (req,res,next)=>{
         .populate('dine')
         .exec((err, bills) => {
         if (err) { return next(err); } 
-        if (results.bill == null) { 
-            var err = new Error('No Bills found');
-            err.status = 404;
-            return next(err);
-        }
-        res.render('bill_detail', { title: 'Bill Detail', bills: bills});
+        res.render('bill_list', { title: 'Bills List', bills: bills});
     });
 }
 
@@ -39,7 +34,6 @@ var bill_create_post = [
     body('dineAmount').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     body('taxAmount').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     body('serviceCharge').isLength({ min: 1 }).trim().withMessage('Invalid length'),
-    body('payableAmount').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('*').trim().escape(),
 
@@ -48,12 +42,10 @@ var bill_create_post = [
         var bill = new Bill(
             {
                 isPaid: req.body.isPaid,
-                order: req.body.order,
                 dine: req.body.dine,
                 dineAmount: req.body.dineAmount,
                 taxAmount: req.body.taxAmount,
                 serviceCharge: req.body.serviceCharge,
-                payableAmount: req.body.payableAmount
             }
         );
 
@@ -78,25 +70,17 @@ var bill_create_post = [
 
 //Display details(+ it's all dishes) for a specefic bill #3 : TODO: this form will have delete button for dishes as well(dishController)
 var bill_details = (req,res,next)=>{
-    async.parallel({
-        bill: (callback) =>{
-            Bill.findById(req.params.id)
-                .populate('dine')
-                .exec(callback)
-        },
-        bill_dine: (callback) =>{
-            Dine.find({ 'bill': req.params.id }, 'orders status booking ')
-                .exec(callback)
-        }
-    },(err, results) => {
-        if (err) { return next(err); } 
-        if (results.bill == null) { 
-            var err = new Error('Bill not found');
-            err.status = 404;
-            return next(err);
-        }
-        res.render('bill_detail', { title: 'Bill Detail', bill: results.bill, bill_dine: results.bill_dine});
-    });
+    Bill.findById(req.params.id)
+        .populate('dine')
+        .exec((err,bill)=>{
+            if (err) { return next(err); } 
+            if (bill == null) { 
+                var err = new Error('Bill not found');
+                err.status = 404;
+                return next(err);
+            }
+            res.render('bill_detail', { title: 'Bill Detail', bill: bill});
+        })
 }
 
 //Display bill update form on GET #4.1
@@ -105,10 +89,6 @@ var bill_edit_get = (req,res,next)=>{
         bill: (callback) =>{
             Bill.findById(req.params.id)
                 .populate('dine')
-                .exec(callback)
-        },
-        bill_dine: (callback) =>{
-            Dine.find({ 'bill': req.params.id }, 'orders status booking ')
                 .exec(callback)
         },
         all_dines: (callback) =>{
@@ -121,7 +101,7 @@ var bill_edit_get = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('bill_edit', { title: 'Update Bill', bill: results.bill, bill_dine: results.bill_dine, all_dines: results.all_dines});
+        res.render('bill_edit', { title: 'Update Bill', bill: results.bill, all_dines: results.all_dines});
     });
 }
 
@@ -130,7 +110,6 @@ var bill_edit_put = [
     body('dineAmount').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     body('taxAmount').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     body('serviceCharge').isLength({ min: 1 }).trim().withMessage('Invalid length'),
-    body('payableAmount').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('*').trim().escape(),
 
@@ -138,13 +117,11 @@ var bill_edit_put = [
         const errors = validationResult(req);
         var bill = new Bill(
             {
-                isPaid: req.body.isPaid,    //form must input a boolean value
-                order: req.body.order,
+                isPaid: req.body.isPaid,
                 dine: req.body.dine,
                 dineAmount: req.body.dineAmount,
                 taxAmount: req.body.taxAmount,
                 serviceCharge: req.body.serviceCharge,
-                payableAmount: req.body.payableAmount,
                 _id:req.params.id
             }
         );
