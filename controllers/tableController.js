@@ -1,6 +1,6 @@
 var Table       = require('../models/table'),
     Hall        = require('../models/hall'),
-    Employee    = require('../models/employee'),
+    Waiter      = require('../models/waiter'),
     async       = require('async')
 
 const { body, validationResult } = require('express-validator/check');
@@ -11,6 +11,8 @@ const { sanitizeBody } = require('express-validator/filter');
 //List all tables #1
 var table_list = (req,res, next)=>{
     Table.find()
+        .populate('hall')
+        .populate('waiter')
         .exec((err, list_table) =>{
             if(err){
                 return next(err)
@@ -21,7 +23,17 @@ var table_list = (req,res, next)=>{
 
 //Display table create form on GET #2.1
 var table_create_get = (req,res,next)=>{
-    res.render('table_create', {title: 'Table Create'});
+    async.parallel({
+        halls: (callback) =>{
+            Hall.find(callback)
+        },
+        waiters: (callback) =>{
+            Waiter.find(callback)
+        }
+    },(err, results) => {
+        if (err) { return next(err); } 
+        res.render('table_create', {title: 'Table Create', halls: results.halls,waiters: results.waiters,errors: errors.array()});
+    });
 }
 
 //Handle table create form on POST #2.2
@@ -30,15 +42,8 @@ var table_create_post = [
     body('capacity').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('available').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('location').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('table').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('employee').isLength({ min: 3 }).trim().withMessage('Invalid length'),
 
-    sanitizeBody('name').escape(),
-    sanitizeBody('capacity').escape(),
-    sanitizeBody('available').escape(),
-    sanitizeBody('location').escape(),
-    sanitizeBody('table').escape(),
-    sanitizeBody('employee').escape(),
+    sanitizeBody('*').escape(),
 
     (req,res,next)=>{
         const errors = validationResult(req);
@@ -48,13 +53,23 @@ var table_create_post = [
                 capacity: req.body.capacity,
                 available: req.body.available,
                 location: req.body.location,
-                table: req.body.table,
-                employee: req.body.employee
+                hall: req.body.hall,
+                waiter: req.body.waiter
             }
         );
 
         if (!errors.isEmpty()) {
-            res.render('table_create', {title: 'Table Create'});
+            async.parallel({
+                halls: (callback) =>{
+                    Hall.find(callback)
+                },
+                waiters: (callback) =>{
+                    Waiter.find(callback)
+                }
+            },(err, results) => {
+                if (err) { return next(err); } 
+                res.render('table_create', {title: 'Table Create', halls: results.halls,waiters: results.waiters,errors: errors.array()});
+            });
             return;
         }
         else {
@@ -68,41 +83,39 @@ var table_create_post = [
 
 //Display details for a specefic table #3
 var table_details = (req,res, next)=>{
-    async.parallel({
-        table: (callback) => {
-            Table.findById(req.params.id)
-                .exec(callback)
-        },
-        table_hall: (callback) => {
-            Hall.find({ 'table': req.params.id }, 'name')
-                .exec(callback)
-        },
-        table_employee: (callback) => {
-            Employee.find({ 'table': req.params.id }, 'name')
-                .exec(callback)
-        }
-    },(err, results) => {
-        if (err) { return next(err); } 
-        if (results.table == null) { 
-            var err = new Error('Table not found');
-            err.status = 404;
-            return next(err);
-        }
-        res.render('table_detail', { title: 'Table Detail', table: results.table, table_hall: results.table_hall, tabltable_employeee_hall: results.table_employee});
+    Table.findById(req.params.id)
+        .populate('hall')
+        .populate('waiter')
+        .exec((err, table) => {
+            if (err) { return next(err); } 
+            if (table == null) { 
+                var err = new Error('Table not found');
+                err.status = 404;
+                return next(err);
+            }
+            res.render('table_detail', { title: 'Table Detail', table: table});
     });
 
 }
 
 //Display table update form on GET #4.1
 var table_edit_get = (req,res,next)=>{
-    Table.findById(req.params.id, (err, table)=> {
-        if (err) { return next(err); }
-        if (table == null) { 
-            var err = new Error('Table not found');
-            err.status = 404;
-            return next(err);
+    async.parallel({
+        table: (callback) =>{
+            Table.findById(req.params.id)
+                .populate('hall')
+                .populate('waiter')
+                .exec(callback)
+        },
+        halls: (callback) =>{
+            Hall.find(callback)
+        },
+        waiters: (callback) =>{
+            Waiter.find(callback)
         }
-        res.render('table_edit', { title: 'Update Table', table: table });
+    },(err, results) => {
+        if (err) { return next(err); } 
+        res.render('table_edit', { title: 'Update Table', table: results.table,halls: results.halls,waiters: results.waiters,errors: errors.array()});
     });
 }
 
@@ -112,15 +125,8 @@ var table_edit_put = [
     body('capacity').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('available').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('location').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('table').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('employee').isLength({ min: 3 }).trim().withMessage('Invalid length'),
 
-    sanitizeBody('name').escape(),
-    sanitizeBody('capacity').escape(),
-    sanitizeBody('available').escape(),
-    sanitizeBody('location').escape(),
-    sanitizeBody('table').escape(),
-    sanitizeBody('employee').escape(),
+    sanitizeBody('*').escape(),
 
     (req,res,next)=>{
         const errors = validationResult(req);
@@ -130,13 +136,24 @@ var table_edit_put = [
                 capacity: req.body.capacity,
                 available: req.body.available,
                 location: req.body.location,
-                table: req.body.table,
-                employee: req.body.employee
+                hall: req.body.hall,
+                waiter: req.body.waiter,
+                _id: req.params.id
             }
         );
 
         if (!errors.isEmpty()) {
-            res.render('table_create', {title: 'Table Create'});
+            async.parallel({
+                halls: (callback) =>{
+                    Hall.find(callback)
+                },
+                waiters: (callback) =>{
+                    Waiter.find(callback)
+                }
+            },(err, results) => {
+                if (err) { return next(err); } 
+                res.render('table_create', {title: 'Table Create', halls: results.halls,waiters: results.waiters,errors: errors.array()});
+            });
             return;
         }
         else {
@@ -157,30 +174,6 @@ var table_delete_delete = (req,res,next)=>{
 }
 
 
-//=================Utils controllers================//
-
-//Display mark attendance form on GET #6.1
-var table_location_get = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: table_location_get');
-}
-
-//show availability: GET #7.1
-var table_availability_get = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: table_availability_get');
-}
-
-//no need for new form.Just edit form will do here
-//update availabiltity- show form: GET #7.2
-var table_update_availability_get = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: table_update_availability_get');
-}
-
-//update availabiltity: PUT #7.3
-var table_update_availability_put = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: table_update_availability_put');
-}
-
-
 module.exports = {
     table_list,
     table_create_get,
@@ -188,9 +181,5 @@ module.exports = {
     table_details,
     table_edit_get,
     table_edit_put,
-    table_delete_delete,
-    table_location_get,
-    table_availability_get,
-    table_update_availability_get,
-    table_update_availability_put
+    table_delete_delete
 }

@@ -16,7 +16,7 @@ var TableSchema = new Schema({
                         z: {type: Number, default:0},       // for multiple hall restaurants
                      },                               
     hall            : {type: Schema.Types.ObjectId, ref: 'Hall'},
-    employee        : {type: Schema.Types.ObjectId, ref: 'Employee'}
+    waiter          : {type: Schema.Types.ObjectId, ref: 'Waiter'}
 }) 
 
 
@@ -27,29 +27,6 @@ var TableSchema = new Schema({
 //check availability status before booking
 
 //check space clashing before adding a new seat
-
-
-/************** Setters ********************/
-
-//set availability(while making booking):
-//mark free
-TableSchema
-.virtual('freed')
-.set(() => {  
-    this.available = true;
-});
-//mark booked
-TableSchema
-.virtual('booked')
-.set(() => {   
-    this.available = false;
-});
-
-
-/************** Utils ********************/
-//How&where to store table availability status w.r.t. time???
-
-
 
 //compile the Model
 var Table = mongoose.model('Table', TableSchema);
