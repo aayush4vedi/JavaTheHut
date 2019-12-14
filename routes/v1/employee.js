@@ -22,9 +22,6 @@ router.put('/:id/edit', employee_controller.employee_edit_put);
 //Display employee update form on DELETE #5
 router.delete('/:id', employee_controller.employee_delete_delete);
 
-//Display mark attendance form on GET #6.1
-router.get('/:id/attendance', employee_controller.employee_mark_attendance_get);
-
 //Display mark attendance form on POST #6.2
 router.post('/:id/attendance', employee_controller.employee_mark_attendance_post);
 

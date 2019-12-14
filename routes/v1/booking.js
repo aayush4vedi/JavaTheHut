@@ -22,17 +22,8 @@ router.put('/:id/edit', booking_controller.booking_edit_put);
 //Display booking update form on DELETE #5
 router.delete('/:id', booking_controller.booking_delete_delete);
 
-//Display all bookings by customerID on GET #6
-router.get('/customer/:id', booking_controller.booking_for_customer_get);
-
-//Display all bookings by tableID on GET #7
-router.get('/table/:id', booking_controller.booking_for_table_get);
-
-//Display all bookings by date on GET #8
-router.get('/date/:d', booking_controller.booking_for_date_get);
-
-//Display all bookings by date & tableID on GET #9
-router.get('/table/:id/date/:d', booking_controller.booking_for_table_date_get);
+//Display all bookings by checkInTime &  checkOutTime on GET #6
+router.get('/time/:checkintime&:checkouttime', booking_controller.booking_for_time_get);
 
 //Display details for a specefic booking #3 : Must come in end
 router.get('/:id', booking_controller.booking_details);

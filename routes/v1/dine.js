@@ -22,6 +22,12 @@ router.put('/:id/edit', dine_controller.dine_edit_put);
 //Display dine update form on DELETE #5
 router.delete('/:id', dine_controller.dine_delete_delete);
 
+//Display dine order update form on GET #6.1
+router.get('/:id/orderupdate', dine_controller.dine_new_order_get);
+
+//Handle dine order update form on POST #6.2
+router.post('/:id/orderupdate', dine_controller.dine_order_update);
+
 //Display details for a specefic dine #3 : Must come in end
 router.get('/:id', dine_controller.dine_details);
 

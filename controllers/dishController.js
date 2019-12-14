@@ -202,8 +202,5 @@ module.exports = {
     dish_details,
     dish_edit_get,
     dish_edit_put,
-    dish_delete_delete,
-    dish_mark_is_serving_get,
-    dish_mark_is_serving_post,
-    dish_for_cateogry_id_get
+    dish_delete_delete
 }

@@ -22,15 +22,6 @@ router.put('/:id/edit', dishInstance_controller.dishInstance_edit_put);
 //Display dishInstance update form on DELETE #5
 router.delete('/:id', dishInstance_controller.dishInstance_delete_delete);
 
-//Display mark is-serving-status form on GET #6.1
-router.get('/:id/serving', dishInstance_controller.dishInstance_mark_is_serving_get);
-
-//Handle mark is-serving-status form on POST #6.2
-router.post('/:id/serving', dishInstance_controller.dishInstance_mark_is_serving_post);
-
-// display all dishInstancees of given Category #7
-router.get('/category/:id', dishInstance_controller.dishInstance_for_cateogry_id_get);
-
 //Display details for a specefic dishInstance #3 : Must come in end
 router.get('/:id', dishInstance_controller.dishInstance_details);
 

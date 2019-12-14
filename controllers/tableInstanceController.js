@@ -168,5 +168,5 @@ module.exports = {
     tableInstance_details,
     tableInstance_edit_get,
     tableInstance_edit_put,
-    tableInstance_delete_deleteg
+    tableInstance_delete_delete
 }

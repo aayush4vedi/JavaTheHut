@@ -239,11 +239,11 @@ var booking_delete_delete = (req,res,next)=>{
 
 //===================Utils controllers================//
 
-//Display all bookings by checkInTime &  checkOutTime on GET #8 
+//Display all bookings by checkInTime &  checkOutTime on GET #6 
 //:: find all bookings overlapping withing this time => to get list of all the busy tables at time t
 var booking_for_time_get = (req,res,next)=>{
     //TODO: optimise this query
-    Booking.find({ 'checkInTime': req.params.checkInTime , 'checkOutTime': req.params.checkOutTime}, (err, booking)=> {
+    Booking.find({ 'checkInTime': req.params.checkintime , 'checkOutTime': req.params.checkouttime}, (err, booking)=> {
         if (err) { return next(err); }
         if (booking == null) { 
             var err = new Error('Booking not found');

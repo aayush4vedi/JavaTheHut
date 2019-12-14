@@ -22,17 +22,17 @@ router.put('/:id/edit', table_controller.table_edit_put);
 //Display table update form on DELETE #5
 router.delete('/:id', table_controller.table_delete_delete);
 
-//Display table coordinates GET #6
-router.get('/:id/location', table_controller.table_location_get);
+// //Display table coordinates GET #6
+// router.get('/:id/location', table_controller.table_location_get);
 
-//show availability: GET #7.1
-router.get('/:id/time/:t/availability', table_controller.table_availability_get);
+// //show availability: GET #7.1
+// router.get('/:id/time/:t/availability', table_controller.table_availability_get);
 
-//update availabiltity- show form: GET #7.2
-router.get('/:id/time/:t/availability/edit', table_controller.table_update_availability_get);
+// //update availabiltity- show form: GET #7.2
+// router.get('/:id/time/:t/availability/edit', table_controller.table_update_availability_get);
 
-//update availabiltity: PUT #7.3
-router.put('/:id/time/:t/availability', table_controller.table_update_availability_put);
+// //update availabiltity: PUT #7.3
+// router.put('/:id/time/:t/availability', table_controller.table_update_availability_put);
 
 //Display details for a specefic table #3 : Must come in end
 router.get('/:id', table_controller.table_details);

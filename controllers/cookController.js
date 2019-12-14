@@ -203,7 +203,7 @@ var cook_mark_attendance_post = (req,res,next)=>{
 module.exports ={
     cook_list,
     cook_create_get,
-    cook_create_post,
+    cook_mark_attendance_postcook_create_post,
     cook_details,
     cook_edit_get,
     cook_edit_put,
