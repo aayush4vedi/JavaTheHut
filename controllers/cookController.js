@@ -8,55 +8,29 @@ const { sanitizeBody } = require('express-validator/filter');
 //===================CRUD controllers================//
 //List all Cooks GET  #1
 var cook_list = (req,res,next)=>{
-    async.parallel({
-        cook: (callback) =>{
-            Cook.find()
-                .populate('category')
-                .exec(callback)
-        },
-        category: (callback) =>{
-            Category.find(callback)
-        }
-    },(err, results) => {
-        if (err) { return next(err); } 
-        if (results.employee == null) { 
-            var err = new Error('No such employee found');
-            err.status = 404;
-            return next(err);
-        }
-        if (results.category == null) { 
-            var err = new Error('No such category found');
-            err.status = 404;
-            return next(err);
-        }
-        res.render('cook_list', { title: 'Cook List', cook: results.cook, category: results.category});
-    });
+    Cook.find()
+        .populate('category')
+        .exec((err, list_cooks) =>{
+            if(err){
+                return next(err)
+            }
+            res.render('cook_list', { title: 'Cook List',list_cooks: list_cooks})
+        })
 }
 
 //Display cook create form on GET #2.1
 //Get employee and category to pick from
 var cook_create_get = (req,res,next)=>{
     async.parallel({
-        employee: (callback) =>{
-            Employee.find()
-                .exec(callback)
+        all_employees: (callback) =>{
+            Employee.find(callback)
         },
-        category: (callback) =>{
+        all_categories: (callback) =>{
             Category.find(callback)
         }
     },(err, results) => {
         if (err) { return next(err); } 
-        if (results.employee == null) { 
-            var err = new Error('No such employee found');
-            err.status = 404;
-            return next(err);
-        }
-        if (results.category == null) { 
-            var err = new Error('No such category found');
-            err.status = 404;
-            return next(err);
-        }
-        res.render('cook_create', {title: 'Cook Create', employee: results.employee, category: results.category});
+        res.render('cook_create', {title: 'Cook Create', all_employees: results.all_employees, all_categories: results.all_categories});
     });
 }
 
@@ -82,33 +56,22 @@ var cook_create_post = [
             {
                 name : req.body.name,
                 employee : req.body.employee,
-                category : req.body.category,
+                category :  (typeof req.body.category==='undefined') ? [] : req.body.category,
                 attendance : req.body.attendance
             }
         );
 
         if (!errors.isEmpty()) {
             async.parallel({
-                employee: (callback) =>{
-                    Employee.find()
-                        .exec(callback)
+                all_employees: (callback) =>{
+                    Employee.find(callback)
                 },
-                category: (callback) =>{
+                all_categories: (callback) =>{
                     Category.find(callback)
                 }
             },(err, results) => {
                 if (err) { return next(err); } 
-                if (results.employee == null) { 
-                    var err = new Error('No such employee found');
-                    err.status = 404;
-                    return next(err);
-                }
-                if (results.category == null) { 
-                    var err = new Error('No such category found');
-                    err.status = 404;
-                    return next(err);
-                }
-                res.render('cook_create', {title: 'Cook Create', employee: results.employee, category: results.category,errors: errors.array()});
+                res.render('cook_create', {title: 'Cook Create', all_employees: results.all_employees, all_categories: results.all_categories});
             });
             return;
         }
@@ -120,9 +83,25 @@ var cook_create_post = [
         }
     }
 ]
-//TODO: @here
+
 //Display details for a specefic cook #3 
 var cook_details = (req,res,next)=>{
+    Cook.findById(req.params.id)
+        .populate('employee')
+        .populate('category')
+        .exec((err,cook)=>{
+            if (err) { return next(err); } 
+            if (cook == null) { 
+                var err = new Error('Cook not found');
+                err.status = 404;
+                return next(err);
+            }
+            res.render('category_detail', { title: 'Category Detail',  cook: cook});
+        })
+}
+
+//Display cook update form on GET #4.1
+var cook_edit_get = (req,res,next)=>{
     async.parallel({
         cook: (callback) =>{
             Cook.findById(req.params.id)
@@ -130,81 +109,64 @@ var cook_details = (req,res,next)=>{
                 .populate('category')
                 .exec(callback)
         },
-        employee: (callback) =>{
-            Employee.find(callback)
+        all_employees: (callback) =>{
+            Employee.find()
+                .exec(callback)
         },
-        category: (callback) =>{
-            Category.find(callback)
+        all_categories: (callback) =>{
+            Category.find()
+                .exec(callback)
         }
     },(err, results) => {
         if (err) { return next(err); } 
-        if (results.cook == null) { 
-            var err = new Error('Cook not found');
-            err.status = 404;
-            return next(err);
-        }
-        res.render('cook_detail', { title: 'Cook Detail', cook: results.cook, cook_speciality: results.cook_speciality, cook_tables: results.cook_tables });
-    });
-}
-
-//Display cook update form on GET #4.1
-var cook_edit_get = (req,res,next)=>{
-    Cook.findById(req.params.id, (err, cook)=> {
-        if (err) { return next(err); }
         if (cook == null) { 
             var err = new Error('Cook not found');
             err.status = 404;
             return next(err);
         }
-        res.render('cook_edit', { title: 'Update Cook', cook: cook });
+        res.render('cook_edit', { title: 'Update Cook', cook: results.cook , all_employees: results.all_employees, all_categories: results.all_categories});
     });
 }
 
 //Handle cook update form on PUT #4.2
 var cook_edit_put = [
-    body('username').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('password').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    (req, res, next) => {
+        if(!(req.body.cook instanceof Array)){
+            if(typeof req.body.category==='undefined')
+            req.body.category=[];
+            else
+            req.body.cook=new Array(req.body.category);
+        }
+        next();
+    },
+
     body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('email').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('phone').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('govIDNumber').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('salary').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('role').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('speciality').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('tables').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('attendance').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     
-    sanitizeBody('username').escape(),
-    sanitizeBody('password').escape(),
-    sanitizeBody('name').escape(),
-    sanitizeBody('email').escape(),
-    sanitizeBody('phone').escape(),
-    sanitizeBody('govIDNumber').escape(),
-    sanitizeBody('salary').escape(),
-    sanitizeBody('speciality').escape(),
-    sanitizeBody('tables').escape(),
-    sanitizeBody('attendance').escape(),
+    sanitizeBody('*').escape(),
 
     (req,res,next)=>{
         const errors = validationResult(req);
         var cook = new Cook(
             {
-                username : req.body.username,
-                password : req.body.password,
-                name : req.body.name,
-                email : req.body.email,
-                phone : req.body.phone,
-                govIDNumber : req.body.govIDNumber,
-                salary : req.body.salary,
-                speciality : req.body.speciality,
-                tables : req.body.tables,
-                attendance : req.body.attendance,
+                name: req.body.name,
+                employee: req.body.employee,
+                category: (typeof req.body.category==='undefined') ? [] : req.body.category,
                 _id : req.params.id
             }
         );
 
         if (!errors.isEmpty()) {
-            res.render('cook_create', {title: 'Cook Create'});
+            async.parallel({
+                all_employees: (callback) =>{
+                    Employee.find(callback)
+                },
+                all_categories: (callback) =>{
+                    Category.find(callback)
+                }
+            },(err, results) => {
+                if (err) { return next(err); } 
+                res.render('cook_create', {title: 'Cook Create', all_employees: results.all_employees, all_categories: results.all_categories});
+            });
             return;
         }
         else {

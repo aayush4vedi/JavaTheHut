@@ -106,22 +106,18 @@ var category_create_post = [
 
 //Display details(+ it's all dishes) for a specefic category #3 : TODO: this form will have delete button for dishes as well(dishController)
 var category_details = (req,res,next)=>{
-    async.parallel({
-        category: (callback) =>{
-            Category.findById(req.params.id)
-                .populate('cook')
-                .populate('dish')
-                .exec(callback)
-        }
-    },(err, results) => {
-        if (err) { return next(err); } 
-        if (results.category == null) { 
-            var err = new Error('Category not found');
-            err.status = 404;
-            return next(err);
-        }
-        res.render('category_detail', { title: 'Category Detail', category: results.category, category_dishes: results.category_dishes, category_cook: results.category_cook});
-    });
+    Category.findById(req.params.id)
+        .populate('dish')
+        .populate('cook')
+        .exec((err,category)=>{
+            if (err) { return next(err); } 
+            if (category == null) { 
+                var err = new Error('Category not found');
+                err.status = 404;
+                return next(err);
+            }
+            res.render('category_detail', { title: 'Category Detail',  category: category});
+        })
 }
 
 //Display category update form on GET #4.1
