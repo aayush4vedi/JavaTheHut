@@ -7,4 +7,5 @@
     <% customer.bookings.forEach((booking)=>{ %>
         <h2><%= booking.dine.date %></h2>
     <% }) %>
+    <a href="/customer/<%= customer._id %>">Details</a>
 <% }) %>

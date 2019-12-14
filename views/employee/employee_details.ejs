@@ -1,0 +1,16 @@
+<h1><%= title %></h1>
+
+<h2><%= employee.name %></h2>
+<h2><%= employee.username %></h2>
+<h2><%= employee.password %></h2>
+<h2><%= employee.email %></h2>
+<h2><%= employee.phone %></h2>
+<h2><%= employee.govIDNumber %></h2>
+<h2><%= employee.salary %></h2>
+<h2><%= employee.role %></h2>
+<h2><%= employee.attendance %></h2>
+
+<button href="/employee/<%= employee._id%>/edit">Edit</button>
+<form action="/employee/<%= employee._id %>?_method=DELETE" method="POST" id="delete">
+    <button class="ui button red" type="submit">Delete</button>
+</form>

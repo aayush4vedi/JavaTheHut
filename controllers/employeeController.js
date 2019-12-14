@@ -6,12 +6,12 @@ const { sanitizeBody } = require('express-validator/filter');
 //===================CRUD controllers================//
 //List all Employees GET  #1
 var employee_list = (req,res,next)=>{
-    Employee.find({'name attendance'})
+    Employee.find({},'name attendance')
         .exec((err, list_employee) =>{
             if(err){
                 return next(err)
             }
-            res.render('employee_list', { title: 'Employee List', employee_list: list_employee})
+            res.render('employee_list', { title: 'Employee List', employees: list_employee})
         })
 }
 

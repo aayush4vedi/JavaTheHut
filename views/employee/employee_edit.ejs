@@ -1,0 +1,15 @@
+<h1><%= title %></h1>
+
+<form action="/employee/<%= employee._id %>?_method=PUT" method="POST">
+    <input name="employee[username]" value = "<%= username %">
+    <input name="employee[password]" value = "<%= password %">
+    <input name="employee[name]" value = "<%= name %">
+    <input name="employee[email]" value = "<%= email %">
+    <input name="employee[phone]" value = "<%= phone %">
+    <input name="employee[govIDNumber]" value = "<%= govIDNumber %">
+    <input name="employee[salary]" value = "<%= salary %">
+    <input name="employee[role]" value = "<%= role %">
+    <input name="employee[attendance]" value = "<%= attendance %">
+
+    <button type="submit">Submit</button>
+</form>
