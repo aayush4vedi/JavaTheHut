@@ -1,0 +1,14 @@
+<h1><%= title %></h1>
+
+<form action="/table/<%= table._id %>?_method=PUT" method="POST">
+    <input name="table[name]" value="<%= table.name %>">
+    <input name="table[capacity]" value="<%= table.capacity %>">
+    <input name="table[available]" value="<%= table.available %>">
+    <input name="table[location].x" value="<%= table.location.x %>">
+    <input name="table[location].y" value="<%= table.location.y %>">
+    <input name="table[location].z" value="<%= table.location.z %>">
+    <input name="table[hall]" value="<%= table.hall %>">
+    <input name="table[waiter]" value="<%= table.waiter %>">
+
+    <button type="submit">Submit</button>
+</form>

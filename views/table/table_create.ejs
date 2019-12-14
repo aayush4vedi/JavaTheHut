@@ -1,0 +1,14 @@
+<h1><%= title %></h1>
+
+<form action="/create" method="POST">
+    <input name="table[name]" placeholder="name">
+    <input name="table[capacity]" placeholder="capacity">
+    <input name="table[available]" placeholder="available">
+    <input name="table[location].x" placeholder="location.x">
+    <input name="table[location].y" placeholder="location.y">
+    <input name="table[location].z" placeholder="location.z">
+    <input name="table[hall]" placeholder="hall">
+    <input name="table[waiter]" placeholder="waiter">
+
+    <button type="submit">Submit</button>
+</form>
