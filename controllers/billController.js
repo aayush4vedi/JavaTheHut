@@ -79,7 +79,7 @@ var bill_details = (req,res,next)=>{
                 err.status = 404;
                 return next(err);
             }
-            res.render('bill_detail', { title: 'Bill Detail', bill: bill});
+            res.render('bill_details', { title: 'Bill Detail', bill: bill});
         })
 }
 

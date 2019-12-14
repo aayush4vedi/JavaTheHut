@@ -1,0 +1,8 @@
+<h1><%= title %></h1>
+
+<h2><%= customer.name %></h2>
+<h2><%= customer.email %></h2>
+<h2><%= customer.phone %></h2>
+<% customer.bookings.forEach((booking)=>{ %>
+    <h2><%= booking.dine.date %></h2>
+<% }) %>

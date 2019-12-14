@@ -88,7 +88,7 @@ var order_details = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('order_detail', { title: 'Order Detail', order: order});
+        res.render('order_details', { title: 'Order Detail', order: order});
     });
 }
 

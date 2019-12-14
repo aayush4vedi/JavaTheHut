@@ -79,7 +79,7 @@ var employee_details = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('employee_detail', { title: 'Employee Detail', employee: employee});
+        res.render('employee_details', { title: 'Employee Detail', employee: employee});
     });
 }
 

@@ -82,7 +82,7 @@ var tableInstance_details = (req,res, next)=>{
             if(err){
                 return next(err)
             }
-            res.render('tableInstance_detail', { title: 'TableInstance Detail',tableInstance: tableInstance})
+            res.render('tableInstance_details', { title: 'TableInstance Detail',tableInstance: tableInstance})
         })
 }
 

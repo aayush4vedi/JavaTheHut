@@ -86,7 +86,7 @@ var restaurant_details = (req,res, next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('restaurant_detail', { title: 'Restaurant Detail', restaurant: results.restaurant, all_halls: results.all_halls });
+        res.render('restaurant_details', { title: 'Restaurant Detail', restaurant: results.restaurant, all_halls: results.all_halls });
     });
 }
 

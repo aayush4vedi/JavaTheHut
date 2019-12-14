@@ -88,7 +88,7 @@ var hall_details = (req,res, next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('hall_detail', { title: 'Hall Detail', hall: hall});
+        res.render('hall_details', { title: 'Hall Detail', hall: hall});
     });
 }
 

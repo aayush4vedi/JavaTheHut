@@ -136,7 +136,7 @@ var booking_details = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('booking_detail', { title: 'Booking Detail', booking: results.booking, booking_dine: results.booking_dine, booking_customer: results.booking_customer, booking_tables: results.booking_tables});
+        res.render('booking_details', { title: 'Booking Detail', booking: results.booking, booking_dine: results.booking_dine, booking_customer: results.booking_customer, booking_tables: results.booking_tables});
     });
 }
 

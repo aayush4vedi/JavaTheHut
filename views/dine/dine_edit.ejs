@@ -1,0 +1,14 @@
+<h1><%= title %></h1>
+
+<form action="/create" method="POST">
+    <input name="dine[orders]" value="<%= dine.orders %>">
+    <input name="dine[booking]" value="<%= dine.booking %>">
+    <input name="dine[bill]" value="<%= dine.bill %>">
+    <input name="dine[waiter]" value="<%= dine.waiter %>">
+    <input name="dine[customer]" value="<%= dine.customer %>">
+    <input name="dine[tableInstances]" value="<%= dine.tableInstances %>">
+    <input name="dine[status]" value="<%= dine.status %>">
+    <input name="dine[date]" value="<%= dine.date %>">
+
+    <button type="submit">Submit</button>
+</form>

@@ -69,7 +69,7 @@ var good_details = (req,res, next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('good_detail', { title: 'Good Detail', good: results.good, good_dishes: results.good_dishes });
+        res.render('good_details', { title: 'Good Detail', good: results.good, good_dishes: results.good_dishes });
     });
 }
 

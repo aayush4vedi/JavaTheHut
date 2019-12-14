@@ -1,11 +1,11 @@
 <h1><%= title %></h1>
 
 <form action="/create" method="POST">
-    <input name="booking[customer]" value = "<%= customer %>">
-    <input name="booking[dine]" value = "<%= dine %>">
-    <input name="booking[tableInstance]" value = "<%= tableInstance %>">
-    <input name="booking[checkInTime]" value = "<%= checkInTime %>">
-    <input name="booking[stayingMinutes]" value = "<%= stayingMinutes %>">
+    <input name="booking[customer]" value = "<%= booking.customer %>">
+    <input name="booking[dine]" value = "<%= booking.dine %>">
+    <input name="booking[tableInstance]" value = "<%= booking.tableInstance %>">
+    <input name="booking[checkInTime]" value = "<%= booking.checkInTime %>">
+    <input name="booking[stayingMinutes]" value = "<%= booking.stayingMinutes %>">
 
     <button type="submit">Submit</button>
 </form>

@@ -1,11 +1,11 @@
 <h1><%= title %></h1>
 
 <form action="/create" method="POST">
-    <input name="bill[isPaid]" value="<%= blog.isPaid %>">
-    <input name="bill[dine]" value="<%= blog.dine %>">
-    <input name="bill[dineAmount]" value="<%= blog.dineAmount %>">
-    <input name="bill[taxAmount]" value="<%= blog.taxAmount %>">
-    <input name="bill[serviceCharge]" value="<%= blog.serviceCharge %>">
+    <input name="bill[isPaid]" value="<%= bill.isPaid %>">
+    <input name="bill[dine]" value="<%= bill.dine %>">
+    <input name="bill[dineAmount]" value="<%= bill.dineAmount %>">
+    <input name="bill[taxAmount]" value="<%= bill.taxAmount %>">
+    <input name="bill[serviceCharge]" value="<%= bill.serviceCharge %>">
 
     <button type="submit">Submit</button>
 </form>

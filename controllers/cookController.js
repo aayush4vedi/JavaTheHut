@@ -14,7 +14,7 @@ var cook_list = (req,res,next)=>{
             if(err){
                 return next(err)
             }
-            res.render('cook_list', { title: 'Cook List',list_cooks: list_cooks})
+            res.render('cook_list', { title: 'Cook List',cooks: list_cooks})
         })
 }
 
@@ -96,7 +96,7 @@ var cook_details = (req,res,next)=>{
                 err.status = 404;
                 return next(err);
             }
-            res.render('category_detail', { title: 'Category Detail',  cook: cook});
+            res.render('category_details', { title: 'Category Detail',  cook: cook});
         })
 }
 

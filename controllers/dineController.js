@@ -26,7 +26,7 @@ var dine_list = (req,res,next)=>{
             if(err){
                 return next(err)
             }
-            res.render('dine_list', { title: 'Dine List', dine_list: list_dine})
+            res.render('dine_list', { title: 'Dine List', dines: list_dine})
         })
 }
 
@@ -127,7 +127,7 @@ var dine_details = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('dine_detail', { title: 'Dine Detail', dine: dine});
+        res.render('dine_details', { title: 'Dine Detail', dine: dine});
     })
 }
 

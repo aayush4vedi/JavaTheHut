@@ -116,7 +116,7 @@ var category_details = (req,res,next)=>{
                 err.status = 404;
                 return next(err);
             }
-            res.render('category_detail', { title: 'Category Detail',  category: category});
+            res.render('category_details', { title: 'Category Detail',  category: category});
         })
 }
 

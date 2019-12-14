@@ -17,7 +17,7 @@ var customer_list = (req,res, next)=>{
             if(err){
                 return next(err)
             }
-            res.render('customer_list', { title: 'Customer List', customer_list: list_customer})
+            res.render('customer_list', { title: 'Customer List', customers: list_customer})
         })
 }
 
@@ -68,7 +68,7 @@ var customer_details = (req,res, next)=>{
                 err.status = 404;
                 return next(err);
             }
-            res.render('customer_detail', { title: 'Customer Detail', customer: customer});
+            res.render('customer_details', { title: 'Customer Detail', customer: customer});
         })
 }
 

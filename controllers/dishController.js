@@ -105,7 +105,7 @@ var dish_details = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('dish_detail', { title: 'Dish Detail', dish: results.dish, dish_category: results.dish_category});
+        res.render('dish_details', { title: 'Dish Detail', dish: results.dish, dish_category: results.dish_category});
     });
 }
 

@@ -88,7 +88,7 @@ var dishInstance_details = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('dishInstance_detail', { title: 'DishInstance Detail', dishInstance: results});
+        res.render('dishInstance_details', { title: 'DishInstance Detail', dishInstance: results});
     });
 }
 
@@ -115,7 +115,7 @@ var dishInstance_edit_get = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('dishInstance_detail', { title: 'DishInstance Detail',dishInstance: results.dishInstance, all_dishes: results.all_dishes, all_orders: results.all_orders});
+        res.render('dishInstance_details', { title: 'DishInstance Detail',dishInstance: results.dishInstance, all_dishes: results.all_dishes, all_orders: results.all_orders});
     });
 }
 

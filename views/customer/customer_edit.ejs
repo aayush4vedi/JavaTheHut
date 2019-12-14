@@ -1,0 +1,10 @@
+<h1><%= title %></h1>
+
+<form action="/create" method="POST">
+    <input name="customer[name]" value = "<%= customer.name %>">
+    <input name="customer[email]" value = "<%= customer.email %>">
+    <input name="customer[phone]" value = "<%= customer.phone %>">
+    <input name="customer[bookings]" value = "<%= customer.bookings %>">
+
+    <button type="submit">Submit</button>
+</form>

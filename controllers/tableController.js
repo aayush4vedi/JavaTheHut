@@ -93,7 +93,7 @@ var table_details = (req,res, next)=>{
                 err.status = 404;
                 return next(err);
             }
-            res.render('table_detail', { title: 'Table Detail', table: table});
+            res.render('table_details', { title: 'Table Detail', table: table});
     });
 
 }
