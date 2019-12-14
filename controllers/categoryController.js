@@ -147,7 +147,7 @@ var category_details = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('category_detail', { title: 'Category Detail', category: results.category, category_dishes: results.category_dishes, category_waiter: results.category_waiter});
+        res.render('category_detail', { title: 'Category Detail', category: results.category, category_dishes: results.category_dishes, category_cook: results.category_cook});
     });
 }
 
@@ -166,25 +166,61 @@ var category_edit_get = (req,res,next)=>{
 
 //Handle category update form on PUT #4.2
 var category_edit_put = [
+    (req, res, next) => {
+        if(!(req.body.cook instanceof Array)){
+            if(typeof req.body.cook==='undefined')
+            req.body.cook=[];
+            else
+            req.body.cook=new Array(req.body.cook);
+        }
+        if(!(req.body.dish instanceof Array)){
+            if(typeof req.body.dish==='undefined')
+            req.body.dish=[];
+            else
+            req.body.dish=new Array(req.body.dish);
+        }
+        next();
+    },
+
     body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('waiter').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('dish').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     
-    sanitizeBody('name').escape(),
-    sanitizeBody('waiter').escape(),
-    sanitizeBody('dish').escape(),
+    sanitizeBody('*').escape(),
+    sanitizeBody('cook.*').escape(),
+    sanitizeBody('dish.*').escape(),
 
     (req,res,next)=>{
         const errors = validationResult(req);
         var category = new Category(
             {
                 name: req.body.name,
-                waiter: req.body.waiter,
+                cook: req.body.cook,
                 dish: req.body.dish,
+                _id : req.params.id
             }
         );
         if (!errors.isEmpty()) {
-            res.render('category_create', { title: 'Update Category', category: category, errors: errors.array() });
+            async.parallel({
+                category: (callback) =>{
+                    Bill.Category()
+                        .sort([['name', 'ascending']])
+                        .populate('dish')
+                        .exec(callback)
+                },
+                dish: (callback) =>{
+                    Dish.find(callback)
+                },
+                cook: (callback) =>{
+                    Cook.find(callback)
+                }
+            },(err, results) => {
+                if (err) { return next(err); } 
+                if (results.bill == null) { 
+                    var err = new Error('No Bills found');
+                    err.status = 404;
+                    return next(err);
+                }
+                res.render('category_create', {title: 'Category Create', category: results.category, dish: results.dish,cook: results.cook,errors: errors.array()});
+            });
             return;
         }
         else {
