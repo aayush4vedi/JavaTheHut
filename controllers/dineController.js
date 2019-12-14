@@ -34,14 +34,14 @@ var dine_create_post = [
     body('status').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('bill').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('booking').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('server').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('waiter').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('customer').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('orders').escape(),
     sanitizeBody('status').escape(),
     sanitizeBody('bill').escape(),
     sanitizeBody('booking').escape(),
-    sanitizeBody('server').escape(),
+    sanitizeBody('waiter').escape(),
     sanitizeBody('customer').escape(),
 
     (req,res,next)=>{
@@ -52,7 +52,7 @@ var dine_create_post = [
                 status: req.body.status,
                 bill: req.body.bill,
                 booking: req.body.booking,
-                server: req.body.server,
+                waiter: req.body.waiter,
                 customer: req.body.customer,
             }
         );
@@ -90,7 +90,7 @@ var dine_details = (req,res,next)=>{
             Booking.find({ 'dine': req.params.id })
                 .exec(callback)
         },
-        dine_server: (callback) =>{
+        dine_waiter: (callback) =>{
             Employee.find({ 'dine': req.params.id }, 'name attendance')
                 .exec(callback)
         },
@@ -128,14 +128,14 @@ var dine_edit_put = [
     body('status').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('bill').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('booking').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('server').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('waiter').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('customer').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('orders').escape(),
     sanitizeBody('status').escape(),
     sanitizeBody('bill').escape(),
     sanitizeBody('booking').escape(),
-    sanitizeBody('server').escape(),
+    sanitizeBody('waiter').escape(),
     sanitizeBody('customer').escape(),
 
     (req,res,next)=>{
@@ -146,7 +146,7 @@ var dine_edit_put = [
                 status: req.body.status,
                 bill: req.body.bill,
                 booking: req.body.booking,
-                server: req.body.server,
+                waiter: req.body.waiter,
                 customer: req.body.customer,
             }
         );

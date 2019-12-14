@@ -1,5 +1,6 @@
 var Category    = require('../models/category'),
     Dish        = require('../models/dish'),
+    Cook        = require('../models/cook'),
     async       = require('async')
 
 const { body, validationResult } = require('express-validator/check');
@@ -7,44 +8,112 @@ const { sanitizeBody } = require('express-validator/filter');
 
 //===================CRUD controllers================//
 
-//List all categories #1
+//List all categories with their dishes#1  => Menu
 var category_list = (req,res,next)=>{
-    Category.find()
-        .exec((err, list_category) =>{
-            if(err){
-                return next(err)
-            }
-            res.render('category_list', { title: 'Category List', category_list: list_category})
-        })
+    async.parallel({
+        category: (callback) =>{
+            Bill.Category()
+                .sort([['name', 'ascending']])
+                .populate('dish')
+                .exec(callback)
+        },
+        dish: (callback) =>{
+            Dish.find(callback)
+        }
+    },(err, results) => {
+        if (err) { return next(err); } 
+        if (results.bill == null) { 
+            var err = new Error('No Bills found');
+            err.status = 404;
+            return next(err);
+        }
+        res.render('category_list', { title: 'Menu: Category List', category: results.category, dish: results.dish});
+    });
 }
 
 //Display category create form on GET #2.1
 var category_create_get = (req,res,next)=>{
-    res.render('category_create', {title: 'Category Create'});
+    async.parallel({
+        category: (callback) =>{
+            Bill.Category()
+                .sort([['name', 'ascending']])
+                .populate('dish')
+                .exec(callback)
+        },
+        dish: (callback) =>{
+            Dish.find(callback)
+        },
+        cook: (callback) =>{
+            Cook.find(callback)
+        }
+    },(err, results) => {
+        if (err) { return next(err); } 
+        if (results.bill == null) { 
+            var err = new Error('No Bills found');
+            err.status = 404;
+            return next(err);
+        }
+        res.render('category_create', {title: 'Category Create', category: results.category, dish: results.dish,cook: results.cook,errors: errors.array()});
+    });
 }
 
 //Handle category create form on POST #2.2
 var category_create_post = [
+    (req, res, next) => {
+        if(!(req.body.cook instanceof Array)){
+            if(typeof req.body.cook==='undefined')
+            req.body.cook=[];
+            else
+            req.body.cook=new Array(req.body.cook);
+        }
+        if(!(req.body.dish instanceof Array)){
+            if(typeof req.body.dish==='undefined')
+            req.body.dish=[];
+            else
+            req.body.dish=new Array(req.body.dish);
+        }
+        next();
+    },
+
     body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('server').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('dish').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     
-    sanitizeBody('name').escape(),
-    sanitizeBody('server').escape(),
-    sanitizeBody('dish').escape(),
+    sanitizeBody('*').escape(),
+    sanitizeBody('cook.*').escape(),
+    sanitizeBody('dish.*').escape(),
 
     (req,res,next)=>{
         const errors = validationResult(req);
         var category = new Category(
             {
                 name: req.body.name,
-                server: req.body.server,
-                dish: req.body.dish,
+                cook:  (typeof req.body.cook==='undefined') ? [] : req.body.cook,
+                dish:  (typeof req.body.dish==='undefined') ? [] : req.body.dish
             }
         );
 
         if (!errors.isEmpty()) {
-            res.render('category_create', {title: 'Category Create'});
+            async.parallel({
+                category: (callback) =>{
+                    Bill.Category()
+                        .sort([['name', 'ascending']])
+                        .populate('dish')
+                        .exec(callback)
+                },
+                dish: (callback) =>{
+                    Dish.find(callback)
+                },
+                cook: (callback) =>{
+                    Cook.find(callback)
+                }
+            },(err, results) => {
+                if (err) { return next(err); } 
+                if (results.bill == null) { 
+                    var err = new Error('No Bills found');
+                    err.status = 404;
+                    return next(err);
+                }
+                res.render('category_create', {title: 'Category Create', category: results.category, dish: results.dish,cook: results.cook,errors: errors.array()});
+            });
             return;
         }
         else {
@@ -67,8 +136,8 @@ var category_details = (req,res,next)=>{
             Dish.find({ 'category': req.params.id }, 'name description ingredients price isServing veg eta')
                 .exec(callback)
         },
-        category_server: (callback) =>{
-            Dish.find({ 'category': req.params.id }, 'name attendance')
+        category_cook: (callback) =>{
+            Cook.find({ 'category': req.params.id }, 'name attendance')
                 .exec(callback)
         }
     },(err, results) => {
@@ -78,7 +147,7 @@ var category_details = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('category_detail', { title: 'Category Detail', category: results.category, category_dishes: results.category_dishes, category_server: results.category_server});
+        res.render('category_detail', { title: 'Category Detail', category: results.category, category_dishes: results.category_dishes, category_waiter: results.category_waiter});
     });
 }
 
@@ -98,11 +167,11 @@ var category_edit_get = (req,res,next)=>{
 //Handle category update form on PUT #4.2
 var category_edit_put = [
     body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('server').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('waiter').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('dish').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('name').escape(),
-    sanitizeBody('server').escape(),
+    sanitizeBody('waiter').escape(),
     sanitizeBody('dish').escape(),
 
     (req,res,next)=>{
@@ -110,7 +179,7 @@ var category_edit_put = [
         var category = new Category(
             {
                 name: req.body.name,
-                server: req.body.server,
+                waiter: req.body.waiter,
                 dish: req.body.dish,
             }
         );

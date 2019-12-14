@@ -1,28 +1,15 @@
-var mongoose = require('mongoose');
+//WaiterInstance where role is 'Waiter'var mongoose = require('mongoose');
 
 //===============
 //     Structure
 //===============
 var Schema = mongoose.Schema;
 
-var EmployeeSchema = new Schema({
-    // employeeID      : { type: String, default: uuid.v1 },     //restaurant specefic ID's to be implemented later
-    username        : {type: String, default: "user"},                                
-    password        : {type: String, default: "password"},                                 //TODO: hash it
+var WaiterSchema = new Schema({
     name            : String,                                
-    email           : String,                                 
-    phone           : Number,                                 
-    govIDNumber     : String,                                
-    salary          : {type: Number, default: 0},                                
-    role            : { 
-                        type: String, 
-                        enum: ['Admin','BookingManager', 'Hall Manager','Waiter Manager','Waiter', 'Kitchen Manager', 'Chef'], 
-                        default: 'Waiter' 
-                        },  
-    speciality      : {type: Schema.Types.ObjectId, ref: 'Category'}, 
+    employee        : {type: Schema.Types.ObjectId, ref: 'Employee'}, 
     tables          : [{type: Schema.Types.ObjectId, ref: 'Table'}],  
     attendance      : {type: Boolean, default: true}                                
-    // rating          : {type: Number, default: 3},       //scale-size:5  //TO be done in v2                       
 }) 
 
 
@@ -39,7 +26,7 @@ var EmployeeSchema = new Schema({
 /************** Getters ********************/
 
 //get speciality: TODO: remove this
-EmployeeSchema
+WaiterSchema
 .virtual('get-speciality')
 .set(function () {
     if(this.role != 'Chef'){
@@ -50,7 +37,7 @@ EmployeeSchema
 });
 
 //get tables TODO: remove this
-EmployeeSchema
+WaiterSchema
 .virtual('get-tables')
 .get(function () {
     if(this.role != 'Waiter'){
@@ -61,7 +48,7 @@ EmployeeSchema
 });
 
 //get rating======v2 stuff
-// EmployeeSchema
+// WaiterSchema
 // .virtual('rating')
 // .get(function () {
 //     return this.rating;  
@@ -71,11 +58,11 @@ EmployeeSchema
 /************** Setters ********************/
 
 //set tables: assign more tables to Waiter. 
-EmployeeSchema
+WaiterSchema
 .virtual('add-tables')
 .set(function (tables) {
     if(this.role != 'Waiter'){
-        return "Not a Waiter: Adding tables to wrong employee type";
+        return "Not a Waiter: Adding tables to wrong waiter type";
     }else{
         this.tables.push(tables); 
     }
@@ -84,11 +71,11 @@ EmployeeSchema
 
 //******v2 stuff */
 //increase rating
-// EmployeeSchema
+// WaiterSchema
 // .virtual('give-rating')
 // .set(function (rating) {
 //     if(this.role != 'Waiter'){
-//         console.log("Not a Waiter: Rating wrong employee type");
+//         console.log("Not a Waiter: Rating wrong waiter type");
 //         return 0;
 //     }else{
 //         var oldSum = 0;
@@ -117,15 +104,15 @@ EmployeeSchema
 
 //set attendance:
 //1.mark present
-EmployeeSchema
+WaiterSchema
 .virtual('mark-attendance')
 .set((attendance)=> {
     this.attendance = attendance;  
 });
 
 //compile the Model
-var Employee = mongoose.model('Employee', EmployeeSchema);
+var Waiter = mongoose.model('Waiter', WaiterSchema);
 
 module.exports = {
-    Employee
+    Waiter
 }

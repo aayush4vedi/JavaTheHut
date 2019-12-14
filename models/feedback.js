@@ -9,7 +9,7 @@
 
 // var FeedbackSchema = new Schema({
 //     order          : {type: Schema.Types.ObjectId, ref: 'Order'},
-//     // serverStars    : Number,             //v2 stuff
+//     // waiterStars    : Number,             //v2 stuff
 //     comments       : String,
 //     // likedDishes    : [{type: Schema.Types.ObjectId, ref: 'Dish'}],    //v2 stuff
 //     // dislikedDish   : [{type: Schema.Types.ObjectId, ref: 'Dish'}]     //v2 stuff
