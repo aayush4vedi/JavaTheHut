@@ -6,45 +6,40 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var DineSchema = new Schema({
-    // dineID         : { type: String, default: uuid.v1 },     //restaurant specefic ID's to be implemented later
     orders          : [{type: Schema.Types.ObjectId, ref: 'Order'}],
-    status          : {
-                            status: {type : String,enum : ['Eating', 'Eated', 'Completed'],default : 'Eating'},
-                            time  : {type: Date, default: Date.now} 
-                        },
-    bill            : {type: Schema.Types.ObjectId, ref: 'Bill'},
     booking         : {type: Schema.Types.ObjectId, ref: 'Booking'},    
-    waiter          : {type: Schema.Types.ObjectId, ref: 'Employee'},    
+    bill            : {type: Schema.Types.ObjectId, ref: 'Bill'},
+    waiter          : {type: Schema.Types.ObjectId, ref: 'Waiter'},    
     customer        : {type: Schema.Types.ObjectId, ref: 'Customer'},
     tableInstances  : [{type: Schema.Types.ObjectId, ref: 'TableInstance'}],
-    date: TODO:
+    Date            : {type: Date, default:Date.now}, 
+    status          : [{
+                            status: {type : String,enum : ['Eating', 'Eaten', 'Completed'],default : 'Eating'},
+                            time  : {type: Date, default: Date.now} 
+                        }],
 })
 
 //===============
 //    Methods
 //===============
-
+//TODO: 
+// 1. handle reorders
+// 2. handle cancelled orders
+// 3. handle status updates
 /************** Setters ********************/
 //set orders(add more)
 DineSchema
-.virtual('new-order')
+.virtual('neworder')
 .set((newOrders)=> { 
     this.orders.push(newOrders);  
 });
 
 //set status
 DineSchema
-.virtual('set-status')   //status{status,time}
+.virtual('setstatus')   //status{status,time}
 .set(function (status) { 
     this.status.status = status;
     this.status.time  = Date.now;
-});
-
-//set bill status(status is Boolean)
-DineSchema
-.virtual('bill-status')
-.set((status) => { 
-    this.bill.isPaid = status;
 });
 
 
