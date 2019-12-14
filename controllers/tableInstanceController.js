@@ -1,6 +1,6 @@
 var TableInstance       = require('../models/tableInstance'),
-    Hall                = require('../models/hall'),
-    Employee            = require('../models/employee'),
+    Table                = require('../models/table'),
+    Booking            = require('../models/booking'),
     async               = require('async')
         
 const { body, validationResult } = require('express-validator/check');
@@ -11,6 +11,8 @@ const { sanitizeBody } = require('express-validator/filter');
 //List all tableInstances #1
 var tableInstance_list = (req,res, next)=>{
     TableInstance.find()
+        .populate('table')
+        .populate('booking')
         .exec((err, list_tableInstance) =>{
             if(err){
                 return next(err)
@@ -21,40 +23,45 @@ var tableInstance_list = (req,res, next)=>{
 
 //Display tableInstance create form on GET #2.1
 var tableInstance_create_get = (req,res,next)=>{
-    res.render('tableInstance_create', {title: 'TableInstance Create'});
+    async.parallel({
+        tables: (callback) =>{
+            Table.find(callback)
+        },
+        bookings: (callback) =>{
+            Booking.find(callback)
+        }
+    },(err, results) => {
+        if (err) { return next(err); } 
+        res.render('tableInstance_create', {title: 'TableInstance Create', tables: results.tables,bookings: results.bookings,errors: errors.array()});
+    });
 }
 
 //Handle tableInstance create form on POST #2.2
 var tableInstance_create_post = [
-    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('capacity').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('available').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('location').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('tableInstance').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('employee').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-
-    sanitizeBody('name').escape(),
-    sanitizeBody('capacity').escape(),
-    sanitizeBody('available').escape(),
-    sanitizeBody('location').escape(),
-    sanitizeBody('tableInstance').escape(),
-    sanitizeBody('employee').escape(),
+    sanitizeBody('*').escape(),
 
     (req,res,next)=>{
         const errors = validationResult(req);
         var tableInstance = new TableInstance(
             {
-                name: req.body.name,
-                capacity: req.body.capacity,
-                available: req.body.available,
-                location: req.body.location,
-                tableInstance: req.body.tableInstance,
-                employee: req.body.employee
+                table: req.body.table,
+                booking: req.body.booking,
+                isFree: req.body.isFree
             }
         );
 
         if (!errors.isEmpty()) {
-            res.render('tableInstance_create', {title: 'TableInstance Create'});
+            async.parallel({
+                tables: (callback) =>{
+                    Table.find(callback)
+                },
+                bookings: (callback) =>{
+                    Booking.find(callback)
+                }
+            },(err, results) => {
+                if (err) { return next(err); } 
+                res.render('tableInstance_create', {title: 'TableInstance Create', tables: results.tables,bookings: results.bookings,errors: errors.array()});
+            });
             return;
         }
         else {
@@ -68,75 +75,70 @@ var tableInstance_create_post = [
 
 //Display details for a specefic tableInstance #3
 var tableInstance_details = (req,res, next)=>{
-    async.parallel({
-        tableInstance: (callback) => {
-            TableInstance.findById(req.params.id)
-                .exec(callback)
-        },
-        tableInstance_hall: (callback) => {
-            Hall.find({ 'tableInstance': req.params.id }, 'name')
-                .exec(callback)
-        },
-        tableInstance_employee: (callback) => {
-            Employee.find({ 'tableInstance': req.params.id }, 'name')
-                .exec(callback)
-        }
-    },(err, results) => {
-        if (err) { return next(err); } 
-        if (results.tableInstance == null) { 
-            var err = new Error('TableInstance not found');
-            err.status = 404;
-            return next(err);
-        }
-        res.render('tableInstance_detail', { title: 'TableInstance Detail', tableInstance: results.tableInstance, tableInstance_hall: results.tableInstance_hall, tabltableInstance_employeee_hall: results.tableInstance_employee});
-    });
-
+    TableInstance.findById(req.params.id)
+        .populate('table')
+        .populate('booking')
+        .exec((err, tableInstance) =>{
+            if(err){
+                return next(err)
+            }
+            res.render('tableInstance_detail', { title: 'TableInstance Detail',tableInstance: tableInstance})
+        })
 }
 
 //Display tableInstance update form on GET #4.1
 var tableInstance_edit_get = (req,res,next)=>{
-    TableInstance.findById(req.params.id, (err, tableInstance)=> {
+    async.parallel({
+        tableInstance: (callback) =>{
+            TableInstance.findById(req.params.id)
+                .populate('hall')
+                .populate('waiter')
+                .exec(callback)
+        },
+        all_tables: (callback) =>{
+            Table.find(callback)
+        },
+        all_bookings: (callback) =>{
+            Booking.find(callback)
+        }
+    },(err, results) => {
         if (err) { return next(err); }
         if (tableInstance == null) { 
             var err = new Error('TableInstance not found');
             err.status = 404;
             return next(err);
         }
-        res.render('tableInstance_edit', { title: 'Update TableInstance', tableInstance: tableInstance });
+        res.render('tableInstance_edit', { title: 'Update TableInstance', tableInstance: results.tableInstance, all_tables: results.all_tables, all_bookings: results.all_bookings });
     });
 }
 
 //Handle tableInstance update form on PUT #4.2
 var tableInstance_edit_put = [
-    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('capacity').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('available').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('location').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('tableInstance').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('employee').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-
-    sanitizeBody('name').escape(),
-    sanitizeBody('capacity').escape(),
-    sanitizeBody('available').escape(),
-    sanitizeBody('location').escape(),
-    sanitizeBody('tableInstance').escape(),
-    sanitizeBody('employee').escape(),
+    sanitizeBody('*').escape(),
 
     (req,res,next)=>{
         const errors = validationResult(req);
         var tableInstance = new TableInstance(
             {
-                name: req.body.name,
-                capacity: req.body.capacity,
-                available: req.body.available,
-                location: req.body.location,
-                tableInstance: req.body.tableInstance,
-                employee: req.body.employee
+                table: req.body.table,
+                booking: req.body.booking,
+                isFree: req.body.isFree,
+                _id: req.params.id
             }
         );
 
         if (!errors.isEmpty()) {
-            res.render('tableInstance_create', {title: 'TableInstance Create'});
+            async.parallel({
+                tables: (callback) =>{
+                    Table.find(callback)
+                },
+                bookings: (callback) =>{
+                    Booking.find(callback)
+                }
+            },(err, results) => {
+                if (err) { return next(err); } 
+                res.render('tableInstance_create', {title: 'TableInstance Create', tables: results.tables,bookings: results.bookings,errors: errors.array()});
+            });
             return;
         }
         else {
@@ -157,33 +159,6 @@ var tableInstance_delete_delete = (req,res,next)=>{
 }
 
 
-//=================Utils controllers================//
-
-//Display all bookings by tableID on GET #7
-var booking_for_table_get = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: booking_for_table_get');
-}
-
-//Display mark attendance form on GET #6.1
-var tableInstance_location_get = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: tableInstance_location_get');
-}
-
-//show availability: GET #7.1
-var tableInstance_availability_get = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: tableInstance_availability_get');
-}
-
-//no need for new form.Just edit form will do here
-//update availabiltity- show form: GET #7.2
-var tableInstance_update_availability_get = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: tableInstance_update_availability_get');
-}
-
-//update availabiltity: PUT #7.3
-var tableInstance_update_availability_put = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: tableInstance_update_availability_put');
-}
 
 
 module.exports = {
@@ -193,9 +168,5 @@ module.exports = {
     tableInstance_details,
     tableInstance_edit_get,
     tableInstance_edit_put,
-    tableInstance_delete_delete,
-    tableInstance_location_get,
-    tableInstance_availability_get,
-    tableInstance_update_availability_get,
-    tableInstance_update_availability_put
+    tableInstance_delete_deleteg
 }
