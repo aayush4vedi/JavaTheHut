@@ -6,3 +6,8 @@
 <% customer.bookings.forEach((booking)=>{ %>
     <h2><%= booking.dine.date %></h2>
 <% }) %>
+
+<button href="/customer/<%= customer._id%>/edit">Edit</button>
+<form action="/customer/<%= blcustomerog._id %>?_method=DELETE" method="POST" id="delete">
+    <button class="ui button red" type="submit">Delete</button>
+</form>

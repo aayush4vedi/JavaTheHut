@@ -17,7 +17,7 @@ var dishInstance_list = (req,res,next)=>{
             if(err){
                 return next(err)
             }
-            res.render('dishInstance_list', { title: 'DishInstance List', dishInstance_list: list_dishInstance})
+            res.render('dishInstance_list', { title: 'DishInstance List', dishInstances: list_dishInstance})
         })
 }
 

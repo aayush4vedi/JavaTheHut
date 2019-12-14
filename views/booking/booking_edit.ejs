@@ -1,6 +1,6 @@
 <h1><%= title %></h1>
 
-<form action="/create" method="POST">
+<form action="/booking/<%= booking._id %>?_method=PUT" method="POST">
     <input name="booking[customer]" value = "<%= booking.customer %>">
     <input name="booking[dine]" value = "<%= booking.dine %>">
     <input name="booking[tableInstance]" value = "<%= booking.tableInstance %>">

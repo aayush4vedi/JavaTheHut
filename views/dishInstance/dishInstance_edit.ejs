@@ -1,0 +1,9 @@
+<h1><%= title %></h1>
+
+<form action="/dishInstance/<%= dishInstance._id %>?_method=PUT" method="POST">
+    <input name="dishInstance[dish]" value="<%= dishInstance.dish %>">
+    <input name="dishInstance[order]" value="<%= dishInstance.order %>">
+    <input name="dishInstance[quantity]" value="<%= dishInstance.quantity %>">
+
+    <button type="submit">Submit</button>
+</form>

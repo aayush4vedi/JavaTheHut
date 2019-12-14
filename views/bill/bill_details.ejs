@@ -7,3 +7,8 @@
 <h2><%= bill.taxAmount %></h2>
 <h2><%= bill.serviceCharge %></h2>
 <h2><%= bill.payableamount %></h2>
+
+<button href="/bill/<%= bill._id%>/edit">Edit</button>
+<form action="/bill/<%= blbillog._id %>?_method=DELETE" method="POST" id="delete">
+    <button class="ui button red" type="submit">Delete</button>
+</form>

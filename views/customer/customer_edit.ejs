@@ -1,6 +1,6 @@
 <h1><%= title %></h1>
 
-<form action="/create" method="POST">
+<form action="/customer/<%= customer._id %>?_method=PUT" method="POST">
     <input name="customer[name]" value = "<%= customer.name %>">
     <input name="customer[email]" value = "<%= customer.email %>">
     <input name="customer[phone]" value = "<%= customer.phone %>">

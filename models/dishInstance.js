@@ -8,7 +8,7 @@ var Schema = mongoose.Schema;
 var DishInstanceSchema = new Schema({
     dish            : {type: Schema.Types.ObjectId, ref: 'Dish'},
     order           : {type: Schema.Types.ObjectId, ref: 'Order'},
-    quantity        : { type: Number, default:1}                                 
+    quantity        : {type: Number, default:1}                                 
 })
 
 

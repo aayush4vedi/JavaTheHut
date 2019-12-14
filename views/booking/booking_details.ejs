@@ -9,3 +9,8 @@
 <% booking.tableInstance.forEach((tableInstance)=>{ %>
     <h2><%= tableInstance.table.name %></h2>
 <% })  %>
+
+<button href="/booking/<%= booking._id%>/edit">Edit</button>
+<form action="/booking/<%= blbookingog._id %>?_method=DELETE" method="POST" id="delete">
+    <button class="ui button red" type="submit">Delete</button>
+</form>

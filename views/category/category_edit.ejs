@@ -1,6 +1,6 @@
 <h1><%= title %></h1>
 
-<form action="/create" method="POST">
+<form action="/category/<%= category._id %>?_method=PUT" method="POST">
     <input name="category[name]" value = "<%= category.name %>">
     <input name="category[cook]" value = "<%= category.cook %>">
     <input name="category[dish]" value = "<%= category.dish %>">
