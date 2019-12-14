@@ -25,8 +25,7 @@ BillSchema
 .virtual('payableamount')
 .get(function () {
     if(this.dineAmount>0 && this.taxAmount  > 0 && this.serviceCharge >0 ){
-        var payableAmount = this.taxAmount + this.dineAmount + this.serviceCharge;
-        return payableAmount;  
+        return  this.taxAmount + this.dineAmount + this.serviceCharge;
     }else{
         throw new Error('Error in amount calculation');
     }
@@ -36,20 +35,20 @@ BillSchema
 
 /************** Utils ********************/
 //calculate tax
-BillSchema
-.virtual('taxpercentage')
-.get((taxPercentage) =>{
-    var taxAmount = (taxPercentage * this.dineAmount)/100;
-    this.taxAmount = taxAmount;  
-});
+// BillSchema
+// .virtual('taxpercentage')
+// .get((taxPercentage) =>{
+//     var taxAmount = (taxPercentage * this.dineAmount)/100;
+//     this.taxAmount = taxAmount;  
+// });
 
 //calculate service charge
-BillSchema
-.virtual('servicechargepercentage')
-.get(function (serviceChargePercentage) {
-    var serviceChargeAmount = (serviceChargePercentage * this.orderAmount)/100;
-    this.serviceChargeAmount = serviceChargeAmount;  
-});
+// BillSchema
+// .virtual('servicechargepercentage')
+// .get(function (serviceChargePercentage) {
+//     var serviceChargeAmount = (serviceChargePercentage * this.orderAmount)/100;
+//     this.serviceChargeAmount = serviceChargeAmount;  
+// });
 
 //compile the Model
 var Bill = mongoose.model('Bill', BillSchema);

@@ -89,6 +89,9 @@ var booking_details = (req,res,next)=>{
     async.parallel({
         booking: (callback) =>{
             Booking.findById(req.params.id)
+                .populate('customer')
+                .populate('dine')
+                .tableInstance('tableInstance')
                 .exec(callback)
         },
         booking_dine: (callback) =>{
@@ -148,7 +151,6 @@ var booking_edit_get = (req,res,next)=>{
             return next(err);
         }
         res.render('booking_edit', { title: 'Update Booking', booking: results.booking, booking_dine: results.booking_dine, booking_customer: results.booking_customer, booking_tables: results.booking_tables, all_tables: results.all_tables});
-
     })
 }
 

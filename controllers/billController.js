@@ -9,35 +9,46 @@ const { sanitizeBody } = require('express-validator/filter');
 
 //List all bills #1
 var bill_list = (req,res,next)=>{
-    Bill.find()
-        .exec((err, list_bill) =>{
-            if(err){
-                return next(err)
-            }
-            res.render('bill_list', { title: 'Bill List', bill_list: list_bill})
-        })
+    async.parallel({
+        bill: (callback) =>{
+            Bill.find()
+                .populate('dine')
+                .exec(callback)
+        },
+        dine: (callback) =>{
+            Dine.find(callback)
+        }
+    },(err, results) => {
+        if (err) { return next(err); } 
+        if (results.bill == null) { 
+            var err = new Error('No Bills found');
+            err.status = 404;
+            return next(err);
+        }
+        res.render('bill_detail', { title: 'Bill Detail', bill: results.bill, dine: results.dine});
+    });
 }
 
 //Display bill create form on GET #2.1
+// need all Dine objects to select from
 var bill_create_get = (req,res,next)=>{
-    res.render('bill_create', {title: 'Bill Create'});
+    Dine.find(callback)
+    .exec((err, all_dines) =>{
+        if(err){
+            return next(err)
+        }
+        res.render('bill_create', { title: 'Bill Create', all_dines: all_dines})
+    })
 }
 
 //Handle bill create form on POST #2.2
 var bill_create_post = [
-    body('isPaid').isLength({ min: 1 }).trim().withMessage('Invalid length'),
-    body('dine').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     body('dineAmount').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     body('taxAmount').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     body('serviceCharge').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     body('payableAmount').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     
-    sanitizeBody('isPaid').escape(),
-    sanitizeBody('dine').escape(),
-    sanitizeBody('dineAmount').escape(),
-    sanitizeBody('taxAmount').escape(),
-    sanitizeBody('serviceCharge').escape(),
-    sanitizeBody('payableAmount').escape(),
+    sanitizeBody('*').trim().escape(),
 
     (req,res,next)=>{
         const errors = validationResult(req);
@@ -54,7 +65,13 @@ var bill_create_post = [
         );
 
         if (!errors.isEmpty()) {
-            res.render('bill_create', {title: 'Bill Create'});
+            Dine.find(callback)
+                .exec((err, all_dines) =>{
+                    if(err){
+                        return next(err)
+                    }
+                    res.render('bill_create', { title: 'Bill Create', all_dines: all_dines})
+                })
             return;
         }
         else {
@@ -71,6 +88,7 @@ var bill_details = (req,res,next)=>{
     async.parallel({
         bill: (callback) =>{
             Bill.findById(req.params.id)
+                .populate('dine')
                 .exec(callback)
         },
         bill_dine: (callback) =>{
@@ -84,37 +102,44 @@ var bill_details = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('bill_detail', { title: 'Bill Detail', bill: results.bill, bill_dishes: results.bill_dishes, bill_employee: results.bill_employee});
+        res.render('bill_detail', { title: 'Bill Detail', bill: results.bill, bill_dine: results.bill_dine});
     });
 }
 
 //Display bill update form on GET #4.1
 var bill_edit_get = (req,res,next)=>{
-    Bill.findById(req.params.id, (err, bill)=> {
-        if (err) { return next(err); }
-        if (bill == null) { 
+    async.parallel({
+        bill: (callback) =>{
+            Bill.findById(req.params.id)
+                .populate('dine')
+                .exec(callback)
+        },
+        bill_dine: (callback) =>{
+            Dine.find({ 'bill': req.params.id }, 'orders status booking ')
+                .exec(callback)
+        },
+        all_dines: (callback) =>{
+            Dine.find(callback)
+        }
+    },(err, results) => {
+        if (err) { return next(err); } 
+        if (results.bill == null) { 
             var err = new Error('Bill not found');
             err.status = 404;
             return next(err);
         }
-        res.render('bill_edit', { title: 'Update Bill', bill: bill });
+        res.render('bill_edit', { title: 'Update Bill', bill: results.bill, bill_dine: results.bill_dine, all_dines: results.all_dines});
     });
 }
 
 //Handle bill update form on PUT #4.2
 var bill_edit_put = [
-    body('dine').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('dineAmount').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('taxAmount').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('serviceCharge').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('payableAmount').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('dineAmount').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('taxAmount').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('serviceCharge').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('payableAmount').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     
-    sanitizeBody('isPaid').escape(),
-    sanitizeBody('dine').escape(),
-    sanitizeBody('dineAmount').escape(),
-    sanitizeBody('taxAmount').escape(),
-    sanitizeBody('serviceCharge').escape(),
-    sanitizeBody('payableAmount').escape(),
+    sanitizeBody('*').trim().escape(),
 
     (req,res,next)=>{
         const errors = validationResult(req);
@@ -131,9 +156,16 @@ var bill_edit_put = [
             }
         );
         if (!errors.isEmpty()) {
-            res.render('bill_create', { title: 'Update Bill', bill: bill, errors: errors.array() });
+            Dine.find(callback)
+                .exec((err, all_dines) =>{
+                    if(err){
+                        return next(err)
+                    }
+                    res.render('bill_create', { title: 'Bill Create', all_dines: all_dines})
+                })
             return;
-        }else {
+        }
+        else {
             Bill.findByIdAndUpdate(req.params.id, bill, {}, (err)=> {
                 if (err) { return next(err); }
                 res.redirect('/');      //TODO: add redirect url here
