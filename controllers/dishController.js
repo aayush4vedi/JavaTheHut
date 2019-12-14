@@ -17,7 +17,7 @@ var dish_list = (req,res,next)=>{
             if(err){
                 return next(err)
             }
-            res.render('dish_list', { title: 'Dish List', dish_list: list_dish})
+            res.render('dish_list', { title: 'Dish List', dishes: list_dish})
         })
 }
 
