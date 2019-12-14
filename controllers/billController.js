@@ -9,23 +9,16 @@ const { sanitizeBody } = require('express-validator/filter');
 
 //List all bills #1
 var bill_list = (req,res,next)=>{
-    async.parallel({
-        bill: (callback) =>{
-            Bill.find()
-                .populate('dine')
-                .exec(callback)
-        },
-        dine: (callback) =>{
-            Dine.find(callback)
-        }
-    },(err, results) => {
+    Bill.find()
+        .populate('dine')
+        .exec((err, bills) => {
         if (err) { return next(err); } 
         if (results.bill == null) { 
             var err = new Error('No Bills found');
             err.status = 404;
             return next(err);
         }
-        res.render('bill_detail', { title: 'Bill Detail', bill: results.bill, dine: results.dine});
+        res.render('bill_detail', { title: 'Bill Detail', bills: bills});
     });
 }
 

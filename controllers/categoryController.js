@@ -10,50 +10,28 @@ const { sanitizeBody } = require('express-validator/filter');
 
 //List all categories with their dishes#1  => Menu
 var category_list = (req,res,next)=>{
-    async.parallel({
-        category: (callback) =>{
-            Bill.Category()
-                .sort([['name', 'ascending']])
-                .populate('dish')
-                .exec(callback)
-        },
-        dish: (callback) =>{
-            Dish.find(callback)
-        }
-    },(err, results) => {
-        if (err) { return next(err); } 
-        if (results.bill == null) { 
-            var err = new Error('No Bills found');
-            err.status = 404;
-            return next(err);
-        }
-        res.render('category_list', { title: 'Menu: Category List', category: results.category, dish: results.dish});
-    });
+    Category.find()
+        .sort([['name', 'ascending']])
+        .populate('dish')
+        .populate('cook')
+        .exec((err,category_list)=>{
+            if (err) { return next(err); } 
+            res.render('category_list', { title: 'Menu: Category List', category: category_list});
+        })
 }
 
 //Display category create form on GET #2.1
 var category_create_get = (req,res,next)=>{
     async.parallel({
-        category: (callback) =>{
-            Bill.Category()
-                .sort([['name', 'ascending']])
-                .populate('dish')
-                .exec(callback)
-        },
-        dish: (callback) =>{
+        dishes: (callback) =>{
             Dish.find(callback)
         },
-        cook: (callback) =>{
+        cooks: (callback) =>{
             Cook.find(callback)
         }
     },(err, results) => {
         if (err) { return next(err); } 
-        if (results.bill == null) { 
-            var err = new Error('No Bills found');
-            err.status = 404;
-            return next(err);
-        }
-        res.render('category_create', {title: 'Category Create', category: results.category, dish: results.dish,cook: results.cook,errors: errors.array()});
+        res.render('category_create', {title: 'Category Create', dishes: results.dishes,cooks: results.cooks,errors: errors.array()});
     });
 }
 
@@ -93,12 +71,6 @@ var category_create_post = [
 
         if (!errors.isEmpty()) {
             async.parallel({
-                category: (callback) =>{
-                    Bill.Category()
-                        .sort([['name', 'ascending']])
-                        .populate('dish')
-                        .exec(callback)
-                },
                 dish: (callback) =>{
                     Dish.find(callback)
                 },
@@ -107,12 +79,7 @@ var category_create_post = [
                 }
             },(err, results) => {
                 if (err) { return next(err); } 
-                if (results.bill == null) { 
-                    var err = new Error('No Bills found');
-                    err.status = 404;
-                    return next(err);
-                }
-                res.render('category_create', {title: 'Category Create', category: results.category, dish: results.dish,cook: results.cook,errors: errors.array()});
+                res.render('category_create', {title: 'Category Create', dish: results.dish,cook: results.cook,errors: errors.array()});
             });
             return;
         }
@@ -121,7 +88,6 @@ var category_create_post = [
             Category.findOne({ 'name': req.body.name })
                 .exec( function(err, found_category) {
                      if (err) { return next(err); }
-
                      if (found_category) {
                          // Genre exists, redirect to its detail page.
                          res.redirect('/');  //TODO: add url here
@@ -143,14 +109,8 @@ var category_details = (req,res,next)=>{
     async.parallel({
         category: (callback) =>{
             Category.findById(req.params.id)
-                .exec(callback)
-        },
-        category_dishes: (callback) =>{
-            Dish.find({ 'category': req.params.id }, 'name description ingredients price isServing veg eta')
-                .exec(callback)
-        },
-        category_cook: (callback) =>{
-            Cook.find({ 'category': req.params.id }, 'name attendance')
+                .populate('cook')
+                .populate('dish')
                 .exec(callback)
         }
     },(err, results) => {
@@ -166,14 +126,29 @@ var category_details = (req,res,next)=>{
 
 //Display category update form on GET #4.1
 var category_edit_get = (req,res,next)=>{
-    Category.findById(req.params.id, (err, category)=> {
-        if (err) { return next(err); }
-        if (category == null) { 
+    async.parallel({
+        category: (callback) =>{
+            Category.findById(req.params.id)
+                .populate('cook')
+                .populate('dish')
+                .exec(callback)
+        },
+        all_dishes: (callback) =>{
+            Dish.find()
+                .exec(callback)
+        },
+        all_cooks: (callback) =>{
+            Cook.find()
+                .exec(callback)
+        }
+    },(err, results) => {
+        if (err) { return next(err); } 
+        if (results.category == null) { 
             var err = new Error('Category not found');
             err.status = 404;
             return next(err);
         }
-        res.render('category_edit', { title: 'Update Category', category: category });
+        res.render('category_edit', { title: 'Update Category', category: results.category, all_dishes: results.all_dishes, all_cooks: results.all_cooks});
     });
 }
 
@@ -206,33 +181,22 @@ var category_edit_put = [
         var category = new Category(
             {
                 name: req.body.name,
-                cook: req.body.cook,
-                dish: req.body.dish,
+                cook: (typeof req.body.cook==='undefined') ? [] : req.body.cook,
+                dish: (typeof req.body.dish==='undefined') ? [] : req.body.dish,
                 _id : req.params.id
             }
         );
         if (!errors.isEmpty()) {
             async.parallel({
-                category: (callback) =>{
-                    Bill.Category()
-                        .sort([['name', 'ascending']])
-                        .populate('dish')
-                        .exec(callback)
-                },
-                dish: (callback) =>{
+                dishes: (callback) =>{
                     Dish.find(callback)
                 },
-                cook: (callback) =>{
+                cooks: (callback) =>{
                     Cook.find(callback)
                 }
             },(err, results) => {
                 if (err) { return next(err); } 
-                if (results.bill == null) { 
-                    var err = new Error('No Bills found');
-                    err.status = 404;
-                    return next(err);
-                }
-                res.render('category_create', {title: 'Category Create', category: results.category, dish: results.dish,cook: results.cook,errors: errors.array()});
+                res.render('category_create', {title: 'Category Create', dishes: results.dishes,cooks: results.cooks,errors: errors.array()});
             });
             return;
         }

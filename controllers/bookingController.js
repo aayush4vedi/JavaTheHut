@@ -12,6 +12,9 @@ const { sanitizeBody } = require('express-validator/filter');
 //List all bookings #1
 var booking_list = (req,res,next)=>{
     Booking.find()
+        .populate('customer')
+        .populate('dine')
+        .populate('tableInstance')
         .exec((err, list_booking) =>{
             if(err){
                 return next(err)
@@ -22,14 +25,26 @@ var booking_list = (req,res,next)=>{
 
 //Display booking create form on GET #2.1
 var booking_create_get = (req,res,next)=>{
-    //Get list of all tables, to select from
-    TableInstance.find(callback)
-        .exec((err, all_tables) =>{
-            if(err){
-                return next(err)
-            }
-            res.render('booking_create', { title: 'Booking Create', all_tables: all_tables})
-        })
+    //Get list of all tables,customers to select from.Dine is not formed yet.
+    async.parallel({
+        customer: (callback) =>{
+            Customer.find()
+                .exec(callback)
+        },
+        //only send free tables
+        tables: (callback) =>{
+            TableInstance.find({'isFree':true})
+            .exec(callback)
+        }
+    },(err, results) => {
+        if (err) { return next(err); } 
+        if (results.customer == null) { 
+            var err = new Error('No such customer found');
+            err.status = 404;
+            return next(err);
+        }
+        res.render('booking_create', { title: 'Booking Create', customer: customer.employee, tables: results.tables});
+    });
 }
 
 //Handle booking create form on POST #2.2
@@ -44,14 +59,10 @@ var booking_create_post = [
         next();
     },
 
-
-    body('customer').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('dine').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('checkInTime').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('stayingMinutes').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('*').trim().escape(),
-    sanitizeBody('tableInstance.*').escape(),
 
     (req,res,next)=>{
         const errors = validationResult(req);
@@ -66,13 +77,25 @@ var booking_create_post = [
         );
 
         if (!errors.isEmpty()) {
-            TableInstance.find(callback)
-                .exec((err, all_tables) =>{
-                    if(err){
-                        return next(err)
-                    }
-                    res.render('booking_create', { title: 'Booking Create', booking:booking, all_tables: all_tables,errors: errors.array()})
-                })
+            async.parallel({
+                customer: (callback) =>{
+                    Customer.find()
+                        .exec(callback)
+                },
+                //only send free tables
+                tables: (callback) =>{
+                    TableInstance.find({'isFree':true})
+                    .exec(callback)
+                }
+            },(err, results) => {
+                if (err) { return next(err); } 
+                if (results.customer == null) { 
+                    var err = new Error('No such customer found');
+                    err.status = 404;
+                    return next(err);
+                }
+                res.render('booking_create', { title: 'Booking Create', customer: customer.employee, tables: results.tables});
+            });
             return;
         }
         else {
