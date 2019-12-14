@@ -23,51 +23,6 @@ var WaiterSchema = new Schema({
 
 //assertion for govIdNumber
 
-/************** Getters ********************/
-
-//get speciality: TODO: remove this
-WaiterSchema
-.virtual('get-speciality')
-.set(function () {
-    if(this.role != 'Chef'){
-        return "Not a cook";
-    }else{
-        return this.speciality;
-    }
-});
-
-//get tables TODO: remove this
-WaiterSchema
-.virtual('get-tables')
-.get(function () {
-    if(this.role != 'Waiter'){
-        return "Not a Waiter";
-    }else{
-        return this.tables;  
-    }
-});
-
-//get rating======v2 stuff
-// WaiterSchema
-// .virtual('rating')
-// .get(function () {
-//     return this.rating;  
-// });
-
-
-/************** Setters ********************/
-
-//set tables: assign more tables to Waiter. 
-WaiterSchema
-.virtual('add-tables')
-.set(function (tables) {
-    if(this.role != 'Waiter'){
-        return "Not a Waiter: Adding tables to wrong waiter type";
-    }else{
-        this.tables.push(tables); 
-    }
-});
-
 
 //******v2 stuff */
 //increase rating
@@ -101,14 +56,6 @@ WaiterSchema
 
 //v2 stuff========calculate rating
 
-
-//set attendance:
-//1.mark present
-WaiterSchema
-.virtual('mark-attendance')
-.set((attendance)=> {
-    this.attendance = attendance;  
-});
 
 //compile the Model
 var Waiter = mongoose.model('Waiter', WaiterSchema);
