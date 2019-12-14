@@ -12,7 +12,7 @@ var good_list = (req,res, next)=>{
         if(err){
             return next(err)
         }
-        res.render('good_list', { title: 'Good List', good_list: list_good})
+        res.render('good_list', { title: 'Good List', goods: list_good})
     })
 }
 

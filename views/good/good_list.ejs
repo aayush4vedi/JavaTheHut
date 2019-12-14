@@ -1,0 +1,10 @@
+<h1><%= title %></h1>
+
+<% goods.forEach((good)=>{ %>
+    <h2><%= good.name %></h2>
+    <h2><%= good.linkToPurchase %></h2>
+    <h2><%= good.threshold %></h2>
+    <h2><%= good.defaultPurchase %></h2>
+    <h2><%= good.quantityInStock %></h2>
+    <a href="/good/<%= good._id %>">Details</a>
+<% }) %>

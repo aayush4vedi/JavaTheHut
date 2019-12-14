@@ -1,0 +1,12 @@
+<h1><%= title %></h1>
+
+<h2><%= good.name %></h2>
+<h2><%= good.linkToPurchase %></h2>
+<h2><%= good.threshold %></h2>
+<h2><%= good.defaultPurchase %></h2>
+<h2><%= good.quantityInStock %></h2>
+
+<button href="/good/<%= good._id%>/edit">Edit</button>
+<form action="/good/<%= good._id %>?_method=DELETE" method="POST" id="delete">
+    <button class="ui button red" type="submit">Delete</button>
+</form>
