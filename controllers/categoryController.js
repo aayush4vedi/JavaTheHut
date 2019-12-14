@@ -117,10 +117,23 @@ var category_create_post = [
             return;
         }
         else {
-            category.save(function (err) {
-                if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
-            });
+            // Check if Category with same name already exists.
+            Category.findOne({ 'name': req.body.name })
+                .exec( function(err, found_category) {
+                     if (err) { return next(err); }
+
+                     if (found_category) {
+                         // Genre exists, redirect to its detail page.
+                         res.redirect('/');  //TODO: add url here
+                     }
+                     else {
+                        category.save(function (err) {
+                            if (err) { return next(err); }
+                            res.redirect('/');      //TODO: add redirect url here
+                        });
+                     }
+
+                 });
         }
     }
 ]
