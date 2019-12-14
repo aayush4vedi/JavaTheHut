@@ -1,6 +1,7 @@
 var Hall        = require('../models/hall'),
     Table       = require('../models/table'),
-    Restaurant  = require('../models/restaurant')
+    Restaurant  = require('../models/restaurant'),
+    async       = require('async')
 
 const { body, validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
@@ -10,6 +11,8 @@ const { sanitizeBody } = require('express-validator/filter');
 //List all halls #1
 var hall_list = (req,res, next)=>{
     Hall.find()
+        .populate('tables')
+        .populate('restaurant')
         .exec((err, list_hall) =>{
             if(err){
                 return next(err)
@@ -20,18 +23,24 @@ var hall_list = (req,res, next)=>{
 
 //Display hall create form on GET #2.1
 var hall_create_get = (req,res,next)=>{
-    res.render('hall_create', {title: 'Hall Create'});
+    async.parallel({
+        tables: (callback) =>{
+            Dish.find(callback)
+        },
+        restaurant: (callback) =>{
+            Cook.find(callback)
+        }
+    },(err, results) => {
+        if (err) { return next(err); } 
+        res.render('hall_create', {title: 'Hall Create', tables: results.tables,restaurant: results.restaurant,errors: errors.array()});
+    });
 }
 
 //Handle hall create form on POST #2.2
 var hall_create_post = [
     body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('tables').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('restaurant').isLength({ min: 3 }).trim().withMessage('Invalid length'),
 
-    sanitizeBody('name').escape(),
-    sanitizeBody('tables').escape(),
-    sanitizeBody('restaurant').escape(),
+    sanitizeBody('*').escape(),
 
     (req,res,next)=>{
         const errors = validationResult(req);
@@ -44,7 +53,17 @@ var hall_create_post = [
         );
 
         if (!errors.isEmpty()) {
-            res.render('hall_create', {title: 'Hall Create'});
+            async.parallel({
+                tables: (callback) =>{
+                    Dish.find(callback)
+                },
+                restaurant: (callback) =>{
+                    Cook.find(callback)
+                }
+            },(err, results) => {
+                if (err) { return next(err); } 
+                res.render('hall_create', {title: 'Hall Create', tables: results.tables,restaurant: results.restaurant,errors: errors.array()});
+            });
             return;
         }
         else {
@@ -59,54 +78,53 @@ var hall_create_post = [
 
 //Display details for a specefic hall #3
 var hall_details = (req,res, next)=>{
-    async.parallel({
-        hall: (callback) => {
-            Hall.findById(req.params.id)
-                .exec(callback)
-        },
-        hall_tables: (callback) => {
-            Table.find({ 'hall': req.params.id }, 'capacity available location')
-                .exec(callback)
-        },
-        hall_restaurnat: (callback) => {
-            Restaurant.find({ 'hall': req.params.id }, 'name')
-                .exec(callback)
-        },
-    },(err, results) => {
-        if (err) { return next(err); } 
-        if (results.hall == null) { 
-            var err = new Error('Hall not found');
-            err.status = 404;
-            return next(err);
-        }
-        res.render('hall_detail', { title: 'Hall Detail', hall: results.hall, hall_tables: results.hall_tables, hall_restaurnat: results.hall_restaurnat});
-    });
-}
-
-//Display hall update form on GET #4.1
-var hall_edit_get = (req,res,next)=>{
-    Hall.findById(req.params.id, (err, hall)=> {
+    Hall.findById(req.params.id)
+        .populate('tables')
+        .populate('restaurant')
+        .exec((err, hall)=> {
         if (err) { return next(err); }
         if (hall == null) { 
             var err = new Error('Hall not found');
             err.status = 404;
             return next(err);
         }
-        res.render('hall_edit', { title: 'Update Hall', hall: hall });
+        res.render('hall_detail', { title: 'Hall Detail', hall: hall});
     });
+}
+
+//Display hall update form on GET #4.1
+var hall_edit_get = (req,res,next)=>{
+    async.parallel({
+        hall: (callback) =>{
+            Hall.findById(req.params.id)
+                .populate('cook')
+                .populate('dish')
+                .exec(callback)
+        },
+        tables: (callback) =>{
+            Dish.find(callback)
+        },
+        restaurant: (callback) =>{
+            Cook.find(callback)
+        }
+    },(err, results) => {
+        if (err) { return next(err); } 
+        if (hall == null) { 
+            var err = new Error('Hall not found');
+            err.status = 404;
+            return next(err);
+        }
+        res.render('hall_edit', { title: 'Update Hall', hall: results.hall, tables: results.tables, restaurant: results.restaurant});
+    })       
 }
 
 //Handle hall update form on PUT #4.2
 var hall_edit_put = [
     body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('tables').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('restaurant').isLength({ min: 3 }).trim().withMessage('Invalid length'),
 
-    sanitizeBody('name').escape(),
-    sanitizeBody('tables').escape(),
-    sanitizeBody('restaurant').escape(),
+    sanitizeBody('*').escape(),
 
-    (req, res, next) => {
+    (req,res,next)=>{
         const errors = validationResult(req);
         var hall = new Hall(
             {
@@ -117,7 +135,17 @@ var hall_edit_put = [
             }
         );
         if (!errors.isEmpty()) {
-            res.render('hall_create', { title: 'Update Hall', hall: hall, errors: errors.array() });
+            async.parallel({
+                tables: (callback) =>{
+                    Dish.find(callback)
+                },
+                restaurant: (callback) =>{
+                    Cook.find(callback)
+                }
+            },(err, results) => {
+                if (err) { return next(err); } 
+                res.render('hall_create', {title: 'Hall Create', tables: results.tables,restaurant: results.restaurant,errors: errors.array()});
+            });
             return;
         }
         else {

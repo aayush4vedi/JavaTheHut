@@ -1,5 +1,4 @@
-var Employee = require('../models/employee'),
-    async       = require('async')
+var Employee = require('../models/employee')
 
 const { body, validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
