@@ -11,7 +11,8 @@ const { sanitizeBody } = require('express-validator/filter');
 //List all dishInstances #1
 var dishInstance_list = (req,res,next)=>{
     DishInstance.find()
-    .populate('dish')
+        .populate('dish')
+        .populate('order')
         .exec((err, list_dishInstance) =>{
             if(err){
                 return next(err)
@@ -22,18 +23,24 @@ var dishInstance_list = (req,res,next)=>{
 
 //Display dishInstance create form on GET #2.1
 var dishInstance_create_get = (req,res,next)=>{
-    res.render('dishInstance_create', {title: 'DishInstance Create'});
+    async.parallel({
+        dishes: (callback) =>{
+            Dish.find(callback)
+        },
+        orders: (callback) =>{
+            Order.find(callback)
+        }
+    },(err, results) => {
+        if (err) { return next(err); } 
+        res.render('dishInstance_create', {title: 'DishInstance Create', dishes: results.dishes,orders: results.orders,errors: errors.array()});
+    });
 }
 
 //Handle dishInstance create form on POST #2.2
 var dishInstance_create_post = [
-    body('dish').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('order').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('quantity').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     
-    sanitizeBody('dish').escape(),
-    sanitizeBody('order').escape(),
-    sanitizeBody('quantity').escape(),
+    sanitizeBody('*').escape(),
 
     (req,res,next)=>{
         const errors = validationResult(req);
@@ -46,7 +53,17 @@ var dishInstance_create_post = [
         );
 
         if (!errors.isEmpty()) {
-            res.render('dishInstance_create', {title: 'DishInstance Create'});
+            async.parallel({
+                dishes: (callback) =>{
+                    Dish.find(callback)
+                },
+                orders: (callback) =>{
+                    Order.find(callback)
+                }
+            },(err, results) => {
+                if (err) { return next(err); } 
+                res.render('dishInstance_create', {title: 'DishInstance Create', dishes: results.dishes,orders: results.orders,errors: errors.array()});
+            });
             return;
         }
         else {
@@ -63,14 +80,15 @@ var dishInstance_create_post = [
 var dishInstance_details = (req,res,next)=>{
     DishInstance.findById(req.params.id)
         .populate('dish')
+        .populate('order')
         .exec((err, results) => {
         if (err) { return next(err); } 
-        if (results.dishInstance == null) { 
+        if (results == null) { 
             var err = new Error('DishInstance not found');
             err.status = 404;
             return next(err);
         }
-        res.render('dishInstance_detail', { title: 'DishInstance Detail', dishInstance: results.dishInstance, dishInstance_dish: results.dishInstance_dish, dishInstance_order: results.dishInstance_order});
+        res.render('dishInstance_detail', { title: 'DishInstance Detail', dishInstance: results});
     });
 }
 
@@ -79,14 +97,17 @@ var dishInstance_details = (req,res,next)=>{
 var dishInstance_edit_get = (req,res,next)=>{
     async.parallel({
         dishInstance: (callback) =>{
-            DishInstance.findById(req.params.id).populate('dish order').exec(callback)
+            DishInstance.findById(req.params.id)
+                .populate('order')
+                .populate('dish')
+                .exec(callback)
         },
-        dishes: function(callback) {
+        all_dishes: function(callback) {
             Dish.find(callback)
         },
-        orders: function(callback) {
+        all_orders: function(callback) {
             Order.find(callback)
-        },
+        }
     },(err, results) => {
         if (err) { return next(err); } 
         if (results.dishInstance == null) { 
@@ -94,19 +115,15 @@ var dishInstance_edit_get = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('dishInstance_detail', { title: 'DishInstance Detail', dish_list : results.dishes, order : results.order, selected_dish : results.dishinstance.dish._id, dishInstance:results.dishInstance});
+        res.render('dishInstance_detail', { title: 'DishInstance Detail',dishInstance: results.dishInstance, all_dishes: results.all_dishes, all_orders: results.all_orders});
     });
 }
 
 //Handle dishInstance update form on PUT #4.2
 var dishInstance_edit_put = [
-    body('dish').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('order').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('quantity').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     
-    sanitizeBody('dish').escape(),
-    sanitizeBody('order').escape(),
-    sanitizeBody('quantity').escape(),
+    sanitizeBody('*').escape(),
 
     (req,res,next)=>{
         const errors = validationResult(req);
@@ -114,11 +131,22 @@ var dishInstance_edit_put = [
             {
                 dish: req.body.dish,
                 order: req.body.order,
-                quantity: req.body.quantity
+                quantity: req.body.quantity,
+                _id : req.params.id
             }
         );
         if (!errors.isEmpty()) {
-            res.render('dishInstance_create', { title: 'Update DishInstance', dishInstance: dishInstance, errors: errors.array() });
+            async.parallel({
+                dishes: (callback) =>{
+                    Dish.find(callback)
+                },
+                orders: (callback) =>{
+                    Order.find(callback)
+                }
+            },(err, results) => {
+                if (err) { return next(err); } 
+                res.render('dishInstance_create', {title: 'DishInstance Create', dishes: results.dishes,orders: results.orders,errors: errors.array()});
+            });
             return;
         }
         else {
