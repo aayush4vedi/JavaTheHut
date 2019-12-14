@@ -11,9 +11,10 @@ var OrderSchema = new Schema({
                             status : {type : String,enum : ['Uninitiated','Placed','Accepted','Cooking','Serving','Cancelled'],default : 'Uninitiated'},
                             time   : {type: Date, default: Date.now}              
                     }],
-    items           : {type: Schema.Types.ObjectId, ref: 'DishInstance'},
+    items           : [{type: Schema.Types.ObjectId, ref: 'DishInstance'}],
+    dine            : {type: Schema.Types.ObjectId, ref: 'Dine'},
     cancellationReqs: [{
-                        dish  : {type: Schema.Types.ObjectId, ref: 'Dish'},
+                        dish  : {type: Schema.Types.ObjectId, ref: 'DishInstance'},
                         stauts: {type: String, enum: ['Null','Pending','Accepted','Rejected'], default: 'Null'}
                     }]
 })

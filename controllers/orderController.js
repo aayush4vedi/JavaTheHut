@@ -1,6 +1,7 @@
 var Order           = require('../models/order'),
     DishInstance    = require('../models/dishInstance'),
-    async       = require('async')
+    Dine            = require('../models/dine'),
+    async           = require('async')
 
 const { body, validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
@@ -10,6 +11,9 @@ const { sanitizeBody } = require('express-validator/filter');
 //List all orders #1
 var order_list = (req,res,next)=>{
     Order.find()
+        .populate('items')
+        .populate('cancellationReqs')
+        .populate('dine')
         .exec((err, list_order) =>{
             if(err){
                 return next(err)
@@ -20,18 +24,22 @@ var order_list = (req,res,next)=>{
 
 //Display order create form on GET #2.1
 var order_create_get = (req,res,next)=>{
-    res.render('order_create', {title: 'Order Create'});
+    async.parallel({
+        dishes: (callback) =>{
+            DishInstance.find(callback)
+        },
+        dines : (callback) =>{
+            Dine.find(callback)
+        }
+    },(err, results) => {
+        if (err) { return next(err); } 
+        res.render('order_create', {title: 'Order Create', dishes: results.dishes,dines: results.dines,errors: errors.array()});
+    });
 }
 
 //Handle order create form on POST #2.2
 var order_create_post = [
-    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('items').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('cancellationReqs').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    
-    sanitizeBody('name').escape(),
-    sanitizeBody('items').escape(),
-    sanitizeBody('cancellationReqs').escape(),
+    sanitizeBody('*').escape(),
 
     (req,res,next)=>{
         const errors = validationResult(req);
@@ -39,12 +47,23 @@ var order_create_post = [
             {
                 status: req.body.status,
                 items: req.body.items,
+                dine : req.body.dine,
                 cancellationReqs: req.body.cancellationReqs,
             }
         );
 
         if (!errors.isEmpty()) {
-            res.render('order_create', {title: 'Order Create'});
+            async.parallel({
+                dishes: (callback) =>{
+                    DishInstance.find(callback)
+                },
+                dines : (callback) =>{
+                    Dine.find(callback)
+                }
+            },(err, results) => {
+                if (err) { return next(err); } 
+                res.render('order_create', {title: 'Order Create', dishes: results.dishes,dines: results.dines,errors: errors.array()});
+            });
             return;
         }
         else {
@@ -58,48 +77,53 @@ var order_create_post = [
 
 //Display details for a specefic order #3 
 var order_details = (req,res,next)=>{
-    async.parallel({
-        order: (callback) =>{
-            Order.findById(req.params.id)
-                .exec(callback)
-        },
-        items : (callback) =>{
-            DishInstance.find({ 'order': req.params.id }, 'name quantity')
-                .exec(callback)
-        },
-    },(err, results) => {
+    Order.findById(req.params.id)
+        .populate('dine')
+        .populate('items')
+        .populate('cancellationReqs')
+        .exec((err, order)=> {
         if (err) { return next(err); } 
         if (results.order == null) { 
             var err = new Error('Order not found');
             err.status = 404;
             return next(err);
         }
-        res.render('order_detail', { title: 'Order Detail', order: results.order, items: results.items});
+        res.render('order_detail', { title: 'Order Detail', order: order});
     });
 }
 
 //Display order update form on GET #4.1
 var order_edit_get = (req,res,next)=>{
-    Order.findById(req.params.id, (err, order)=> {
-        if (err) { return next(err); }
-        if (order == null) { 
+    async.parallel({
+        order: (callback) =>{
+            Order.findById(req.params.id)
+                .populate('dine')
+                .populate('items')
+                .populate('cancellationReqs')
+                .exec(callback)
+        },
+        all_disheinstances: (callback) =>{
+            DishInstance.find()
+                .exec(callback)
+        },
+        all_dines: (callback) =>{
+            Dine.find()
+                .exec(callback)
+        }
+    },(err, results) => {
+        if (err) { return next(err); } 
+        if (results.category == null) { 
             var err = new Error('Order not found');
             err.status = 404;
             return next(err);
         }
-        res.render('order_edit', { title: 'Update Order', order: order });
+        res.render('order_edit', { title: 'Update Order', order: results.order, all_disheinstances: results.all_disheinstances, all_dines: results.all_dines});
     });
 }
 
 //Handle order update form on PUT #4.2
 var order_edit_put = [
-    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('items').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('cancellationReqs').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    
-    sanitizeBody('name').escape(),
-    sanitizeBody('items').escape(),
-    sanitizeBody('cancellationReqs').escape(),
+    sanitizeBody('*').escape(),
 
     (req,res,next)=>{
         const errors = validationResult(req);
@@ -107,11 +131,23 @@ var order_edit_put = [
             {
                 status: req.body.status,
                 items: req.body.items,
+                dine : req.body.dine,
                 cancellationReqs: req.body.cancellationReqs,
+                _id : req.params.id
             }
         );
         if (!errors.isEmpty()) {
-            res.render('order_create', { title: 'Update Order', order: order, errors: errors.array() });
+            async.parallel({
+                dishes: (callback) =>{
+                    DishInstance.find(callback)
+                },
+                dines : (callback) =>{
+                    Dine.find(callback)
+                }
+            },(err, results) => {
+                if (err) { return next(err); } 
+                res.render('order_create', {title: 'Order Create', dishes: results.dishes,dines: results.dines,errors: errors.array()});
+            });
             return;
         }
         else {
@@ -130,7 +166,7 @@ var order_delete_delete = (req,res,next)=>{
         res.redirect('/');      //TODO: add redirect url here
     })
 }
-
+//TODO: handle cancellation
 //same form to handle both(request button-customer, approve button-kitchen manager)
 //Display Cancellation form GET #6.1
 var order_cancellation_get = (req,res,next)=>{
