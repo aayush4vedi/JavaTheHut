@@ -1,5 +1,6 @@
 var Dish        = require('../models/dish'),
     Category    = require('../models/category'),
+    Good        = require('../models/good'),
     async       = require('async')
 
 const { body, validationResult } = require('express-validator/check');
@@ -10,6 +11,8 @@ const { sanitizeBody } = require('express-validator/filter');
 //List all dishs #1
 var dish_list = (req,res,next)=>{
     Dish.find()
+        .sort([['name', 'ascending']])
+        .populate('category')
         .exec((err, list_dish) =>{
             if(err){
                 return next(err)
@@ -20,7 +23,17 @@ var dish_list = (req,res,next)=>{
 
 //Display dish create form on GET #2.1
 var dish_create_get = (req,res,next)=>{
-    res.render('dish_create', {title: 'Dish Create'});
+    async.parallel({
+        all_categories: (callback) =>{
+            Category.find(callback)
+        },
+        all_goods: (callback) =>{
+            Good.find(callback)
+        }
+    },(err, results) => {
+        if (err) { return next(err); } 
+        res.render('dish_create', {title: 'Dish Create', all_categories: results.all_categories,all_goods: results.all_goods,errors: errors.array()});
+    });
 }
 
 //Handle dish create form on POST #2.2
@@ -28,22 +41,12 @@ var dish_create_post = [
     body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('description').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('ingredients').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('goods').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('category').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('price').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('isServing').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('veg').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('eta').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     
-    sanitizeBody('name').escape(),
-    sanitizeBody('description').escape(),
-    sanitizeBody('ingredients').escape(),
-    sanitizeBody('goods').escape(),
-    sanitizeBody('category').escape(),
-    sanitizeBody('price').escape(),
-    sanitizeBody('isServing').escape(),
-    sanitizeBody('veg').escape(),
-    sanitizeBody('eta').escape(),
+    sanitizeBody('*').escape(),
 
     (req,res,next)=>{
         const errors = validationResult(req);
@@ -62,7 +65,17 @@ var dish_create_post = [
         );
 
         if (!errors.isEmpty()) {
-            res.render('dish_create', {title: 'Dish Create'});
+            async.parallel({
+                all_categories: (callback) =>{
+                    Category.find(callback)
+                },
+                all_goods: (callback) =>{
+                    Good.find(callback)
+                }
+            },(err, results) => {
+                if (err) { return next(err); } 
+                res.render('dish_create', {title: 'Dish Create', all_categories: results.all_categories,all_goods: results.all_goods,errors: errors.array()});
+            });
             return;
         }
         else {
@@ -98,14 +111,27 @@ var dish_details = (req,res,next)=>{
 
 //Display dish update form on GET #4.1
 var dish_edit_get = (req,res,next)=>{
-    Dish.findById(req.params.id, (err, dish)=> {
-        if (err) { return next(err); }
-        if (dish == null) { 
-            var err = new Error('Dish not found');
+    async.parallel({
+        dish: (callback) =>{
+            Dish.findById(req.params.id)
+                .populate('category')
+                .populate('good')
+                .exec(callback)
+        },
+        all_categories: (callback) =>{
+            Category.find(callback)
+        },
+        all_goods: (callback) =>{
+            Good.find(callback)
+        }
+    },(err, results) => {
+        if (err) { return next(err); } 
+        if (results.category == null) { 
+            var err = new Error('Category not found');
             err.status = 404;
             return next(err);
         }
-        res.render('dish_edit', { title: 'Update Dish', dish: dish });
+        res.render('dish_edit', { title: 'Update Dish', dish: dish, all_categories: results.all_categories,all_goods: results.all_goods,errors: errors.array()});
     });
 }
 
@@ -114,22 +140,12 @@ var dish_edit_put = [
     body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('description').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('ingredients').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('goods').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('category').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('price').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('isServing').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('veg').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('eta').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     
-    sanitizeBody('name').escape(),
-    sanitizeBody('description').escape(),
-    sanitizeBody('ingredients').escape(),
-    sanitizeBody('goods').escape(),
-    sanitizeBody('category').escape(),
-    sanitizeBody('price').escape(),
-    sanitizeBody('isServing').escape(),
-    sanitizeBody('veg').escape(),
-    sanitizeBody('eta').escape(),
+    sanitizeBody('*').escape(),
 
     (req,res,next)=>{
         const errors = validationResult(req);
@@ -144,10 +160,21 @@ var dish_edit_put = [
                 isServing: req.body.isServing,
                 veg: req.body.veg,
                 eta: req.body.eta,
+                _id: req.params.id
             }
         );
         if (!errors.isEmpty()) {
-            res.render('dish_create', { title: 'Update Dish', dish: dish, errors: errors.array() });
+            async.parallel({
+                all_categories: (callback) =>{
+                    Category.find(callback)
+                },
+                all_goods: (callback) =>{
+                    Good.find(callback)
+                }
+            },(err, results) => {
+                if (err) { return next(err); } 
+                res.render('dish_create', {title: 'Dish Create', all_categories: results.all_categories,all_goods: results.all_goods,errors: errors.array()});
+            });
             return;
         }
         else {
@@ -167,24 +194,6 @@ var dish_delete_delete = (req,res,next)=>{
     })
 }
 
-
-
-//=================Utils controllers================//
-
-//Display mark is-serving-status form on GET #6.1
-var dish_mark_is_serving_get = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: dish_mark_is_serving_get');
-}
-
-//Handle mark is-serving-status form on POST #6.2
-var dish_mark_is_serving_post = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: dish_mark_is_serving_post');
-}
-
-// display all dishes of given Category #7
-var dish_for_cateogry_id_get = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: dish_for_cateogry_id_get');
-}
 
 module.exports = {
     dish_list,

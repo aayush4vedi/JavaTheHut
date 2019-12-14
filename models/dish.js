@@ -30,13 +30,6 @@ var DishSchema = new Schema({
 
 /************** Setters ********************/
 
-//set ingredients
-DishSchema
-.virtual('set-ingredients')
-.set(function (ingredients) {
-    var ingredients = ingredients.split(' ');
-    this.ingredients = ingredients;
-});
 
 // ===< v2 stuff >=====
 // //increase likes
