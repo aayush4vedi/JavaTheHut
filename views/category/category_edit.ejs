@@ -1,0 +1,9 @@
+<h1><%= title %></h1>
+
+<form action="/create" method="POST">
+    <input name="category[name]" value = "<%= name %>">
+    <input name="category[cook]" value = "<%= cook %>">
+    <input name="category[dish]" value = "<%= dish %>">
+
+    <button type="submit">Submit</button>
+</form>
