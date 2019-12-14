@@ -12,7 +12,7 @@ var DineSchema = new Schema({
     waiter          : {type: Schema.Types.ObjectId, ref: 'Waiter'},    
     customer        : {type: Schema.Types.ObjectId, ref: 'Customer'},
     tableInstances  : [{type: Schema.Types.ObjectId, ref: 'TableInstance'}],
-    Date            : {type: Date, default:Date.now}, 
+    date            : {type: Date, default:Date.now}, 
     status          : [{
                             status: {type : String,enum : ['Eating', 'Eaten', 'Completed'],default : 'Eating'},
                             time  : {type: Date, default: Date.now} 

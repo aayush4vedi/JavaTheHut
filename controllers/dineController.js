@@ -80,6 +80,7 @@ var dine_create_post = [
                 customer: req.body.customer,
                 tableInstances: req.body.tableInstances,
                 status: req.body.status,
+                date: req.body.date,
             }
         );
 
@@ -183,11 +184,14 @@ var dine_edit_put = [
         var dine = new Dine(
             {
                 orders: req.body.orders,
-                status: req.body.status,
-                bill: req.body.bill,
                 booking: req.body.booking,
+                bill: req.body.bill,
                 waiter: req.body.waiter,
                 customer: req.body.customer,
+                tableInstances: req.body.tableInstances,
+                status: req.body.status,
+                date: req.body.date,
+                _id: req.params.id
             }
         );
         if (!errors.isEmpty()) {

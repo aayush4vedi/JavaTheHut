@@ -19,7 +19,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-
+app.use(methodOverrid('_method'));
 //Add more versioning here
 app.use('/fooder/v1', v1);
 

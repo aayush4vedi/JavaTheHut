@@ -1,0 +1,11 @@
+<h1><%= title %></h1>
+
+<% bills.forEach((bill)=>{ %>
+    <h2><%= bill.isPaid %></h2>
+    <h2><%= bill.dine._id %></h2>
+    <h2><%= bill.dine.date %></h2>
+    <h2><%= bill.dineAmount %></h2>
+    <h2><%= bill.taxAmount %></h2>
+    <h2><%= bill.serviceCharge %></h2>
+    <h2><%= bill.payableamount %></h2>
+<% }) %>
