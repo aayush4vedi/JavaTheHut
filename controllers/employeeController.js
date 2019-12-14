@@ -1,6 +1,4 @@
 var Employee = require('../models/employee'),
-    Category = require('../models/category'),
-    Table    = require('../models/table'),
     async       = require('async')
 
 const { body, validationResult } = require('express-validator/check');
@@ -9,7 +7,7 @@ const { sanitizeBody } = require('express-validator/filter');
 //===================CRUD controllers================//
 //List all Employees GET  #1
 var employee_list = (req,res,next)=>{
-    Employee.find()
+    Employee.find({'name attendance'})
         .exec((err, list_employee) =>{
             if(err){
                 return next(err)
@@ -33,8 +31,6 @@ var employee_create_post = [
     body('govIDNumber').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('salary').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('role').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('speciality').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('tables').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('attendance').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('username').escape(),
@@ -44,8 +40,6 @@ var employee_create_post = [
     sanitizeBody('phone').escape(),
     sanitizeBody('govIDNumber').escape(),
     sanitizeBody('salary').escape(),
-    sanitizeBody('speciality').escape(),
-    sanitizeBody('tables').escape(),
     sanitizeBody('attendance').escape(),
 
     (req,res,next)=>{
@@ -59,8 +53,6 @@ var employee_create_post = [
                 phone : req.body.phone,
                 govIDNumber : req.body.govIDNumber,
                 salary : req.body.salary,
-                speciality : req.body.speciality,
-                tables : req.body.tables,
                 attendance : req.body.attendance
             }
         );
@@ -80,27 +72,15 @@ var employee_create_post = [
 
 //Display details for a specefic employee #3 
 var employee_details = (req,res,next)=>{
-    async.parallel({
-        employee: (callback) =>{
-            Employee.findById(req.params.id)
-                .exec(callback)
-        },
-        employee_speciality: (callback) =>{
-            Category.find({ 'employee': req.params.id }, 'name')
-                .exec(callback)
-        },
-        employee_tables: (callback) =>{
-            Table.find({ 'employee': req.params.id }, 'name')
-                .exec(callback)
-        }
-    },(err, results) => {
+    Employee.findById(req.params.id)
+        .exec((err, employee) => {
         if (err) { return next(err); } 
-        if (results.employee == null) { 
+        if (employee == null) { 
             var err = new Error('Employee not found');
             err.status = 404;
             return next(err);
         }
-        res.render('employee_detail', { title: 'Employee Detail', employee: results.employee, employee_speciality: results.employee_speciality, employee_tables: results.employee_tables });
+        res.render('employee_detail', { title: 'Employee Detail', employee: employee});
     });
 }
 
@@ -127,8 +107,6 @@ var employee_edit_put = [
     body('govIDNumber').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('salary').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('role').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('speciality').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('tables').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('attendance').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('username').escape(),
@@ -138,8 +116,6 @@ var employee_edit_put = [
     sanitizeBody('phone').escape(),
     sanitizeBody('govIDNumber').escape(),
     sanitizeBody('salary').escape(),
-    sanitizeBody('speciality').escape(),
-    sanitizeBody('tables').escape(),
     sanitizeBody('attendance').escape(),
 
     (req,res,next)=>{
@@ -184,14 +160,20 @@ var employee_delete_delete = (req,res,next)=>{
 
 //=================Utils controllers================//
 
-//Display mark attendance form on GET #6.1
-var employee_mark_attendance_get = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: employee_mark_attendance_get');
-}
+//Display mark attendance form on GET ==> same as employee_list
 
 //Display mark attendance form on POST #6.2
 var employee_mark_attendance_post = (req,res,next)=>{
-    res.send('NOT IMPLEMENTED: employee_mark_attendance_post');
+    var employee = new Employee(
+        {
+            attendance : req.body.attendance,
+            _id : req.params.id
+        }
+    );
+    Employee.findByIdAndUpdate(req.params.id, employee, {}, (err)=> {
+        if (err) { return next(err); }
+        res.redirect('/');      //TODO: add redirect url here
+    });
 }
 
 
@@ -203,6 +185,5 @@ module.exports ={
     employee_edit_get,
     employee_edit_put,
     employee_delete_delete,
-    employee_mark_attendance_get,
     employee_mark_attendance_post
 }

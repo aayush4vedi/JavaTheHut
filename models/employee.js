@@ -6,7 +6,6 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var EmployeeSchema = new Schema({
-    // employeeID      : { type: String, default: uuid.v1 },     //restaurant specefic ID's to be implemented later
     username        : {type: String, default: "user"},                                
     password        : {type: String, default: "password"},                                 //TODO: hash it
     name            : String,                                
@@ -19,8 +18,6 @@ var EmployeeSchema = new Schema({
                         enum: ['Admin','BookingManager', 'Hall Manager','Waiter Manager','Waiter', 'Kitchen Manager', 'Chef'], 
                         default: 'Waiter' 
                         },  
-    speciality      : {type: Schema.Types.ObjectId, ref: 'Category'}, 
-    tables          : [{type: Schema.Types.ObjectId, ref: 'Table'}],  
     attendance      : {type: Boolean, default: true}                                
     // rating          : {type: Number, default: 3},       //scale-size:5  //TO be done in v2                       
 }) 
@@ -38,27 +35,6 @@ var EmployeeSchema = new Schema({
 
 /************** Getters ********************/
 
-//get speciality: TODO: remove this
-EmployeeSchema
-.virtual('get-speciality')
-.set(function () {
-    if(this.role != 'Chef'){
-        return "Not a cook";
-    }else{
-        return this.speciality;
-    }
-});
-
-//get tables TODO: remove this
-EmployeeSchema
-.virtual('get-tables')
-.get(function () {
-    if(this.role != 'Waiter'){
-        return "Not a Waiter";
-    }else{
-        return this.tables;  
-    }
-});
 
 //get rating======v2 stuff
 // EmployeeSchema
@@ -70,16 +46,6 @@ EmployeeSchema
 
 /************** Setters ********************/
 
-//set tables: assign more tables to Waiter. 
-EmployeeSchema
-.virtual('add-tables')
-.set(function (tables) {
-    if(this.role != 'Waiter'){
-        return "Not a Waiter: Adding tables to wrong employee type";
-    }else{
-        this.tables.push(tables); 
-    }
-});
 
 
 //******v2 stuff */
@@ -114,14 +80,6 @@ EmployeeSchema
 
 //v2 stuff========calculate rating
 
-
-//set attendance:
-//1.mark present
-EmployeeSchema
-.virtual('mark-attendance')
-.set((attendance)=> {
-    this.attendance = attendance;  
-});
 
 //compile the Model
 var Employee = mongoose.model('Employee', EmployeeSchema);
