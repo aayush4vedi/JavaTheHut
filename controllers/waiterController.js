@@ -14,7 +14,7 @@ var waiter_list = (req,res,next)=>{
             if(err){
                 return next(err)
             }
-            res.render('waiter_list', { title: 'Waiter List',list_waiters: list_waiters})
+            res.render('waiter_list', { title: 'Waiter List',waiters: list_waiters})
         })
 }
 

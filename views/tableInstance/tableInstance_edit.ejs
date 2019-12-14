@@ -1,0 +1,9 @@
+<h1><%= title %></h1>
+
+<form action="/tableinstance/<%= tableInstance._id %>?_method=PUT" method="POST">
+    <input name="tableInstance[table]" value="<%= tableInstance.table %>">
+    <input name="tableInstance[booking]" value="<%= tableInstance.booking %>">
+    <input name="tableInstance[isFree]" value="<%= tableInstance.isFree %>">
+
+    <button type="submit">Submit</button>
+</form>

@@ -17,7 +17,7 @@ var table_list = (req,res, next)=>{
             if(err){
                 return next(err)
             }
-            res.render('table_list', { title: 'Table List', table_list: list_table})
+            res.render('table_list', { title: 'Table List', tables: list_table})
         })
 }
 

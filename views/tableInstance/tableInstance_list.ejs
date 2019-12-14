@@ -1,0 +1,8 @@
+<h1><%= title %></h1>
+
+<% tableInstances.forEach((table)=>{ %>
+    <h2><%= tableInstance.table.name %></h2>
+    <h2><%= tableInstance.booking._id %></h2>
+    <h2><%= tableInstance.isFree %></h2>
+    <a href="/tableinstance/<%= table._id %>">Details</a>
+<% }) %>
