@@ -25,10 +25,10 @@ var hall_list = (req,res, next)=>{
 var hall_create_get = (req,res,next)=>{
     async.parallel({
         tables: (callback) =>{
-            Dish.find(callback)
+            Table.find(callback)
         },
         restaurant: (callback) =>{
-            Cook.find(callback)
+            Restaurant.find(callback)
         }
     },(err, results) => {
         if (err) { return next(err); } 
@@ -55,10 +55,10 @@ var hall_create_post = [
         if (!errors.isEmpty()) {
             async.parallel({
                 tables: (callback) =>{
-                    Dish.find(callback)
+                    Table.find(callback)
                 },
                 restaurant: (callback) =>{
-                    Cook.find(callback)
+                    Restaurant.find(callback)
                 }
             },(err, results) => {
                 if (err) { return next(err); } 
@@ -102,10 +102,10 @@ var hall_edit_get = (req,res,next)=>{
                 .exec(callback)
         },
         tables: (callback) =>{
-            Dish.find(callback)
+            Table.find(callback)
         },
         restaurant: (callback) =>{
-            Cook.find(callback)
+            Restaurant.find(callback)
         }
     },(err, results) => {
         if (err) { return next(err); } 
@@ -137,10 +137,10 @@ var hall_edit_put = [
         if (!errors.isEmpty()) {
             async.parallel({
                 tables: (callback) =>{
-                    Dish.find(callback)
+                    Table.find(callback)
                 },
                 restaurant: (callback) =>{
-                    Cook.find(callback)
+                    Restaurant.find(callback)
                 }
             },(err, results) => {
                 if (err) { return next(err); } 
