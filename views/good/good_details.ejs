@@ -1,3 +1,4 @@
+<%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
 <h2><%= good.name %></h2>
@@ -6,7 +7,9 @@
 <h2><%= good.defaultPurchase %></h2>
 <h2><%= good.quantityInStock %></h2>
 
-<button href="/good/<%= good._id%>/edit">Edit</button>
-<form action="/good/<%= good._id %>?_method=DELETE" method="POST" id="delete">
+<button href="<%= good._id%>/edit">Edit</button>
+<form action="<%= good._id %>?_method=DELETE" method="POST" id="delete">
     <button type="submit">Delete</button>
 </form>
+
+<%- include ('../partials/footer') %>

@@ -17,7 +17,7 @@ var dishInstance_list = (req,res,next)=>{
             if(err){
                 return next(err)
             }
-            res.render('dishInstance_list', { title: 'DishInstance List', dishInstances: list_dishInstance})
+            res.render('dishInstance/dishInstance_list', { title: 'DishInstance List', dishInstances: list_dishInstance})
         })
 }
 
@@ -32,7 +32,7 @@ var dishInstance_create_get = (req,res,next)=>{
         }
     },(err, results) => {
         if (err) { return next(err); } 
-        res.render('dishInstance_create', {title: 'DishInstance Create', dishes: results.dishes,orders: results.orders,errors: errors.array()});
+        res.render('dishInstance/dishInstance_create', {title: 'DishInstance Create', dishes: results.dishes,orders: results.orders });
     });
 }
 
@@ -44,6 +44,7 @@ var dishInstance_create_post = [
 
     (req,res,next)=>{
         const errors = validationResult(req);
+        console.log('***req.body:',req.body);
         var dishInstance = new DishInstance(
             {
                 dish: req.body.dish,
@@ -62,14 +63,14 @@ var dishInstance_create_post = [
                 }
             },(err, results) => {
                 if (err) { return next(err); } 
-                res.render('dishInstance_create', {title: 'DishInstance Create', dishes: results.dishes,orders: results.orders,errors: errors.array()});
+                res.render('dishInstance/dishInstance_create', {title: 'DishInstance Create', dishes: results.dishes,orders: results.orders });
             });
             return;
         }
         else {
             dishInstance.save(function (err) {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../dishinstance');
             });
         }
     }
@@ -88,11 +89,10 @@ var dishInstance_details = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('dishInstance_details', { title: 'DishInstance Detail', dishInstance: results});
+        res.render('dishInstance/dishInstance_details', { title: 'DishInstance Detail', dishInstance: results});
     });
 }
 
-//TODO: this is buggy
 //Display dishInstance update form on GET #4.1
 var dishInstance_edit_get = (req,res,next)=>{
     async.parallel({
@@ -115,7 +115,7 @@ var dishInstance_edit_get = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('dishInstance_details', { title: 'DishInstance Detail',dishInstance: results.dishInstance, all_dishes: results.all_dishes, all_orders: results.all_orders});
+        res.render('dishInstance/dishInstance_details', { title: 'DishInstance Detail',dishInstance: results.dishInstance, all_dishes: results.all_dishes, all_orders: results.all_orders});
     });
 }
 
@@ -145,14 +145,14 @@ var dishInstance_edit_put = [
                 }
             },(err, results) => {
                 if (err) { return next(err); } 
-                res.render('dishInstance_create', {title: 'DishInstance Create', dishes: results.dishes,orders: results.orders,errors: errors.array()});
+                res.render('dishInstance/dishInstance_create', {title: 'DishInstance Create', dishes: results.dishes,orders: results.orders });
             });
             return;
         }
         else {
             DishInstance.findByIdAndUpdate(req.params.id, dishInstance, {}, (err)=> {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../dishinstance');
             });
         }
     }
@@ -162,7 +162,7 @@ var dishInstance_edit_put = [
 var dishInstance_delete_delete = (req,res,next)=>{
     DishInstance.findByIdAndRemove(req.body.dishInstanceid, function deleteDishInstance(err) {
         if (err) { return next(err); }
-        res.redirect('/');      //TODO: add redirect url here
+        res.redirect('../dishinstance');
     })
 }
 

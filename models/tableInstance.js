@@ -15,6 +15,4 @@ var TableInstanceSchema = new Schema({
 //compile the Model
 var TableInstance = mongoose.model('TableInstance', TableInstanceSchema);
 
-module.exports = {
-    TableInstance
-}
+module.exports = TableInstance

@@ -1,11 +1,14 @@
+<%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
-<form action="/booking/<%= booking._id %>?_method=PUT" method="POST">
-    <input name="booking[customer]" value = "<%= booking.customer %>">
-    <input name="booking[dine]" value = "<%= booking.dine %>">
-    <input name="booking[tableInstance]" value = "<%= booking.tableInstance %>">
-    <input name="booking[checkInTime]" value = "<%= booking.checkInTime %>">
-    <input name="booking[stayingMinutes]" value = "<%= booking.stayingMinutes %>">
+<form action="<%= booking._id %>?_method=PUT" method="POST">
+    <input name="customer" value = "<%= booking.customer %>">
+    <input name="dine" value = "<%= booking.dine %>">
+    <input name="tableInstance" value = "<%= booking.tableInstance %>">
+    <input name="checkInTime" value = "<%= booking.checkInTime %>">
+    <input name="stayingMinutes" value = "<%= booking.stayingMinutes %>">
 
     <button type="submit">Submit</button>
 </form>
+
+<%- include ('../partials/footer') %>

@@ -1,3 +1,4 @@
+<%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
 <% employees.forEach((employee)=>{ %>
@@ -10,5 +11,5 @@
     <h2><%= employee.salary %></h2>
     <h2><%= employee.role %></h2>
     <h2><%= employee.attendance %></h2>
-    <a href="/employee/<%= employee._id %>">Details</a>
+    <a href="<%= employee._id %>">Details</a>
 <% }) %>

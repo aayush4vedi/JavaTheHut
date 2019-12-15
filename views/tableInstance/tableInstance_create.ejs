@@ -1,9 +1,12 @@
+<%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
-<form action="/create" method="POST">
-    <input name="tableInstance[table]" placeholder="table">
-    <input name="tableInstance[booking]" placeholder="booking">
-    <input name="tableInstance[isFree]" placeholder="isFree">
+<form action="create" method="POST">
+    <input name="table" placeholder="table">
+    <input name="booking" placeholder="booking">
+    <input name="isFree" placeholder="isFree">
 
     <button type="submit">Submit</button>
 </form>
+
+<%- include ('../partials/footer') %>

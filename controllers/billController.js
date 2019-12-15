@@ -13,19 +13,19 @@ var bill_list = (req,res,next)=>{
         .populate('dine')
         .exec((err, bills) => {
         if (err) { return next(err); } 
-        res.render('bill_list', { title: 'Bills List', bills: bills});
+        res.render('bill/bill_list', { title: 'Bills List', bills: bills});
     });
 }
 
 //Display bill create form on GET #2.1
 // need all Dine objects to select from
 var bill_create_get = (req,res,next)=>{
-    Dine.find(callback)
+    Dine.find()
     .exec((err, all_dines) =>{
         if(err){
             return next(err)
         }
-        res.render('bill_create', { title: 'Bill Create', all_dines: all_dines})
+        res.render('bill/bill_create', { title: 'Bill Create', all_dines: all_dines})
     })
 }
 
@@ -39,6 +39,8 @@ var bill_create_post = [
 
     (req,res,next)=>{
         const errors = validationResult(req);
+        console.log('***req.body:',req.body);
+        
         var bill = new Bill(
             {
                 isPaid: req.body.isPaid,
@@ -50,25 +52,25 @@ var bill_create_post = [
         );
 
         if (!errors.isEmpty()) {
-            Dine.find(callback)
+            Dine.find()
                 .exec((err, all_dines) =>{
                     if(err){
                         return next(err)
                     }
-                    res.render('bill_create', { title: 'Bill Create', all_dines: all_dines})
+                    res.render('bill/bill_create', { title: 'Bill Create', all_dines: all_dines})
                 })
             return;
         }
         else {
             bill.save(function (err) {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../bill');
             });
         }
     }
 ]
 
-//Display details(+ it's all dishes) for a specefic bill #3 : TODO: this form will have delete button for dishes as well(dishController)
+//Display detailsfor a specefic bill #3 
 var bill_details = (req,res,next)=>{
     Bill.findById(req.params.id)
         .populate('dine')
@@ -79,7 +81,7 @@ var bill_details = (req,res,next)=>{
                 err.status = 404;
                 return next(err);
             }
-            res.render('bill_details', { title: 'Bill Detail', bill: bill});
+            res.render('bill/bill_details', { title: 'Bill Detail', bill: bill});
         })
 }
 
@@ -101,7 +103,7 @@ var bill_edit_get = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('bill_edit', { title: 'Update Bill', bill: results.bill, all_dines: results.all_dines});
+        res.render('bill/bill_edit', { title: 'Update Bill', bill: results.bill, all_dines: results.all_dines});
     });
 }
 
@@ -131,14 +133,14 @@ var bill_edit_put = [
                     if(err){
                         return next(err)
                     }
-                    res.render('bill_create', { title: 'Bill Create', all_dines: all_dines})
+                    res.render('bill/bill_create', { title: 'Bill Create', all_dines: all_dines})
                 })
             return;
         }
         else {
             Bill.findByIdAndUpdate(req.params.id, bill, {}, (err)=> {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../bill');
             });
         }
     }
@@ -148,7 +150,7 @@ var bill_edit_put = [
 var bill_delete_delete = (req,res,next)=>{
     Bill.findByIdAndRemove(req.body.billid, function deleteBill(err) {
         if (err) { return next(err); }
-        res.redirect('/');      //TODO: add redirect url here
+        res.redirect('../bill');
     })
 }
 

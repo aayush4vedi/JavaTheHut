@@ -1,16 +1,19 @@
+<%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
-<form action="/create" method="POST">
-    <input name="dish[name]" placeholder="name">
-    <input name="dish[description]" placeholder="description">
-    <input name="dish[ingredients]" placeholder="ingredients">
-    <input name="dish[goods]" placeholder="goods">
-    <input name="dish[category]" placeholder="category">
-    <input name="dish[goods]" placeholder="goods">
-    <input name="dish[price]" placeholder="price">
-    <input name="dish[isServing]" placeholder="isServing">
-    <input name="dish[veg]" placeholder="veg">
-    <input name="dish[eta]" placeholder="eta">
+<form action="create" method="POST">
+    <input name="name" placeholder="name">
+    <input name="description" placeholder="description">
+    <input name="ingredients" placeholder="ingredients">
+    <input name="goods" placeholder="goods">
+    <input name="category" placeholder="category">
+    <input name="goods" placeholder="goods">
+    <input name="price" placeholder="price">
+    <input name="isServing" placeholder="isServing">
+    <input name="veg" placeholder="veg">
+    <input name="eta" placeholder="eta">
 
     <button type="submit">Submit</button>
 </form>
+
+<%- include ('../partials/footer') %>

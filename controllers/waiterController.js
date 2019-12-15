@@ -1,4 +1,5 @@
-var Employee    = require('../models/employee'),
+var Waiter      = require('../models/waiter'),
+    Employee    = require('../models/employee'),
     Table       = require('../models/table'),
     async       = require('async')
 
@@ -6,6 +7,7 @@ const { body, validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
 
 //===================CRUD controllers================//
+
 //List all Waiters GET  #1
 var waiter_list = (req,res,next)=>{
     Waiter.find()
@@ -14,7 +16,7 @@ var waiter_list = (req,res,next)=>{
             if(err){
                 return next(err)
             }
-            res.render('waiter_list', { title: 'Waiter List',waiters: list_waiters})
+            res.render('waiter/waiter_list', { title: 'Waiter List',waiters: list_waiters})
         })
 }
 
@@ -30,7 +32,7 @@ var waiter_create_get = (req,res,next)=>{
         }
     },(err, results) => {
         if (err) { return next(err); } 
-        res.render('waiter_create', {title: 'Waiter Create', all_employees: results.all_employees, all_tables: results.all_tables});
+        res.render('waiter/waiter_create', {title: 'Waiter Create', all_employees: results.all_employees, all_tables: results.all_tables});
     });
 }
 
@@ -51,6 +53,7 @@ var waiter_create_post = [
     sanitizeBody('*').trim().escape(),
 
     (req,res,next)=>{
+        console.log('***req.body:',req.body);
         const errors = validationResult(req);
         var waiter = new Waiter(
             {
@@ -71,14 +74,14 @@ var waiter_create_post = [
                 }
             },(err, results) => {
                 if (err) { return next(err); } 
-                res.render('waiter_create', {title: 'Waiter Create', all_employees: results.all_employees, all_tables: results.all_tables});
+                res.render('waiter/waiter_create', {title: 'Waiter Create', all_employees: results.all_employees, all_tables: results.all_tables});
             });
             return;
         }
         else {
             waiter.save(function (err) {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../waiter');
             });
         }
     }
@@ -96,7 +99,7 @@ var waiter_details = (req,res,next)=>{
                 err.status = 404;
                 return next(err);
             }
-            res.render('table_details', { title: 'Table Detail',  waiter: waiter});
+            res.render('waiter/waiter_details', { title: 'Table Detail',  waiter: waiter});
         })
 }
 
@@ -124,7 +127,7 @@ var waiter_edit_get = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('waiter_edit', { title: 'Update Waiter', waiter: results.waiter , all_employees: results.all_employees, all_tables: results.all_tables});
+        res.render('waiter/waiter_edit', { title: 'Update Waiter', waiter: results.waiter , all_employees: results.all_employees, all_tables: results.all_tables});
     });
 }
 
@@ -165,14 +168,14 @@ var waiter_edit_put = [
                 }
             },(err, results) => {
                 if (err) { return next(err); } 
-                res.render('waiter_create', {title: 'Waiter Create', all_employees: results.all_employees, all_tables: results.all_tables});
+                res.render('waiter/waiter_create', {title: 'Waiter Create', all_employees: results.all_employees, all_tables: results.all_tables});
             });
             return;
         }
         else {
             Waiter.findByIdAndUpdate(req.params.id, waiter, {}, (err)=> {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../waiter');
             });
         }
     }
@@ -182,7 +185,7 @@ var waiter_edit_put = [
 var waiter_delete_delete = (req,res,next)=>{
     Waiter.findByIdAndRemove(req.body.waiterid, function deleteWaiter(err) {
         if (err) { return next(err); }
-        res.redirect('/');      //TODO: add redirect url here
+        res.redirect('../waiter');
     })
 }
 

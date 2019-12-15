@@ -17,14 +17,14 @@ var customer_list = (req,res, next)=>{
             if(err){
                 return next(err)
             }
-            res.render('customer_list', { title: 'Customer List', customers: list_customer})
+            res.render('customer/customer_list', { title: 'Customer List', customers: list_customer})
         })
 }
 
 //Display customer create form on GET #2.1
 var customer_create_get = (req,res,next)=>{
     //bookings are created for existing customers.So new customer won't neeed it/
-    res.render('customer_create', {title: 'Customer Create'});
+    res.render('customer/customer_create', {title: 'Customer Create'});
 }
 
 //Handle customer create form on POST #2.2
@@ -35,6 +35,7 @@ var customer_create_post = [
 
     sanitizeBody('*').escape(),
     (req,res,next)=>{
+        console.log('***req.body:',req.body);
         const errors = validationResult(req);
         var customer = new Customer(
             {
@@ -45,13 +46,13 @@ var customer_create_post = [
         );
 
         if (!errors.isEmpty()) {
-            res.render('customer_create', {title: 'Customer Create'});
+            res.render('customer/customer_create', {title: 'Customer Create'});
             return;
         }
         else {
             customer.save( (err)=> {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../customer');
             });
         }
     }
@@ -68,7 +69,7 @@ var customer_details = (req,res, next)=>{
                 err.status = 404;
                 return next(err);
             }
-            res.render('customer_details', { title: 'Customer Detail', customer: customer});
+            res.render('customer/customer_details', { title: 'Customer Detail', customer: customer});
         })
 }
 
@@ -91,7 +92,7 @@ var customer_edit_get = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('customer_edit', { title: 'Update Customer', category: results.category, all_bookings: results.all_bookings});
+        res.render('customer/customer_edit', { title: 'Update Customer', category: results.category, all_bookings: results.all_bookings});
     });
 }
 
@@ -113,13 +114,13 @@ var customer_edit_put = [
             }
         );
         if (!errors.isEmpty()) {
-            res.render('customer_create', { title: 'Update Customer', customer: customer, errors: errors.array() });
+            res.render('customer/customer_create', { title: 'Update Customer', customer: customer, errors: errors.array() });
             return;
         }
         else {
             Customer.findByIdAndUpdate(req.params.id, customer, {}, (err)=> {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../customer');
             });
         }
     }
@@ -130,7 +131,7 @@ var customer_edit_put = [
 var customer_delete_delete = (req,res,next)=>{
     Customer.findByIdAndRemove(req.body.customerid, function deleteCustomer(err) {
         if (err) { return next(err); }
-        res.redirect('/');      //TODO: add redirect url here
+        res.redirect('../customer');
     })
 }
 
@@ -144,7 +145,7 @@ var booking_for_customer_get = (req,res,next)=>{
             if(err){
                 return next(err)
             }
-            res.render('booking_list', { title: 'Booking List', booking_list: list_booking})
+            res.render('booking/booking_list', { title: 'Booking List', booking_list: list_booking})
         })
 }
 

@@ -23,6 +23,4 @@ var Restaurant = mongoose.model('Restaurant', RestaurantSchema);
 //validate contact
 
 
-module.exports = {
-    Restaurant
-}
+module.exports = Restaurant

@@ -29,6 +29,4 @@ var GoodSchema = new Schema({
 //compile the Model
 var Good = mongoose.model('Good', GoodSchema);
 
-module.exports = {
-    Good
-}
+module.exports = Good

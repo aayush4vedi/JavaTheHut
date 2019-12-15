@@ -1,11 +1,14 @@
+<%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
-<form action="/good/<%= good._id %>?_method=PUT" method="POST">
-    <input name="good[name]" value="<%= good.name %>">
-    <input name="good[linkToPurchase]" value="<%= good.linkToPurchase %>">
-    <input name="good[threshold]" value="<%= good.threshold %>">
-    <input name="good[defaultPurchase]" value="<%= good.defaultPurchase %>">
-    <input name="good[quantityInStock]" value="<%= good.quantityInStock %>">
+<form action="<%= good._id %>?_method=PUT" method="POST">
+    <input name="name" value="<%= good.name %>">
+    <input name="linkToPurchase" value="<%= good.linkToPurchase %>">
+    <input name="threshold" value="<%= good.threshold %>">
+    <input name="defaultPurchase" value="<%= good.defaultPurchase %>">
+    <input name="quantityInStock" value="<%= good.quantityInStock %>">
 
     <button type="submit">Submit</button>
 </form>
+
+<%- include ('../partials/footer') %>

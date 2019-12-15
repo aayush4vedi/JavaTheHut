@@ -17,7 +17,7 @@ var table_list = (req,res, next)=>{
             if(err){
                 return next(err)
             }
-            res.render('table_list', { title: 'Table List', tables: list_table})
+            res.render('table/table_list', { title: 'Table List', tables: list_table})
         })
 }
 
@@ -32,7 +32,7 @@ var table_create_get = (req,res,next)=>{
         }
     },(err, results) => {
         if (err) { return next(err); } 
-        res.render('table_create', {title: 'Table Create', halls: results.halls,waiters: results.waiters,errors: errors.array()});
+        res.render('table/table_create', {title: 'Table Create', halls: results.halls,waiters: results.waiters });
     });
 }
 
@@ -46,6 +46,7 @@ var table_create_post = [
     sanitizeBody('*').escape(),
 
     (req,res,next)=>{
+        console.log('***req.body:',req.body);
         const errors = validationResult(req);
         var table = new Table(
             {
@@ -68,14 +69,14 @@ var table_create_post = [
                 }
             },(err, results) => {
                 if (err) { return next(err); } 
-                res.render('table_create', {title: 'Table Create', halls: results.halls,waiters: results.waiters,errors: errors.array()});
+                res.render('table/table_create', {title: 'Table Create', halls: results.halls,waiters: results.waiters });
             });
             return;
         }
         else {
             table.save(function (err) {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../table');
             });
         }
     }
@@ -93,7 +94,7 @@ var table_details = (req,res, next)=>{
                 err.status = 404;
                 return next(err);
             }
-            res.render('table_details', { title: 'Table Detail', table: table});
+            res.render('table/table_details', { title: 'Table Detail', table: table});
     });
 
 }
@@ -115,7 +116,7 @@ var table_edit_get = (req,res,next)=>{
         }
     },(err, results) => {
         if (err) { return next(err); } 
-        res.render('table_edit', { title: 'Update Table', table: results.table,halls: results.halls,waiters: results.waiters,errors: errors.array()});
+        res.render('table/table_edit', { title: 'Update Table', table: results.table,halls: results.halls,waiters: results.waiters });
     });
 }
 
@@ -152,14 +153,14 @@ var table_edit_put = [
                 }
             },(err, results) => {
                 if (err) { return next(err); } 
-                res.render('table_create', {title: 'Table Create', halls: results.halls,waiters: results.waiters,errors: errors.array()});
+                res.render('table/table_create', {title: 'Table Create', halls: results.halls,waiters: results.waiters });
             });
             return;
         }
         else {
             table.findByIdAndUpdate(function (err) {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../table');
             });
         }
     }
@@ -169,7 +170,7 @@ var table_edit_put = [
 var table_delete_delete = (req,res,next)=>{
     Table.findByIdAndRemove(req.body.restaurantid, function deleteTable(err) {
         if (err) { return next(err); }
-        res.redirect('/');      //TODO: add redirect url here
+        res.redirect('../table');
     })
 }
 

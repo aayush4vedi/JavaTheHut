@@ -1,10 +1,13 @@
+<%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
-<form action="/waiter/<%= waiter._id %>?_method=PUT" method="POST">
-    <input name="waiter[employee]" value = "<%=waiter.employee %>">
-    <input name="waiter[name]" value = "<%=waiter.name %>">
-    <input name="waiter[tables]" value = "<%=waiter.tables %>">
-    <input name="waiter[attendance]" value = "<%=waiter.attendance %>">
+<form action="<%= waiter._id %>?_method=PUT" method="POST">
+    <input name="employee" value = "<%=waiter.employee %>">
+    <input name="name" value = "<%=waiter.name %>">
+    <input name="tables" value = "<%=waiter.tables %>">
+    <input name="attendance" value = "<%=waiter.attendance %>">
 
     <button type="submit">Submit</button>
 </form>
+
+<%- include ('../partials/footer') %>

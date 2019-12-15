@@ -1,3 +1,4 @@
+<%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
 <% tables.forEach((table)=>{ %>
@@ -9,5 +10,5 @@
     <h2><%= table.location.z %></h2>
     <h2><%= table.hall %></h2>
     <h2><%= table.waiter %></h2>
-    <a href="/table/<%= table._id %>">Details</a>
+    <a href="<%= table._id %>">Details</a>
 <% }) %>

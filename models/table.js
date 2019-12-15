@@ -31,6 +31,4 @@ var TableSchema = new Schema({
 //compile the Model
 var Table = mongoose.model('Table', TableSchema);
 
-module.exports = {
-    Table
-}
+module.exports = Table

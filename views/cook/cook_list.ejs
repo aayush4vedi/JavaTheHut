@@ -1,3 +1,4 @@
+<%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
 <% cooks.forEach((cook)=>{ %>
@@ -6,5 +7,5 @@
     <% cook.category.forEach((category)=>{ %>
         <h2><%= category.name %></h2>
     <% }) %>
-    <a href="/cook/<%= cook._id %>">Details</a>
+    <a href="<%= cook._id %>">Details</a>
 <% }) %>

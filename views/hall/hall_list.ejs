@@ -1,3 +1,4 @@
+<%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
 <% halls.forEach((hall)=>{ %>
@@ -7,5 +8,5 @@
         <h2><%= table.name %></h2>
         <h2><%= table.capacity %></h2>
     <% }) %>
-    <a href="/hall/<%= hall._id %>">Details</a>
+    <a href="<%= hall._id %>">Details</a>
 <% }) %>

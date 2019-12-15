@@ -12,13 +12,13 @@ var good_list = (req,res, next)=>{
         if(err){
             return next(err)
         }
-        res.render('good_list', { title: 'Good List', goods: list_good})
+        res.render('good/good_list', { title: 'Good List', goods: list_good})
     })
 }
 
 //Display good create form on GET #2.1
 var good_create_get = (req,res,next)=>{
-    res.render('good_create', {title: 'Good Create'});
+    res.render('good/good_create', {title: 'Good Create'});
 }
 
 //Handle good create form on POST #2.2
@@ -36,6 +36,7 @@ var good_create_post = [
     sanitizeBody('quantityInStock').escape(),
 
     (req,res,next)=>{
+        console.log('***req.body:',req.body);
         const errors = validationResult(req);
         var good = new Good(
             {
@@ -48,13 +49,13 @@ var good_create_post = [
         );
 
         if (!errors.isEmpty()) {
-            res.render('good_create', {title: 'Good Create'});
+            res.render('good/good_create', {title: 'Good Create'});
             return;
         }
         else {
             Good.save(function (err) {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../good');
             });
         }
     }
@@ -69,7 +70,7 @@ var good_details = (req,res, next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('good_details', { title: 'Good Detail', good: results.good, good_dishes: results.good_dishes });
+        res.render('good/good_details', { title: 'Good Detail', good: results.good, good_dishes: results.good_dishes });
     });
 }
 
@@ -82,7 +83,7 @@ var good_edit_get = (req,res, next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('good_edit', { title: 'Update Good', good: good });
+        res.render('good/good_edit', { title: 'Update Good', good: good });
     });
 }
 
@@ -114,13 +115,13 @@ var good_edit_put = [
         );
 
         if (!errors.isEmpty()) {
-            res.render('good_create', {title: 'Good Create'});
+            res.render('good/good_create', {title: 'Good Create'});
             return;
         }
         else {
             Good.findByIdAndUpdate(req.params.id, good, {}, (err)=> {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../good');
             });
         }
     }
@@ -130,7 +131,7 @@ var good_edit_put = [
 var good_delete_delete = (req,res,next)=>{
     Good.findByIdAndRemove(req.body.goodid, function deleteGood(err) {
         if (err) { return next(err); }
-        res.redirect('/');      //TODO: add redirect url here
+        res.redirect('../good');
     })
 }
 

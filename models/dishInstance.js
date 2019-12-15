@@ -22,6 +22,4 @@ var DishInstanceSchema = new Schema({
 //compile the Model
 var DishInstance = mongoose.model('DishInstance', DishInstanceSchema);
 
-module.exports = {
-    DishInstance
-}
+module.exports = DishInstance

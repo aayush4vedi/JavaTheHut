@@ -1,3 +1,4 @@
+<%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
 <% bookings.forEach((booking)=>{ %>
@@ -7,8 +8,8 @@
     <h2><%= booking.checkInTime %></h2>
     <h2><%= booking.stayingMinutes %></h2>
     <h2><%= booking.checkOutTime %></h2>
-    <% booking.tableInstance.forEach((tableInstance)=>{
+    <% booking.tableInstance.forEach((tableInstance)=>{ %>
         <h2><%= tableInstance.table.name %></h2>
-    }) 
-    <a href="/booking/<%= booking._id %>">Details</a>
+    <% })  %>
+    <a href="<%= booking._id %>">Details</a>
 <% }) %>

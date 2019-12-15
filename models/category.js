@@ -21,6 +21,4 @@ var CategorySchema = new Schema({
 //compile the Model
 var Category = mongoose.model('Category', CategorySchema);
 
-module.exports = {
-    Category
-}
+module.exports = Category

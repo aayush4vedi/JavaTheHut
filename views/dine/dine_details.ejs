@@ -1,3 +1,4 @@
+<%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
 <h2><%= dine.date %></h2>
@@ -15,7 +16,9 @@
     <% }) %>
 <% }) %>
 
-<button href="/dine/<%= dine._id%>/edit">Edit</button>
-<form action="/dine/<%= bldineog._id %>?_method=DELETE" method="POST" id="delete">
+<button href="<%= dine._id%>/edit">Edit</button>
+<form action="<%= dine._id %>?_method=DELETE" method="POST" id="delete">
     <button type="submit">Delete</button>
 </form>
+
+<%- include ('../partials/footer') %>

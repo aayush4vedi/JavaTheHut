@@ -26,7 +26,7 @@ var dine_list = (req,res,next)=>{
             if(err){
                 return next(err)
             }
-            res.render('dine_list', { title: 'Dine List', dines: list_dine})
+            res.render('dine/dine_list', { title: 'Dine List', dines: list_dine})
         })
 }
 
@@ -51,7 +51,8 @@ var dine_create_get = (req,res,next)=>{
         },
     },(err, results) => {
         if (err) { return next(err); } 
-        res.render('dine_create', {title: 'Dine Create', bookings: results.bookings,customers: results.customers,tables: results.tables ,errors: errors.array()});
+        res.render('dine/dine_create', {title: 'Dine Create', bookings: results.bookings,customers: results.customers,tables: results.tables 
+});
     });
 }
 
@@ -70,6 +71,7 @@ var dine_create_post = [
     sanitizeBody('*').escape(),
 
     (req,res,next)=>{
+        console.log('***req.body:',req.body);
         const errors = validationResult(req);
         var dine = new Dine(
             {
@@ -98,14 +100,15 @@ var dine_create_post = [
                 },
             },(err, results) => {
                 if (err) { return next(err); } 
-                res.render('dine_create', {title: 'Dine Create', bookings: results.bookings,customers: results.customers,tables: results.tables ,errors: errors.array()});
+                res.render('dine/dine_create', {title: 'Dine Create', bookings: results.bookings,customers: results.customers,tables: results.tables 
+});
             });
             return;
         }
         else {
             dine.save(function (err) {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../dine');
             });
         }
     }
@@ -127,7 +130,7 @@ var dine_details = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('dine_details', { title: 'Dine Detail', dine: dine});
+        res.render('dine/dine_details', { title: 'Dine Detail', dine: dine});
     })
 }
 
@@ -158,21 +161,11 @@ var dine_edit_get = (req,res,next)=>{
     },(err, results) => {
         if (err) { return next(err); } 
         if (results.category == null) { 
-            var err = new Error('Category not found');
-            err.status = 404;
-            return next(err);
-        }
-        res.render('category_edit', { title: 'Update Category', category: results.dine, all_orders: results.all_orders, all_bookings: results.all_bookings, all_waiters: results.all_waiters, all_customers: results.all_customers, all_tableInstances: results.all_tableInstances});
-    });
-
-    Dine.findById(req.params.id, (err, dine)=> {
-        if (err) { return next(err); }
-        if (dine == null) { 
             var err = new Error('Dine not found');
             err.status = 404;
             return next(err);
         }
-        res.render('dine_edit', { title: 'Update Dine', dine: dine });
+        res.render('dine_edit', { title: 'Update Dine', dine: results.dine, all_orders: results.all_orders, all_bookings: results.all_bookings, all_waiters: results.all_waiters, all_customers: results.all_customers, all_tableInstances: results.all_tableInstances});
     });
 }
 //@here
@@ -208,14 +201,15 @@ var dine_edit_put = [
                 },
             },(err, results) => {
                 if (err) { return next(err); } 
-                res.render('dine_create', {title: 'Dine Create', bookings: results.bookings,customers: results.customers,tables: results.tables ,errors: errors.array()});
+                res.render('dine/dine_create', {title: 'Dine Create', bookings: results.bookings,customers: results.customers,tables: results.tables 
+});
             });
             return;
         }
         else {
             Dine.findByIdAndUpdate(req.params.id, dine, {}, (err)=> {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../dine');
             });
         }
     }
@@ -225,7 +219,7 @@ var dine_edit_put = [
 var dine_delete_delete = (req,res,next)=>{
     Dine.findByIdAndRemove(req.body.dineid, function deleteDine(err) {
         if (err) { return next(err); }
-        res.redirect('/');      //TODO: add redirect url here
+        res.redirect('../dine');
     })
 }
 

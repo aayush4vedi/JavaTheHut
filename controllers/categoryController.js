@@ -16,7 +16,7 @@ var category_list = (req,res,next)=>{
         .populate('cook')
         .exec((err,category_list)=>{
             if (err) { return next(err); } 
-            res.render('category_list', { title: 'Menu: Category List', category: category_list});
+            res.render('category/category_list', { title: 'Menu: Category List', category: category_list});
         })
 }
 
@@ -30,8 +30,8 @@ var category_create_get = (req,res,next)=>{
             Cook.find(callback)
         }
     },(err, results) => {
-        if (err) { return next(err); } 
-        res.render('category_create', {title: 'Category Create', dishes: results.dishes,cooks: results.cooks,errors: errors.array()});
+        if (err) { console.log('Error has occured Remi: ', err); return next(err); } 
+        res.render('category/category_create', {title: 'Category Create', dishes: results.dishes,cooks: results.cooks,});
     });
 }
 
@@ -52,7 +52,6 @@ var category_create_post = [
         }
         next();
     },
-
     body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('*').escape(),
@@ -60,6 +59,8 @@ var category_create_post = [
     sanitizeBody('dish.*').escape(),
 
     (req,res,next)=>{
+        console.log('****** req.body: ', req.body);
+        
         const errors = validationResult(req);
         var category = new Category(
             {
@@ -79,7 +80,7 @@ var category_create_post = [
                 }
             },(err, results) => {
                 if (err) { return next(err); } 
-                res.render('category_create', {title: 'Category Create', dish: results.dish,cook: results.cook,errors: errors.array()});
+                res.render('category/category_create', {title: 'Category Create', dish: results.dish,cook: results.cook});
             });
             return;
         }
@@ -89,13 +90,12 @@ var category_create_post = [
                 .exec( function(err, found_category) {
                      if (err) { return next(err); }
                      if (found_category) {
-                         // Genre exists, redirect to its detail page.
-                         res.redirect('/');  //TODO: add url here
+                        res.redirect('../category');
                      }
                      else {
                         category.save(function (err) {
                             if (err) { return next(err); }
-                            res.redirect('/');      //TODO: add redirect url here
+                            res.redirect('../category');
                         });
                      }
 
@@ -116,7 +116,7 @@ var category_details = (req,res,next)=>{
                 err.status = 404;
                 return next(err);
             }
-            res.render('category_details', { title: 'Category Detail',  category: category});
+            res.render('category/category_details', { title: 'Category Detail',  category: category});
         })
 }
 
@@ -144,7 +144,7 @@ var category_edit_get = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('category_edit', { title: 'Update Category', category: results.category, all_dishes: results.all_dishes, all_cooks: results.all_cooks});
+        res.render('category/category_edit', { title: 'Update Category', category: results.category, all_dishes: results.all_dishes, all_cooks: results.all_cooks});
     });
 }
 
@@ -192,14 +192,14 @@ var category_edit_put = [
                 }
             },(err, results) => {
                 if (err) { return next(err); } 
-                res.render('category_create', {title: 'Category Create', dishes: results.dishes,cooks: results.cooks,errors: errors.array()});
+                res.render('category/category_create', {title: 'Category Create', dishes: results.dishes,cooks: results.cooks});
             });
             return;
         }
         else {
             Category.findByIdAndUpdate(req.params.id, category, {}, (err)=> {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../category');
             });
         }
     }
@@ -209,7 +209,7 @@ var category_edit_put = [
 var category_delete_delete = (req,res,next)=>{
     Category.findByIdAndRemove(req.body.categoryid, function deleteCategory(err) {
         if (err) { return next(err); }
-        res.redirect('/');      //TODO: add redirect url here
+        res.redirect('../category');
     })
 }
 

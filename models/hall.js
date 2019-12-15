@@ -24,6 +24,4 @@ var HallSchema = new Schema({
 //compile the Model
 var Hall = mongoose.model('Hall', HallSchema);
 
-module.exports = {
-    Hall
-}
+module.exports = Hall

@@ -1,3 +1,4 @@
+<%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
 <% dishes.forEach((dish)=>{ %>
@@ -15,5 +16,5 @@
     <h2><%= dish.isServing %></h2>
     <h2><%= dish.veg %></h2>
     <h2><%= dish.eta %></h2>
-    <a href="/dish/<%= dish._id %>">Details</a>
+    <a href="<%= dish._id %>">Details</a>
 <% }) %>

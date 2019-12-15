@@ -1,3 +1,4 @@
+<%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
 <h2><%= bill.isPaid %></h2>
@@ -8,7 +9,9 @@
 <h2><%= bill.serviceCharge %></h2>
 <h2><%= bill.payableamount %></h2>
 
-<button href="/bill/<%= bill._id%>/edit">Edit</button>
-<form action="/bill/<%= blbillog._id %>?_method=DELETE" method="POST" id="delete">
+<button href="<%= bill._id%>/edit">Edit</button>
+<form action="<%= blbillog._id %>?_method=DELETE" method="POST" id="delete">
     <button type="submit">Delete</button>
 </form>
+
+<%- include ('../partials/footer') %>

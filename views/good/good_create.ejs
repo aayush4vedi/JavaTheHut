@@ -1,11 +1,14 @@
+<%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
-<form action="/create" method="POST">
-    <input name="good[name]" placeholder="name">
-    <input name="good[linkToPurchase]" placeholder="linkToPurchase">
-    <input name="good[threshold]" placeholder="threshold">
-    <input name="good[defaultPurchase]" placeholder="defaultPurchase">
-    <input name="good[quantityInStock]" placeholder="quantityInStock">
+<form action="create" method="POST">
+    <input name="name" placeholder="name">
+    <input name="linkToPurchase" placeholder="linkToPurchase">
+    <input name="threshold" placeholder="threshold">
+    <input name="defaultPurchase" placeholder="defaultPurchase">
+    <input name="quantityInStock" placeholder="quantityInStock">
 
     <button type="submit">Submit</button>
 </form>
+
+<%- include ('../partials/footer') %>

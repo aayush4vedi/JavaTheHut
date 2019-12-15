@@ -17,7 +17,7 @@ var hall_list = (req,res, next)=>{
             if(err){
                 return next(err)
             }
-            res.render('hall_list', { title: 'Hall List', halls: list_hall})
+            res.render('hall/hall_list', { title: 'Hall List', halls: list_hall})
         })
 }
 
@@ -32,7 +32,7 @@ var hall_create_get = (req,res,next)=>{
         }
     },(err, results) => {
         if (err) { return next(err); } 
-        res.render('hall_create', {title: 'Hall Create', tables: results.tables,restaurant: results.restaurant,errors: errors.array()});
+        res.render('hall/hall_create', {title: 'Hall Create', tables: results.tables,restaurant: results.restaurant});
     });
 }
 
@@ -43,6 +43,7 @@ var hall_create_post = [
     sanitizeBody('*').escape(),
 
     (req,res,next)=>{
+        console.log('***req.body:',req.body);
         const errors = validationResult(req);
         var hall = new Hall(
             {
@@ -62,14 +63,14 @@ var hall_create_post = [
                 }
             },(err, results) => {
                 if (err) { return next(err); } 
-                res.render('hall_create', {title: 'Hall Create', tables: results.tables,restaurant: results.restaurant,errors: errors.array()});
+                res.render('hall/hall_create', {title: 'Hall Create', tables: results.tables,restaurant: results.restaurant});
             });
             return;
         }
         else {
             hall.save(function (err) {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../hall');
             });
         }
     }
@@ -88,7 +89,7 @@ var hall_details = (req,res, next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('hall_details', { title: 'Hall Detail', hall: hall});
+        res.render('hall/hall_details', { title: 'Hall Detail', hall: hall});
     });
 }
 
@@ -114,7 +115,7 @@ var hall_edit_get = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('hall_edit', { title: 'Update Hall', hall: results.hall, tables: results.tables, restaurant: results.restaurant});
+        res.render('hall/hall_edit', { title: 'Update Hall', hall: results.hall, tables: results.tables, restaurant: results.restaurant});
     })       
 }
 
@@ -144,14 +145,14 @@ var hall_edit_put = [
                 }
             },(err, results) => {
                 if (err) { return next(err); } 
-                res.render('hall_create', {title: 'Hall Create', tables: results.tables,restaurant: results.restaurant,errors: errors.array()});
+                res.render('hall/hall_create', {title: 'Hall Create', tables: results.tables,restaurant: results.restaurant});
             });
             return;
         }
         else {
             Hall.findByIdAndUpdate(req.params.id, hall, {}, (err)=> {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../hall');
             });
         }
     }
@@ -161,7 +162,7 @@ var hall_edit_put = [
 var hall_delete_delete = (req,res,next)=>{
     Hall.findByIdAndRemove(req.body.restaurantid, function deleteHall(err) {
         if (err) { return next(err); }
-        res.redirect('/');      //TODO: add redirect url here
+        res.redirect('../hall');
     })
 }
 

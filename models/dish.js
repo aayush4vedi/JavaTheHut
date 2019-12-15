@@ -53,6 +53,4 @@ var DishSchema = new Schema({
 //compile the Model
 var Dish = mongoose.model('Dish', DishSchema);
 
-module.exports = {
-    Dish
-}
+module.exports = Dish

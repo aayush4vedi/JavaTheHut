@@ -18,6 +18,4 @@ var CookSchema = new Schema({
 //compile the Model
 var Cook = mongoose.model('Cook', CookSchema);
 
-module.exports = {
-    Cook
-}
+module.exports = Cook

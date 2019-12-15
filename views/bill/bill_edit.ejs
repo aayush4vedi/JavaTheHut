@@ -1,11 +1,14 @@
+<%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
-<form action="/bill/<%= bill._id %>?_method=PUT" method="POST">
-    <input name="bill[isPaid]" value="<%= bill.isPaid %>">
-    <input name="bill[dine]" value="<%= bill.dine %>">
-    <input name="bill[dineAmount]" value="<%= bill.dineAmount %>">
-    <input name="bill[taxAmount]" value="<%= bill.taxAmount %>">
-    <input name="bill[serviceCharge]" value="<%= bill.serviceCharge %>">
+<form action="<%= bill._id %>?_method=PUT" method="POST">
+    <input name="isPaid" value="<%= bill.isPaid %>">
+    <input name="dine" value="<%= bill.dine %>">
+    <input name="dineAmount" value="<%= bill.dineAmount %>">
+    <input name="taxAmount" value="<%= bill.taxAmount %>">
+    <input name="serviceCharge" value="<%= bill.serviceCharge %>">
 
     <button type="submit">Submit</button>
 </form>
+
+<%- include ('../partials/footer') %>

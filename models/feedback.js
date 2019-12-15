@@ -32,6 +32,4 @@
 // //compile the Model
 // var Feedback = mongoose.model('Feedback', FeedbackSchema);
 
-// module.exports = {
-//     Feedback
-// }
+// module.exports = Feedback

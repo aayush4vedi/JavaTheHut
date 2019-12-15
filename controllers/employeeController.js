@@ -1,9 +1,11 @@
-var Employee = require('../models/employee')
+var Employee        = require('../models/employee')
 
 const { body, validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
 
+
 //===================CRUD controllers================//
+
 //List all Employees GET  #1
 var employee_list = (req,res,next)=>{
     Employee.find({},'name attendance')
@@ -11,13 +13,13 @@ var employee_list = (req,res,next)=>{
             if(err){
                 return next(err)
             }
-            res.render('employee_list', { title: 'Employee List', employees: list_employee})
+            res.render('employee/employee_list', { title: 'Employee List', employees: list_employee})
         })
 }
 
 //Display employee create form on GET #2.1
 var employee_create_get = (req,res,next)=>{
-    res.render('employee_create', {title: 'Employee Create'});
+    res.render('employee/employee_create', {title: 'Employee Create'});
 }
 
 //Handle employee create form on POST #2.2
@@ -42,6 +44,9 @@ var employee_create_post = [
     sanitizeBody('attendance').escape(),
 
     (req,res,next)=>{
+        console.log('***req.body:',req.body);
+        
+        res.redirect(parent_url);
         const errors = validationResult(req);
         var employee = new Employee(
             {
@@ -57,13 +62,13 @@ var employee_create_post = [
         );
 
         if (!errors.isEmpty()) {
-            res.render('employee_create', {title: 'Employee Create'});
+            res.render('employee/employee_create', {title: 'Employee Create'});
             return;
         }
         else {
             employee.save(function (err) {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../employee');      
             });
         }
     }
@@ -79,7 +84,7 @@ var employee_details = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('employee_details', { title: 'Employee Detail', employee: employee});
+        res.render('employee/employee_details', { title: 'Employee Detail', employee: employee});
     });
 }
 
@@ -92,7 +97,7 @@ var employee_edit_get = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('employee_edit', { title: 'Update Employee', employee: employee });
+        res.render('employee/employee_edit', { title: 'Update Employee', employee: employee });
     });
 }
 
@@ -136,13 +141,13 @@ var employee_edit_put = [
         );
 
         if (!errors.isEmpty()) {
-            res.render('employee_create', {title: 'Employee Create'});
+            res.render('employee/employee_create', {title: 'Employee Create'});
             return;
         }
         else {
             Employee.findByIdAndUpdate(req.params.id, employee, {}, (err)=> {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../employee');
             });
         }
     }
@@ -152,7 +157,7 @@ var employee_edit_put = [
 var employee_delete_delete = (req,res,next)=>{
     Employee.findByIdAndRemove(req.body.employeeid, function deleteEmployee(err) {
         if (err) { return next(err); }
-        res.redirect('/');      //TODO: add redirect url here
+        res.redirect('../employee');
     })
 }
 
@@ -171,7 +176,7 @@ var employee_mark_attendance_post = (req,res,next)=>{
     );
     Employee.findByIdAndUpdate(req.params.id, employee, {}, (err)=> {
         if (err) { return next(err); }
-        res.redirect('/');      //TODO: add redirect url here
+        res.redirect('../employee');
     });
 }
 

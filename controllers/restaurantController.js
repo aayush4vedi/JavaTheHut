@@ -15,7 +15,7 @@ var restaurant_list = (req,res, next)=>{
             if(err){
                 return next(err)
             }
-            res.render('restaurant_list', { title: 'Restaurant List', restaurants: list_restaurant})
+            res.render('restaurant/restaurant_list', { title: 'Restaurant List', restaurants: list_restaurant})
         })
 }
 
@@ -24,7 +24,7 @@ var restaurant_create_get = (req,res,next)=>{
     Hall.find()
         .exec((err,halls)=>{
             if (err) { return next(err); } 
-            res.render('restaurant_create', {title: 'Restaurant Create',  halls: halls});
+            res.render('restaurant/restaurant_create', {title: 'Restaurant Create',  halls: halls});
         })
 }
 
@@ -38,6 +38,7 @@ var restaurant_create_post = [
     sanitizeBody('*').escape(),
 
     (req,res,next)=>{
+        console.log('***req.body:',req.body);
         const errors = validationResult(req);
         var restaurant = new Restaurant(
             {
@@ -53,14 +54,14 @@ var restaurant_create_post = [
             Hall.find()
             .exec((err,halls)=>{
                 if (err) { return next(err); } 
-                res.render('restaurant_create', {title: 'Restaurant Create',  halls: halls});
+                res.render('restaurant/restaurant_create', {title: 'Restaurant Create',  halls: halls});
             })
             return;
         }
         else {
             restaurant.save(function (err) {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../restaurant');
             });
         }
     }
@@ -86,7 +87,7 @@ var restaurant_details = (req,res, next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('restaurant_details', { title: 'Restaurant Detail', restaurant: results.restaurant, all_halls: results.all_halls });
+        res.render('restaurant/restaurant_details', { title: 'Restaurant Detail', restaurant: results.restaurant, all_halls: results.all_halls });
     });
 }
 
@@ -110,7 +111,7 @@ var restaurant_edit_get = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('restaurant_edit', { title: 'Update Restaurant', restaurant: restaurant, all_halls: results.all_halls });
+        res.render('restaurant/restaurant_edit', { title: 'Update Restaurant', restaurant: restaurant, all_halls: results.all_halls });
     });
 }
 
@@ -138,14 +139,14 @@ var restaurant_edit_put = [
             Hall.find()
             .exec((err,halls)=>{
                 if (err) { return next(err); } 
-                res.render('restaurant_create', {title: 'Restaurant Create',  halls: halls});
+                res.render('restaurant/restaurant_create', {title: 'Restaurant Create',  halls: halls});
             })
             return;
         }
         else {
             Restaurant.findByIdAndUpdate(req.params.id, restaurant, {}, (err)=> {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../restaurant');
             });
         }
     }
@@ -155,7 +156,7 @@ var restaurant_edit_put = [
 var restaurant_delete_delete = (req,res,next)=>{
     Restaurant.findByIdAndRemove(req.body.restaurantid, function deleteRestaurant(err) {
         if (err) { return next(err); }
-        res.redirect('/');      //TODO: add redirect url here
+        res.redirect('../restaurant');
     })
 }
 

@@ -20,6 +20,5 @@ BookingSchema
 //compile the Model
 var Booking = mongoose.model('Booking',BookingSchema)
 
-module.exports ={
-    Booking
-}
+module.exports = Booking
+    

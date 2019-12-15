@@ -84,6 +84,4 @@ var EmployeeSchema = new Schema({
 //compile the Model
 var Employee = mongoose.model('Employee', EmployeeSchema);
 
-module.exports = {
-    Employee
-}
+module.exports = Employee

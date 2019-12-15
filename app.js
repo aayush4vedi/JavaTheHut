@@ -2,9 +2,13 @@ var express          = require('express'),
     mongoose         = require('mongoose'),
     path             = require('path'),
     createError      = require('http-errors');
+    methodOverride   = require('method-override'),
+    bodyParser       = require('body-parser'),
+    cookieParser     = require('cookie-parser')
 
-var app              = express()
-var v1               = require('./routes/v1');
+    
+var app              = express(),
+    v1               = require('./routes/v1');
 
 // app config
 //mongo DB: 
@@ -18,8 +22,10 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
 
-app.use(methodOverrid('_method'));
+app.use(methodOverride('_method'));
 //Add more versioning here
 app.use('/fooder/v1', v1);
 

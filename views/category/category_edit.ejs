@@ -1,9 +1,12 @@
+<%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
-<form action="/category/<%= category._id %>?_method=PUT" method="POST">
-    <input name="category[name]" value = "<%= category.name %>">
-    <input name="category[cook]" value = "<%= category.cook %>">
-    <input name="category[dish]" value = "<%= category.dish %>">
+<form action="<%= category._id %>?_method=PUT" method="POST">
+    <input name="name" value = "<%= category.name %>">
+    <input name="cook" value = "<%= category.cook %>">
+    <input name="dish" value = "<%= category.dish %>">
 
     <button type="submit">Submit</button>
 </form>
+
+<%- include ('../partials/footer') %>

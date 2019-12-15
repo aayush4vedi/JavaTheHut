@@ -17,7 +17,7 @@ var tableInstance_list = (req,res, next)=>{
             if(err){
                 return next(err)
             }
-            res.render('tableInstance_list', { title: 'TableInstance List', tableInstances: list_tableInstance})
+            res.render('tableInstance/tableInstance_list', { title: 'TableInstance List', tableInstances: list_tableInstance})
         })
 }
 
@@ -32,7 +32,7 @@ var tableInstance_create_get = (req,res,next)=>{
         }
     },(err, results) => {
         if (err) { return next(err); } 
-        res.render('tableInstance_create', {title: 'TableInstance Create', tables: results.tables,bookings: results.bookings,errors: errors.array()});
+        res.render('tableInstance/tableInstance_create', {title: 'TableInstance Create', tables: results.tables,bookings: results.bookings });
     });
 }
 
@@ -41,6 +41,7 @@ var tableInstance_create_post = [
     sanitizeBody('*').escape(),
 
     (req,res,next)=>{
+        console.log('***req.body:',req.body);
         const errors = validationResult(req);
         var tableInstance = new TableInstance(
             {
@@ -60,14 +61,14 @@ var tableInstance_create_post = [
                 }
             },(err, results) => {
                 if (err) { return next(err); } 
-                res.render('tableInstance_create', {title: 'TableInstance Create', tables: results.tables,bookings: results.bookings,errors: errors.array()});
+                res.render('tableInstance/tableInstance_create', {title: 'TableInstance Create', tables: results.tables,bookings: results.bookings });
             });
             return;
         }
         else {
             tableInstance.save(function (err) {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../tableinstance');
             });
         }
     }
@@ -82,7 +83,7 @@ var tableInstance_details = (req,res, next)=>{
             if(err){
                 return next(err)
             }
-            res.render('tableInstance_details', { title: 'TableInstance Detail',tableInstance: tableInstance})
+            res.render('tableInstance/tableInstance_details', { title: 'TableInstance Detail',tableInstance: tableInstance})
         })
 }
 
@@ -108,7 +109,7 @@ var tableInstance_edit_get = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('tableInstance_edit', { title: 'Update TableInstance', tableInstance: results.tableInstance, all_tables: results.all_tables, all_bookings: results.all_bookings });
+        res.render('tableInstance/tableInstance_edit', { title: 'Update TableInstance', tableInstance: results.tableInstance, all_tables: results.all_tables, all_bookings: results.all_bookings });
     });
 }
 
@@ -137,14 +138,14 @@ var tableInstance_edit_put = [
                 }
             },(err, results) => {
                 if (err) { return next(err); } 
-                res.render('tableInstance_create', {title: 'TableInstance Create', tables: results.tables,bookings: results.bookings,errors: errors.array()});
+                res.render('tableInstance/tableInstance_create', {title: 'TableInstance Create', tables: results.tables,bookings: results.bookings });
             });
             return;
         }
         else {
             tableInstance.findByIdAndUpdate(function (err) {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../tableinstance');
             });
         }
     }
@@ -154,7 +155,7 @@ var tableInstance_edit_put = [
 var tableInstance_delete_delete = (req,res,next)=>{
     TableInstance.findByIdAndRemove(req.body.restaurantid, function deleteTableInstance(err) {
         if (err) { return next(err); }
-        res.redirect('/');      //TODO: add redirect url here
+        res.redirect('../tableinstance');
     })
 }
 

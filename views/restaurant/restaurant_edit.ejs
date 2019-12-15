@@ -1,11 +1,14 @@
+<%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
-<form action="/restaurant/<%= restaurant._id %>?_method=PUT" method="POST">
-    <input name="restaurant[name]" value="<%= restaurant.name %>">
-    <input name="restaurant[name]" value="<%= restaurant.name %>">
-    <input name="restaurant[name]" value="<%= restaurant.name %>">
-    <input name="restaurant[name]" value="<%= restaurant.name %>">
-    <input name="restaurant[name]" value="<%= restaurant.name %>">
+<form action="<%= restaurant._id %>?_method=PUT" method="POST">
+    <input name="name" value="<%= restaurant.name %>">
+    <input name="activePlanID" value="<%= restaurant.activePlanID %>">
+    <input name="halls" value="<%= restaurant.halls %>">
+    <input name="phone" value="<%= restaurant.phone %>">
+    <input name="address" value="<%= restaurant.address %>">
 
     <button type="submit">Submit</button>
 </form>
+
+<%- include ('../partials/footer') %>

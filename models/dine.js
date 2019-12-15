@@ -48,6 +48,4 @@ DineSchema
 //compile the Model
 var Dine = mongoose.model('Dine', DineSchema);
 
-module.exports = {
-    Dine
-}
+module.exports = Dine

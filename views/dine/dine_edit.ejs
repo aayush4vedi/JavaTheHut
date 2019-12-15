@@ -1,6 +1,7 @@
+<%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
-<form action="/dine/<%= dine._id %>?_method=PUT" method="POST">
+<form action="<%= dine._id %>?_method=PUT" method="POST">
     <input name="dine[orders]" value="<%= dine.orders %>">
     <input name="dine[booking]" value="<%= dine.booking %>">
     <input name="dine[bill]" value="<%= dine.bill %>">
@@ -12,3 +13,5 @@
 
     <button type="submit">Submit</button>
 </form>
+
+<%- include ('../partials/footer') %>

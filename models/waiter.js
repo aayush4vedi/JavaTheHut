@@ -1,4 +1,5 @@
 //WaiterInstance where role is 'Waiter'var mongoose = require('mongoose');
+var mongoose = require('mongoose');
 
 //===============
 //     Structure
@@ -60,6 +61,4 @@ var WaiterSchema = new Schema({
 //compile the Model
 var Waiter = mongoose.model('Waiter', WaiterSchema);
 
-module.exports = {
-    Waiter
-}
+module.exports = Waiter

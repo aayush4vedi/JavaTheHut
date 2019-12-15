@@ -19,7 +19,7 @@ var booking_list = (req,res,next)=>{
             if(err){
                 return next(err)
             }
-            res.render('booking_list', { title: 'Booking List', booking_list: list_booking})
+            res.render('booking/booking_list', { title: 'Booking List', bookings: list_booking})
         })
 }
 
@@ -43,7 +43,7 @@ var booking_create_get = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('booking_create', { title: 'Booking Create', customer: customer.employee, tables: results.tables});
+        res.render('booking/booking_create', { title: 'Booking Create', customer: results.customer, tables: results.tables});
     });
 }
 
@@ -65,6 +65,7 @@ var booking_create_post = [
     sanitizeBody('*').trim().escape(),
 
     (req,res,next)=>{
+        console.log('***req.body:',req.body);
         const errors = validationResult(req);
         var booking = new Booking(
             {
@@ -94,14 +95,14 @@ var booking_create_post = [
                     err.status = 404;
                     return next(err);
                 }
-                res.render('booking_create', { title: 'Booking Create', customer: customer.employee, tables: results.tables});
+                res.render('booking/booking_create', { title: 'Booking Create', customer: results.customer, tables: results.tables});
             });
             return;
         }
         else {
             booking.save(function (err) {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../booking');
             });
         }
     }
@@ -114,7 +115,7 @@ var booking_details = (req,res,next)=>{
             Booking.findById(req.params.id)
                 .populate('customer')
                 .populate('dine')
-                .tableInstance('tableInstance')
+                .populate('tableInstance')
                 .exec(callback)
         },
         booking_dine: (callback) =>{
@@ -136,7 +137,7 @@ var booking_details = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('booking_details', { title: 'Booking Detail', booking: results.booking, booking_dine: results.booking_dine, booking_customer: results.booking_customer, booking_tables: results.booking_tables});
+        res.render('booking/booking_details', { title: 'Booking Detail', booking: results.booking, booking_dine: results.booking_dine, booking_customer: results.booking_customer, booking_tables: results.booking_tables});
     });
 }
 
@@ -147,7 +148,7 @@ var booking_edit_get = (req,res,next)=>{
             Booking.findById(req.params.id)
                 .populate('customer')
                 .populate('dine')
-                .tableInstance('tableInstance')
+                .populate('tableInstance')
                 .exec(callback)
         },
         booking_dine: (callback) =>{
@@ -173,7 +174,7 @@ var booking_edit_get = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('booking_edit', { title: 'Update Booking', booking: results.booking, booking_dine: results.booking_dine, booking_customer: results.booking_customer, booking_tables: results.booking_tables, all_tables: results.all_tables});
+        res.render('booking/booking_edit', { title: 'Update Booking', booking: results.booking, booking_dine: results.booking_dine, booking_customer: results.booking_customer, booking_tables: results.booking_tables, all_tables: results.all_tables});
     })
 }
 
@@ -216,14 +217,14 @@ var booking_edit_put = [
                     if(err){
                         return next(err)
                     }
-                    res.render('booking_create', { title: 'Booking Create', booking:booking, all_tables: all_tables, errors: errors.array()})
+                    res.render('booking/booking_create', { title: 'Booking Create', booking:booking, all_tables: all_tables, errors: errors.array()})
                 })
             return;
         }
         else {
             Booking.findByIdAndUpdate(req.params.id, booking, {}, (err)=> {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../booking');
             });
         }
     }
@@ -233,7 +234,7 @@ var booking_edit_put = [
 var booking_delete_delete = (req,res,next)=>{
     Booking.findByIdAndRemove(req.body.bookingid, function deleteBooking(err) {
         if (err) { return next(err); }
-        res.redirect('/');      //TODO: add redirect url here
+        res.redirect('../booking');
     })
 }
 
@@ -251,7 +252,7 @@ var booking_for_time_get = (req,res,next)=>{
             return next(err);
         }
         //render the same list page
-        res.render('booking_list', { title: 'Listings all bookings in this time', booking: booking });
+        res.render('booking/booking_list', { title: 'Listings all bookings in this time', booking: booking });
     });
 }
 

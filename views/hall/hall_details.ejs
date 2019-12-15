@@ -1,3 +1,4 @@
+<%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
 <h2><%= hall.name %></h2>
@@ -7,7 +8,9 @@
     <h2><%= table.capacity %></h2>
 <% }) %>
 
-<button href="/hall/<%= hall._id%>/edit">Edit</button>
-<form action="/hall/<%= hall._id %>?_method=DELETE" method="POST" id="delete">
+<button href="<%= hall._id%>/edit">Edit</button>
+<form action="<%= hall._id %>?_method=DELETE" method="POST" id="delete">
     <button type="submit">Delete</button>
 </form>
+
+<%- include ('../partials/footer') %>

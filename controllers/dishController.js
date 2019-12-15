@@ -17,7 +17,7 @@ var dish_list = (req,res,next)=>{
             if(err){
                 return next(err)
             }
-            res.render('dish_list', { title: 'Dish List', dishes: list_dish})
+            res.render('dish/dish_list', { title: 'Dish List', dishes: list_dish})
         })
 }
 
@@ -32,7 +32,7 @@ var dish_create_get = (req,res,next)=>{
         }
     },(err, results) => {
         if (err) { return next(err); } 
-        res.render('dish_create', {title: 'Dish Create', all_categories: results.all_categories,all_goods: results.all_goods,errors: errors.array()});
+        res.render('dish/dish_create', {title: 'Dish Create', all_categories: results.all_categories,all_goods: results.all_goods});
     });
 }
 
@@ -49,6 +49,7 @@ var dish_create_post = [
     sanitizeBody('*').escape(),
 
     (req,res,next)=>{
+        console.log('***req.body:',req.body);
         const errors = validationResult(req);
         var dish = new Dish(
             {
@@ -74,14 +75,14 @@ var dish_create_post = [
                 }
             },(err, results) => {
                 if (err) { return next(err); } 
-                res.render('dish_create', {title: 'Dish Create', all_categories: results.all_categories,all_goods: results.all_goods,errors: errors.array()});
+                res.render('dish/dish_create', {title: 'Dish Create', all_categories: results.all_categories,all_goods: results.all_goods});
             });
             return;
         }
         else {
             dish.save(function (err) {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../dish');
             });
         }
     }
@@ -105,7 +106,7 @@ var dish_details = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('dish_details', { title: 'Dish Detail', dish: results.dish, dish_category: results.dish_category});
+        res.render('dish/dish_details', { title: 'Dish Detail', dish: results.dish, dish_category: results.dish_category});
     });
 }
 
@@ -131,7 +132,7 @@ var dish_edit_get = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('dish_edit', { title: 'Update Dish', dish: dish, all_categories: results.all_categories,all_goods: results.all_goods,errors: errors.array()});
+        res.render('dish/dish_edit', { title: 'Update Dish', dish: dish, all_categories: results.all_categories,all_goods: results.all_goods});
     });
 }
 
@@ -173,14 +174,14 @@ var dish_edit_put = [
                 }
             },(err, results) => {
                 if (err) { return next(err); } 
-                res.render('dish_create', {title: 'Dish Create', all_categories: results.all_categories,all_goods: results.all_goods,errors: errors.array()});
+                res.render('dish/dish_create', {title: 'Dish Create', all_categories: results.all_categories,all_goods: results.all_goods});
             });
             return;
         }
         else {
             Dish.findByIdAndUpdate(req.params.id, dish, {}, (err)=> {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../dish');
             });
         }
     }
@@ -190,7 +191,7 @@ var dish_edit_put = [
 var dish_delete_delete = (req,res,next)=>{
     Dish.findByIdAndRemove(req.body.dishid, function deleteDish(err) {
         if (err) { return next(err); }
-        res.redirect('/');      //TODO: add redirect url here
+        res.redirect('../dish');
     })
 }
 

@@ -1,4 +1,5 @@
-var Employee = require('../models/employee'),
+var Cook     = require('../models/cook'),
+    Employee = require('../models/employee'),
     Category = require('../models/category'),
     async    = require('async')
 
@@ -6,6 +7,7 @@ const { body, validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
 
 //===================CRUD controllers================//
+
 //List all Cooks GET  #1
 var cook_list = (req,res,next)=>{
     Cook.find()
@@ -14,7 +16,7 @@ var cook_list = (req,res,next)=>{
             if(err){
                 return next(err)
             }
-            res.render('cook_list', { title: 'Cook List',cooks: list_cooks})
+            res.render('cook/cook_list', { title: 'Cook List',cooks: list_cooks})
         })
 }
 
@@ -30,7 +32,7 @@ var cook_create_get = (req,res,next)=>{
         }
     },(err, results) => {
         if (err) { return next(err); } 
-        res.render('cook_create', {title: 'Cook Create', all_employees: results.all_employees, all_categories: results.all_categories});
+        res.render('cook/cook_create', {title: 'Cook Create', all_employees: results.all_employees, all_categories: results.all_categories});
     });
 }
 
@@ -51,6 +53,7 @@ var cook_create_post = [
     sanitizeBody('*').trim().escape(),
 
     (req,res,next)=>{
+        console.log('***req.body:',req.body);
         const errors = validationResult(req);
         var cook = new Cook(
             {
@@ -71,14 +74,14 @@ var cook_create_post = [
                 }
             },(err, results) => {
                 if (err) { return next(err); } 
-                res.render('cook_create', {title: 'Cook Create', all_employees: results.all_employees, all_categories: results.all_categories});
+                res.render('cook/cook_create', {title: 'Cook Create', all_employees: results.all_employees, all_categories: results.all_categories});
             });
             return;
         }
         else {
             cook.save(function (err) {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../cook');
             });
         }
     }
@@ -96,7 +99,7 @@ var cook_details = (req,res,next)=>{
                 err.status = 404;
                 return next(err);
             }
-            res.render('category_details', { title: 'Category Detail',  cook: cook});
+            res.render('cook/category_details', { title: 'Category Detail',  cook: cook});
         })
 }
 
@@ -124,7 +127,7 @@ var cook_edit_get = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('cook_edit', { title: 'Update Cook', cook: results.cook , all_employees: results.all_employees, all_categories: results.all_categories});
+        res.render('cook/cook_edit', { title: 'Update Cook', cook: results.cook , all_employees: results.all_employees, all_categories: results.all_categories});
     });
 }
 
@@ -165,14 +168,14 @@ var cook_edit_put = [
                 }
             },(err, results) => {
                 if (err) { return next(err); } 
-                res.render('cook_create', {title: 'Cook Create', all_employees: results.all_employees, all_categories: results.all_categories});
+                res.render('cook/cook_create', {title: 'Cook Create', all_employees: results.all_employees, all_categories: results.all_categories});
             });
             return;
         }
         else {
             Cook.findByIdAndUpdate(req.params.id, cook, {}, (err)=> {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../cook');
             });
         }
     }
@@ -182,7 +185,7 @@ var cook_edit_put = [
 var cook_delete_delete = (req,res,next)=>{
     Cook.findByIdAndRemove(req.body.cookid, function deleteCook(err) {
         if (err) { return next(err); }
-        res.redirect('/');      //TODO: add redirect url here
+        res.redirect('../cook');
     })
 }
 
@@ -203,7 +206,7 @@ var cook_mark_attendance_post = (req,res,next)=>{
 module.exports ={
     cook_list,
     cook_create_get,
-    cook_mark_attendance_postcook_create_post,
+    cook_create_post,
     cook_details,
     cook_edit_get,
     cook_edit_put,

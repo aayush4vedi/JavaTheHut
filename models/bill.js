@@ -34,6 +34,4 @@ BillSchema
 //compile the Model
 var Bill = mongoose.model('Bill', BillSchema);
 
-module.exports = {
-    Bill
-}
+module.exports = Bill

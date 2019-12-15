@@ -1,3 +1,4 @@
+<%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
 <% goods.forEach((good)=>{ %>
@@ -6,5 +7,5 @@
     <h2><%= good.threshold %></h2>
     <h2><%= good.defaultPurchase %></h2>
     <h2><%= good.quantityInStock %></h2>
-    <a href="/good/<%= good._id %>">Details</a>
+    <a href="<%= good._id %>">Details</a>
 <% }) %>

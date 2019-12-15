@@ -95,6 +95,4 @@ OrderSchema
 //compile the Model
 var Order = mongoose.model('Order', OrderSchema);
 
-module.exports = {
-    Order
-}
+module.exports = Order

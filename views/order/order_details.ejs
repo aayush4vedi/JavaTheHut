@@ -1,3 +1,4 @@
+<%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
 <% order.status.forEach((status)=>{ %>
@@ -14,7 +15,9 @@
     <h2><%= cancellationReqs.stauts %></h2>
 <% }) %>
 
-<button href="/order/<%= order._id%>/edit">Edit</button>
-<form action="/order/<%= order._id %>?_method=DELETE" method="POST" id="delete">
+<button href="<%= order._id%>/edit">Edit</button>
+<form action="<%= order._id %>?_method=DELETE" method="POST" id="delete">
     <button type="submit">Delete</button>
 </form>
+
+<%- include ('../partials/footer') %>

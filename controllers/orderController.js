@@ -18,7 +18,7 @@ var order_list = (req,res,next)=>{
             if(err){
                 return next(err)
             }
-            res.render('order_list', { title: 'Order List', orders: list_order})
+            res.render('order/order_list', { title: 'Order List', orders: list_order})
         })
 }
 
@@ -33,7 +33,7 @@ var order_create_get = (req,res,next)=>{
         }
     },(err, results) => {
         if (err) { return next(err); } 
-        res.render('order_create', {title: 'Order Create', dishes: results.dishes,dines: results.dines,errors: errors.array()});
+        res.render('order/order_create', {title: 'Order Create', dishes: results.dishes,dines: results.dines });
     });
 }
 
@@ -42,6 +42,7 @@ var order_create_post = [
     sanitizeBody('*').escape(),
 
     (req,res,next)=>{
+        console.log('***req.body:',req.body);
         const errors = validationResult(req);
         var order = new Order(
             {
@@ -62,14 +63,14 @@ var order_create_post = [
                 }
             },(err, results) => {
                 if (err) { return next(err); } 
-                res.render('order_create', {title: 'Order Create', dishes: results.dishes,dines: results.dines,errors: errors.array()});
+                res.render('order/order_create', {title: 'Order Create', dishes: results.dishes,dines: results.dines });
             });
             return;
         }
         else {
             order.save(function (err) {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../order');
             });
         }
     }
@@ -88,7 +89,7 @@ var order_details = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('order_details', { title: 'Order Detail', order: order});
+        res.render('order/order_details', { title: 'Order Detail', order: order});
     });
 }
 
@@ -117,7 +118,7 @@ var order_edit_get = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('order_edit', { title: 'Update Order', order: results.order, all_disheinstances: results.all_disheinstances, all_dines: results.all_dines});
+        res.render('order/order_edit', { title: 'Update Order', order: results.order, all_disheinstances: results.all_disheinstances, all_dines: results.all_dines});
     });
 }
 
@@ -146,14 +147,14 @@ var order_edit_put = [
                 }
             },(err, results) => {
                 if (err) { return next(err); } 
-                res.render('order_create', {title: 'Order Create', dishes: results.dishes,dines: results.dines,errors: errors.array()});
+                res.render('order/order_create', {title: 'Order Create', dishes: results.dishes,dines: results.dines });
             });
             return;
         }
         else {
             Order.findByIdAndUpdate(req.params.id, order, {}, (err)=> {
                 if (err) { return next(err); }
-                res.redirect('/');      //TODO: add redirect url here
+                res.redirect('../order');
             });
         }
     }
@@ -163,7 +164,7 @@ var order_edit_put = [
 var order_delete_delete = (req,res,next)=>{
     Order.findByIdAndRemove(req.body.orderid, function deleteOrder(err) {
         if (err) { return next(err); }
-        res.redirect('/');      //TODO: add redirect url here
+        res.redirect('../order');
     })
 }
 //TODO: handle cancellation

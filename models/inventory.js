@@ -20,6 +20,4 @@ var InventorySchema = new Schema({
 //compile the Model
 var Inventory = mongoose.model('Inventory', InventorySchema);
 
-module.exports = {
-    Inventory
-}
+module.exports = Inventory

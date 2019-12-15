@@ -1,9 +1,12 @@
+<%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
-<form action="/create" method="POST">
-    <input name="dishInstance[dish]" placeholder="dish">
-    <input name="dishInstance[order]" placeholder="order">
-    <input name="dishInstance[quantity]" placeholder="quantity">
+<form action="create" method="POST">
+    <input name="dish" placeholder="dish">
+    <input name="order" placeholder="order">
+    <input name="quantity" placeholder="quantity">
 
     <button type="submit">Submit</button>
 </form>
+
+<%- include ('../partials/footer') %>
