@@ -17,7 +17,7 @@ router.post('/create', employee_controller.employee_create_post);
 router.get('/:id/edit', employee_controller.employee_edit_get);
 
 //Handle employee update form on PUT #4.2
-router.put('/:id/edit', employee_controller.employee_edit_put);
+router.put('/:id', employee_controller.employee_edit_put);
 
 //Display employee update form on DELETE #5
 router.delete('/:id', employee_controller.employee_delete_delete);

@@ -1,16 +1,16 @@
 <%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
-<form action="<%= employee._id %>?_method=PUT" method="POST">
-    <input name="username" value = "<%= employee.username %">
-    <input name="password" value = "<%= employee.password %">
-    <input name="name" value = "<%= employee.name %">
-    <input name="email" value = "<%= employee.email %">
-    <input name="phone" value = "<%= employee.phone %">
-    <input name="govIDNumber" value = "<%= employee.govIDNumber %">
-    <input name="salary" value = "<%= employee.salary %">
-    <input name="role" value = "<%= employee.role %">
-    <input name="attendance" value = "<%= employee.attendance %">
+<form action="/fooder/v1/employee/<%= employee._id %>?_method=PUT" method="POST">
+    <input name="username" value = "<%= employee.username %>">
+    <input name="password" value = "<%= employee.password %>">
+    <input name="name" value = "<%= employee.name %>">
+    <input name="email" value = "<%= employee.email %>">
+    <input name="phone" value = "<%= employee.phone %>">
+    <input name="govIDNumber" value = "<%= employee.govIDNumber %>">
+    <input name="salary" value = "<%= employee.salary %>">
+    <input name="role" value = "<%= employee.role %>">
+    <input name="attendance" name="attendance" value = "<%= employee.attendance %>">
 
     <button type="submit">Submit</button>
 </form>

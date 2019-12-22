@@ -1,6 +1,8 @@
 <%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
+<a href="/fooder/v1/employee/create">Create</a>
+
 <% employees.forEach((employee)=>{ %>
     <h2><%= employee.name %></h2>
     <h2><%= employee.username %></h2>
@@ -11,5 +13,7 @@
     <h2><%= employee.salary %></h2>
     <h2><%= employee.role %></h2>
     <h2><%= employee.attendance %></h2>
-    <a href="<%= employee._id %>">Details</a>
+    <a href="/fooder/v1/employee/<%= employee._id %>">Details</a>
 <% }) %>
+
+

@@ -11,7 +11,7 @@
 <h2><%= employee.role %></h2>
 <h2><%= employee.attendance %></h2>
 
-<button href="<%= employee._id%>/edit">Edit</button>
+<a href="/fooder/v1/employee/<%= employee._id %>/edit">Edit</a>
 <form action="<%= employee._id %>?_method=DELETE" method="POST" id="delete">
     <button type="submit">Delete</button>
 </form>

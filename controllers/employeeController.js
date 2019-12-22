@@ -24,15 +24,14 @@ var employee_create_get = (req,res,next)=>{
 
 //Handle employee create form on POST #2.2
 var employee_create_post = [
-    body('username').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('password').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('email').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('phone').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('govIDNumber').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('salary').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('role').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('attendance').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('username').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('password').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('name').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('email').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('phone').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('govIDNumber').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('salary').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('role').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('username').escape(),
     sanitizeBody('password').escape(),
@@ -41,12 +40,10 @@ var employee_create_post = [
     sanitizeBody('phone').escape(),
     sanitizeBody('govIDNumber').escape(),
     sanitizeBody('salary').escape(),
-    sanitizeBody('attendance').escape(),
 
     (req,res,next)=>{
         console.log('***req.body:',req.body);
         
-        res.redirect(parent_url);
         const errors = validationResult(req);
         var employee = new Employee(
             {
@@ -62,10 +59,12 @@ var employee_create_post = [
         );
 
         if (!errors.isEmpty()) {
+            console.log("ERROOR: ", errors);
             res.render('employee/employee_create', {title: 'Employee Create'});
             return;
         }
         else {
+            console.log("Employee created...redirecting now");
             employee.save(function (err) {
                 if (err) { return next(err); }
                 res.redirect('../employee');      
@@ -103,15 +102,15 @@ var employee_edit_get = (req,res,next)=>{
 
 //Handle employee update form on PUT #4.2
 var employee_edit_put = [
-    body('username').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('password').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('email').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('phone').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('govIDNumber').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('salary').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('role').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('attendance').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('username').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('password').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('name').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('email').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('phone').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('govIDNumber').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('salary').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('role').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('attendance').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('username').escape(),
     sanitizeBody('password').escape(),
