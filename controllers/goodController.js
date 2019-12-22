@@ -25,10 +25,7 @@ var good_create_get = (req,res,next)=>{
 var good_create_post = [
     body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
     body('linkToPurchase').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('threshold').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('defaultPurchase').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('quantityInStock').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    
+
     sanitizeBody('name').escape(),
     sanitizeBody('linkToPurchase').escape(),
     sanitizeBody('threshold').escape(),
@@ -41,10 +38,10 @@ var good_create_post = [
         var good = new Good(
             {
                 name: req.body.name,
-                linkToPurchase: req.body.namlinkToPurchasee,
+                linkToPurchase: req.body.linkToPurchase,
                 threshold: req.body.threshold,
                 defaultPurchase: req.body.defaultPurchase,
-                quantityInStock: req.body.naquantityInStockme,
+                quantityInStock: req.body.quantityInStock,
             }
         );
 
@@ -53,7 +50,7 @@ var good_create_post = [
             return;
         }
         else {
-            Good.save(function (err) {
+            good.save(function (err) {
                 if (err) { return next(err); }
                 res.redirect('../good');
             });
@@ -70,7 +67,7 @@ var good_details = (req,res, next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('good/good_details', { title: 'Good Detail', good: results.good, good_dishes: results.good_dishes });
+        res.render('good/good_details', { title: 'Good Details', good: good});
     });
 }
 
@@ -89,11 +86,8 @@ var good_edit_get = (req,res, next)=>{
 
 //Handle good update form on PUT #4.2
 var good_edit_put = [
-    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('linkToPurchase').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('threshold').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('defaultPurchase').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('quantityInStock').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('name').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('linkToPurchase').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('name').escape(),
     sanitizeBody('linkToPurchase').escape(),
@@ -106,10 +100,10 @@ var good_edit_put = [
         var good = new Good(
             {
                 name: req.body.name,
-                linkToPurchase: req.body.namlinkToPurchasee,
+                linkToPurchase: req.body.linkToPurchase,
                 threshold: req.body.threshold,
                 defaultPurchase: req.body.defaultPurchase,
-                quantityInStock: req.body.naquantityInStockme,
+                quantityInStock: req.body.quantityInStock,
                 _id:  req.params.id
             }
         );
@@ -129,7 +123,7 @@ var good_edit_put = [
 
 //Display good update form on DELETE #5
 var good_delete_delete = (req,res,next)=>{
-    Good.findByIdAndRemove(req.body.goodid, function deleteGood(err) {
+    Good.findByIdAndDelete(req.params.id, function deleteGood(err) {
         if (err) { return next(err); }
         res.redirect('../good');
     })

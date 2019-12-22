@@ -9,9 +9,21 @@
     <input name="phone" value = "<%= employee.phone %>">
     <input name="govIDNumber" value = "<%= employee.govIDNumber %>">
     <input name="salary" value = "<%= employee.salary %>">
-    <input name="role" value = "<%= employee.role %>">
-    <input name="attendance" name="attendance" value = "<%= employee.attendance %>">
-
+    <!-- <input name="role" value = "<%= employee.role %>"> -->
+    <select name="role" value = "<%= employee.role %>">
+        <option value="Waiter">Waiter</option>
+        <option value="Chef">Chef</option>
+        <option value="Kitchen Manager">Kitchen Manager</option>
+        <option value="Waiter Manager">Waiter Manager</option>
+        <option value="Hall Manager">Hall Manager</option>
+        <option value="Booking Manager">Booking Manager</option>
+        <option value="Admin">Admin</option>
+    </select>
+    <!-- <input name="attendance" name="attendance" value = "<%= employee.attendance %>"> -->
+    <select name="attendance" name="attendance" value = "<%= employee.attendance %>"">
+        <option value="Present">Present</option>
+        <option value="Absent">Absent</option>
+    </select>
     <button type="submit">Submit</button>
 </form>
 

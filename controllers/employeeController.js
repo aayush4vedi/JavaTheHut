@@ -154,8 +154,11 @@ var employee_edit_put = [
 
 //Display employee update form on DELETE #5
 var employee_delete_delete = (req,res,next)=>{
-    Employee.findByIdAndRemove(req.body.employeeid, function deleteEmployee(err) {
-        if (err) { return next(err); }
+    Employee.findByIdAndDelete(req.params.id, (err, deleteEmployee) =>{
+        if (err) { 
+            console.log("ERROR in deleting:,", err);
+            return next(err); 
+        }
         res.redirect('../employee');
     })
 }

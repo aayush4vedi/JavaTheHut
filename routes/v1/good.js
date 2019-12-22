@@ -17,7 +17,7 @@ router.post('/create', good_controller.good_create_post);
 router.get('/:id/edit', good_controller.good_edit_get);
 
 //Handle good update form on PUT #4.2
-router.put('/:id/edit', good_controller.good_edit_put);
+router.put('/:id', good_controller.good_edit_put);
 
 //Display good update form on DELETE #5
 router.delete('/:id', good_controller.good_delete_delete);

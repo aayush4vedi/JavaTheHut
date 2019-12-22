@@ -1,7 +1,7 @@
 <%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
-<form action="<%= good._id %>?_method=PUT" method="POST">
+<form action="/fooder/v1/good/<%= good._id %>?_method=PUT" method="POST">
     <input name="name" value="<%= good.name %>">
     <input name="linkToPurchase" value="<%= good.linkToPurchase %>">
     <input name="threshold" value="<%= good.threshold %>">
