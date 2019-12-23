@@ -153,7 +153,7 @@ var tableInstance_edit_put = [
 
 //Display tableInstance update form on DELETE #5.1
 var tableInstance_delete_delete = (req,res,next)=>{
-    TableInstance.findByIdAndRemove(req.body.restaurantid, function deleteTableInstance(err) {
+    TableInstance.findByIdAndDelete(req.params.id, function deleteTableInstance(err) {
         if (err) { return next(err); }
         res.redirect('../tableinstance');
     })

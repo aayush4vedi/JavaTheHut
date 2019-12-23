@@ -1,9 +1,11 @@
 <%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
-<form action="<%= bill._id %>?_method=PUT" method="POST">
-    <input name="isPaid" value="<%= bill.isPaid %>">
-    <input name="dine" value="<%= bill.dine %>">
+<form action="/fooder/v1/bill/<%= bill._id %>?_method=PUT" method="POST">
+    <select name="isPaid" value="<%= bill.isPaid %>">
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
     <input name="dineAmount" value="<%= bill.dineAmount %>">
     <input name="taxAmount" value="<%= bill.taxAmount %>">
     <input name="serviceCharge" value="<%= bill.serviceCharge %>">
@@ -12,3 +14,4 @@
 </form>
 
 <%- include ('../partials/footer') %>
+

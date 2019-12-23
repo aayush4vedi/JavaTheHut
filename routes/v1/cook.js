@@ -17,7 +17,7 @@ router.post('/create', cook_controller.cook_create_post);
 router.get('/:id/edit', cook_controller.cook_edit_get);
 
 //Handle cook update form on PUT #4.2
-router.put('/:id/edit', cook_controller.cook_edit_put);
+router.put('/:id', cook_controller.cook_edit_put);
 
 //Display cook update form on DELETE #5
 router.delete('/:id', cook_controller.cook_delete_delete);

@@ -3,8 +3,6 @@
 
 <% bills.forEach((bill)=>{ %>
     <h2><%= bill.isPaid %></h2>
-    <h2><%= bill.dine._id %></h2>
-    <h2><%= bill.dine.date %></h2>
     <h2><%= bill.payableamount %></h2>
-    <a href="<%= bill._id %>">Details</a>
+    <a href="/fooder/v1/bill/<%= bill._id %>">Details</a>
 <% }) %>

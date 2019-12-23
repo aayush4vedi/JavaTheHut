@@ -48,7 +48,7 @@ var cook_create_post = [
         next();
     },
 
-    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('name').isLength({ min: 1 }).trim().withMessage('Invalid length'),
 
     sanitizeBody('*').trim().escape(),
 
@@ -143,7 +143,7 @@ var cook_edit_put = [
         next();
     },
 
-    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('name').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('*').escape(),
 
@@ -183,7 +183,7 @@ var cook_edit_put = [
 
 //Display cook update form on DELETE #5
 var cook_delete_delete = (req,res,next)=>{
-    Cook.findByIdAndRemove(req.body.cookid, function deleteCook(err) {
+    Cook.findByIdAndDelete(req.params.id, function deleteCook(err) {
         if (err) { return next(err); }
         res.redirect('../cook');
     })

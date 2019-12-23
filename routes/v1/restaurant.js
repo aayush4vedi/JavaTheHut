@@ -17,7 +17,7 @@ router.post('/create', restaurant_controller.restaurant_create_post);
 router.get('/:id/edit', restaurant_controller.restaurant_edit_get);
 
 //Handle restaurant update form on PUT #4.2
-router.put('/:id/edit', restaurant_controller.restaurant_edit_put);
+router.put('/:id', restaurant_controller.restaurant_edit_put);
 
 //Display restaurant update form on DELETE #5
 router.delete('/:id', restaurant_controller.restaurant_delete_delete);

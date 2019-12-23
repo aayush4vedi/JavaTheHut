@@ -17,7 +17,7 @@ router.post('/create', hall_controller.hall_create_post);
 router.get('/:id/edit', hall_controller.hall_edit_get);
 
 //Handle hall update form on PUT #4.2
-router.put('/:id/edit', hall_controller.hall_edit_put);
+router.put('/:id', hall_controller.hall_edit_put);
 
 //Display hall update form on DELETE #5
 router.delete('/:id', hall_controller.hall_delete_delete);

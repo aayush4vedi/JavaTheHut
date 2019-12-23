@@ -38,7 +38,7 @@ var hall_create_get = (req,res,next)=>{
 
 //Handle hall create form on POST #2.2
 var hall_create_post = [
-    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('name').isLength({ min: 1 }).trim().withMessage('Invalid length'),
 
     sanitizeBody('*').escape(),
 
@@ -121,7 +121,7 @@ var hall_edit_get = (req,res,next)=>{
 
 //Handle hall update form on PUT #4.2
 var hall_edit_put = [
-    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('name').isLength({ min: 1 }).trim().withMessage('Invalid length'),
 
     sanitizeBody('*').escape(),
 
@@ -160,7 +160,7 @@ var hall_edit_put = [
 
 //Display hall update form on DELETE #5
 var hall_delete_delete = (req,res,next)=>{
-    Hall.findByIdAndRemove(req.body.restaurantid, function deleteHall(err) {
+    Hall.findByIdAndDelete(req.params.id, function deleteHall(err) {
         if (err) { return next(err); }
         res.redirect('../hall');
     })

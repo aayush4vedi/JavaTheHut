@@ -17,7 +17,7 @@ router.post('/create', tableInstance_controller.tableInstance_create_post);
 router.get('/:id/edit', tableInstance_controller.tableInstance_edit_get);
 
 //Handle tableInstance update form on PUT #4.2
-router.put('/:id/edit', tableInstance_controller.tableInstance_edit_put);
+router.put('/:id', tableInstance_controller.tableInstance_edit_put);
 
 //Display tableInstance update form on DELETE #5
 router.delete('/:id', tableInstance_controller.tableInstance_delete_delete);

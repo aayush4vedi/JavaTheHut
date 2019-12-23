@@ -6,7 +6,7 @@ var CustomerSchema = new Schema({
     name            : String,
     email           : String,                                 
     phone           : String,
-    bookings        : [{type: Schema.Types.ObjectId, ref: 'Booking'}]   //prev orders too                                
+    // bookings        : [{type: Schema.Types.ObjectId, ref: 'Booking'}]   //prev orders too                                
 })
 
 //compile the Model

@@ -7,14 +7,14 @@ var Schema = mongoose.Schema;
 
 var DishSchema = new Schema({
     // dishID          : { type: String, default: uuid.v1 },     //restaurant specefic ID's to be implemented later
-    name            : {type: String, required: [true, '3<len<100'], min: 3, max: 100},                                 
+    name            : {type: String, required: [true, '3<len<100'], min: 1, max: 100},                                 
     description     : String,
     ingredients     : [String],                               //Major ingredients: to be manually entered for luring customers:Enter ' ' separated items 
     goods           : [{                                      // To be entered as key-val pairs
                         good        : {type: Schema.Types.ObjectId, ref: 'Good'},
                         quantity    : {type: Number, default: '1'}  // xUnits(grams)
                       }],
-    category        : {type: Schema.Types.ObjectId, ref: 'Category'},
+    // category        : {type: Schema.Types.ObjectId, ref: 'Category'},
     price           : { type: Number, default:0},                                 
     isServing       : {type: Boolean, default:false},
     veg             : {type: Boolean, default:true},                            //function returns string: 'veg'/'non-veg'

@@ -17,7 +17,7 @@ router.post('/create', table_controller.table_create_post);
 router.get('/:id/edit', table_controller.table_edit_get);
 
 //Handle table update form on PUT #4.2
-router.put('/:id/edit', table_controller.table_edit_put);
+router.put('/:id', table_controller.table_edit_put);
 
 //Display table update form on DELETE #5
 router.delete('/:id', table_controller.table_delete_delete);

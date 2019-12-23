@@ -162,7 +162,7 @@ var order_edit_put = [
 
 //Display order update form on DELETE #5
 var order_delete_delete = (req,res,next)=>{
-    Order.findByIdAndRemove(req.body.orderid, function deleteOrder(err) {
+    Order.findByIdAndDelete(req.params.id, function deleteOrder(err) {
         if (err) { return next(err); }
         res.redirect('../order');
     })

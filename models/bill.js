@@ -6,8 +6,12 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var BillSchema = new Schema({
-    isPaid         : { type: Boolean, default: false, required: true},
-    dine           : {type: Schema.Types.ObjectId, ref: 'Dine', required: true},
+    isPaid         : { 
+                        type: String, 
+                        enum: ['Yes','No'], 
+                        default: 'No' 
+                        },
+    // dine           : {type: Schema.Types.ObjectId, ref: 'Dine', required: true},
     dineAmount     : { type: Number, default: 0, required: true},
     taxAmount      : { type: Number, default: 0},
     serviceCharge  : { type: Number, default: 0}

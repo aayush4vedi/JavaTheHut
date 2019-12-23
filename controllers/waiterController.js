@@ -48,7 +48,7 @@ var waiter_create_post = [
         next();
     },
 
-    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('name').isLength({ min: 1 }).trim().withMessage('Invalid length'),
 
     sanitizeBody('*').trim().escape(),
 
@@ -143,7 +143,7 @@ var waiter_edit_put = [
         next();
     },
 
-    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('name').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('*').escape(),
 
@@ -183,7 +183,7 @@ var waiter_edit_put = [
 
 //Display waiter update form on DELETE #5
 var waiter_delete_delete = (req,res,next)=>{
-    Waiter.findByIdAndRemove(req.body.waiterid, function deleteWaiter(err) {
+    Waiter.findByIdAndDelete(req.params.id, function deleteWaiter(err) {
         if (err) { return next(err); }
         res.redirect('../waiter');
     })

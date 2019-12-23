@@ -29,7 +29,7 @@ var customer_create_get = (req,res,next)=>{
 
 //Handle customer create form on POST #2.2
 var customer_create_post = [
-    body('name').isLength({ min: 3 }).trim().withMessage('Name must be >= 3 characters.'),
+    body('name').isLength({ min: 1 }).trim().withMessage('Name must be >= 3 characters.'),
     body('email').isLength({ min: 10 }).trim().withMessage('Email must be >= 10 characters.'),
     body('phone').isLength({ min: 11 }).trim().withMessage('Phone must be >= 11 characters.'),
 
@@ -98,7 +98,7 @@ var customer_edit_get = (req,res,next)=>{
 
 //Handle customer update form on PUT #4.2
 var customer_edit_put = [
-    body('name').isLength({ min: 3 }).trim().withMessage('Name must be >= 3 characters.'),
+    body('name').isLength({ min: 1 }).trim().withMessage('Name must be >= 3 characters.'),
     body('email').isLength({ min: 10 }).trim().withMessage('Email must be >= 10 characters.'),
     body('phone').isLength({ min: 11 }).trim().withMessage('Phone must be >= 11 characters.'),
 
@@ -129,7 +129,7 @@ var customer_edit_put = [
 
 //Display customer update form on DELETE #5
 var customer_delete_delete = (req,res,next)=>{
-    Customer.findByIdAndRemove(req.body.customerid, function deleteCustomer(err) {
+    Customer.findByIdAndDelete(req.params.id, function deleteCustomer(err) {
         if (err) { return next(err); }
         res.redirect('../customer');
     })

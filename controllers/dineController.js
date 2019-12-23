@@ -217,7 +217,7 @@ var dine_edit_put = [
 
 //Display dine update form on DELETE #5
 var dine_delete_delete = (req,res,next)=>{
-    Dine.findByIdAndRemove(req.body.dineid, function deleteDine(err) {
+    Dine.findByIdAndDelete(req.params.id, function deleteDine(err) {
         if (err) { return next(err); }
         res.redirect('../dine');
     })

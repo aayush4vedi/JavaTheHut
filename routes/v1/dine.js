@@ -17,7 +17,7 @@ router.post('/create', dine_controller.dine_create_post);
 router.get('/:id/edit', dine_controller.dine_edit_get);
 
 //Handle dine update form on PUT #4.2
-router.put('/:id/edit', dine_controller.dine_edit_put);
+router.put('/:id', dine_controller.dine_edit_put);
 
 //Display dine update form on DELETE #5
 router.delete('/:id', dine_controller.dine_delete_delete);

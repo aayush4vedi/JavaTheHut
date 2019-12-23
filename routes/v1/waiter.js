@@ -17,7 +17,7 @@ router.post('/create', waiter_controller.waiter_create_post);
 router.get('/:id/edit', waiter_controller.waiter_edit_get);
 
 //Handle waiter update form on PUT #4.2
-router.put('/:id/edit', waiter_controller.waiter_edit_put);
+router.put('/:id', waiter_controller.waiter_edit_put);
 
 //Display waiter update form on DELETE #5
 router.delete('/:id', waiter_controller.waiter_delete_delete);

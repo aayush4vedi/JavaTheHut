@@ -30,10 +30,10 @@ var restaurant_create_get = (req,res,next)=>{
 
 //Handle restaurant create form on POST #2.2
 var restaurant_create_post = [
-    body('name').isLength({ min: 3 }).trim().withMessage('Name must be >= 3 characters.'),
+    body('name').isLength({ min: 1 }).trim().withMessage('Name must be >= 3 characters.'),
     body('activePlanID').isLength({ min: 1 }).trim().withMessage('Invalid input is entered'),
-    body('phone').isLength({ min: 3 }).trim().withMessage('Invalid input is entered'),
-    body('address').isLength({ min: 3 }).trim().withMessage('Invalid input is entered'),
+    body('phone').isLength({ min: 1 }).trim().withMessage('Invalid input is entered'),
+    body('address').isLength({ min: 1 }).trim().withMessage('Invalid input is entered'),
 
     sanitizeBody('*').escape(),
 
@@ -117,10 +117,10 @@ var restaurant_edit_get = (req,res,next)=>{
 
 //Handle restaurant update form on PUT #4.2
 var restaurant_edit_put = [
-    body('name').isLength({ min: 3 }).trim().withMessage('Name must be >= 3 characters.'),
+    body('name').isLength({ min: 1 }).trim().withMessage('Name must be >= 3 characters.'),
     body('activePlanID').isLength({ min: 1 }).trim().withMessage('Invalid input is entered'),
-    body('phone').isLength({ min: 3 }).trim().withMessage('Invalid input is entered'),
-    body('address').isLength({ min: 3 }).trim().withMessage('Invalid input is entered'),
+    body('phone').isLength({ min: 1 }).trim().withMessage('Invalid input is entered'),
+    body('address').isLength({ min: 1 }).trim().withMessage('Invalid input is entered'),
 
     sanitizeBody('*').escape(),
     (req, res, next) => {
@@ -154,7 +154,7 @@ var restaurant_edit_put = [
 
 //Display restaurant update form on DELETE #5
 var restaurant_delete_delete = (req,res,next)=>{
-    Restaurant.findByIdAndRemove(req.body.restaurantid, function deleteRestaurant(err) {
+    Restaurant.findByIdAndDelete(req.params.id, function deleteRestaurant(err) {
         if (err) { return next(err); }
         res.redirect('../restaurant');
     })

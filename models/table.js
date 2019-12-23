@@ -15,7 +15,7 @@ var TableSchema = new Schema({
                         y: {type: Number, default:0},
                         z: {type: Number, default:0},       // for multiple hall restaurants
                      },                               
-    hall            : {type: Schema.Types.ObjectId, ref: 'Hall'},
+    // hall            : {type: Schema.Types.ObjectId, ref: 'Hall'},
     waiter          : {type: Schema.Types.ObjectId, ref: 'Waiter'}
 }) 
 

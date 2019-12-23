@@ -17,7 +17,7 @@ router.post('/create', order_controller.order_create_post);
 router.get('/:id/edit', order_controller.order_edit_get);
 
 //Handle order update form on PUT #4.2
-router.put('/:id/edit', order_controller.order_edit_put);
+router.put('/:id', order_controller.order_edit_put);
 
 //Display order update form on DELETE #5
 router.delete('/:id', order_controller.order_delete_delete);

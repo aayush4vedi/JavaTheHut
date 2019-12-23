@@ -17,7 +17,7 @@ router.post('/create', bill_controller.bill_create_post);
 router.get('/:id/edit', bill_controller.bill_edit_get);
 
 //Handle bill update form on PUT #4.2 ::only authorised person can do this(not customer)
-router.put('/:id/edit', bill_controller.bill_edit_put);
+router.put('/:id', bill_controller.bill_edit_put);
 
 //Display bill update form on DELETE #5
 router.delete('/:id', bill_controller.bill_delete_delete);

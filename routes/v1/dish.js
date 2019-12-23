@@ -17,7 +17,7 @@ router.post('/create', dish_controller.dish_create_post);
 router.get('/:id/edit', dish_controller.dish_edit_get);
 
 //Handle dish update form on PUT #4.2
-router.put('/:id/edit', dish_controller.dish_edit_put);
+router.put('/:id', dish_controller.dish_edit_put);
 
 //Display dish update form on DELETE #5
 router.delete('/:id', dish_controller.dish_delete_delete);

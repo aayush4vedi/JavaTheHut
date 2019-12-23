@@ -17,7 +17,7 @@ router.post('/create', category_controller.category_create_post);
 router.get('/:id/edit', category_controller.category_edit_get);
 
 //Handle category update form on PUT #4.2
-router.put('/:id/edit', category_controller.category_edit_put);
+router.put('/:id', category_controller.category_edit_put);
 
 //Display category update form on DELETE #5
 router.delete('/:id', category_controller.category_delete_delete);

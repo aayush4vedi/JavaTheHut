@@ -7,11 +7,11 @@ var Schema = mongoose.Schema;
 
 var DineSchema = new Schema({
     orders          : [{type: Schema.Types.ObjectId, ref: 'Order'}],
-    booking         : {type: Schema.Types.ObjectId, ref: 'Booking'},    
+    // booking         : {type: Schema.Types.ObjectId, ref: 'Booking'},    
     bill            : {type: Schema.Types.ObjectId, ref: 'Bill'},
     waiter          : {type: Schema.Types.ObjectId, ref: 'Waiter'},    
-    customer        : {type: Schema.Types.ObjectId, ref: 'Customer'},
-    tableInstances  : [{type: Schema.Types.ObjectId, ref: 'TableInstance'}],
+    // customer        : {type: Schema.Types.ObjectId, ref: 'Customer'},
+    // tableInstances  : [{type: Schema.Types.ObjectId, ref: 'TableInstance'}],
     date            : {type: Date, default:Date.now}, 
     status          : [{
                             status: {type : String,enum : ['Eating', 'Eaten', 'Completed'],default : 'Eating'},

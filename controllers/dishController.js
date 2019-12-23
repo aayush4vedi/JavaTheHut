@@ -38,13 +38,13 @@ var dish_create_get = (req,res,next)=>{
 
 //Handle dish create form on POST #2.2
 var dish_create_post = [
-    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('description').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('ingredients').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('price').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('isServing').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('veg').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('eta').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('name').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('description').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('ingredients').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('price').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('isServing').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('veg').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('eta').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('*').escape(),
 
@@ -138,13 +138,13 @@ var dish_edit_get = (req,res,next)=>{
 
 //Handle dish update form on PUT #4.2
 var dish_edit_put = [
-    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('description').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('ingredients').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('price').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('isServing').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('veg').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('eta').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('name').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('description').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('ingredients').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('price').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('isServing').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('veg').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('eta').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('*').escape(),
 
@@ -189,7 +189,7 @@ var dish_edit_put = [
 
 //Display dish update form on DELETE #5
 var dish_delete_delete = (req,res,next)=>{
-    Dish.findByIdAndRemove(req.body.dishid, function deleteDish(err) {
+    Dish.findByIdAndDelete(req.params.id, function deleteDish(err) {
         if (err) { return next(err); }
         res.redirect('../dish');
     })

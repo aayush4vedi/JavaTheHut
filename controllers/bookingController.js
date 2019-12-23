@@ -59,8 +59,8 @@ var booking_create_post = [
         next();
     },
 
-    body('checkInTime').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('stayingMinutes').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('checkInTime').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('stayingMinutes').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('*').trim().escape(),
 
@@ -190,10 +190,10 @@ var booking_edit_put = [
         next();
     },
 
-    body('customer').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('dine').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('checkInTime').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('stayingMinutes').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('customer').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('dine').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('checkInTime').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('stayingMinutes').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('*').trim().escape(),
     sanitizeBody('tableInstance.*').escape(),
@@ -232,7 +232,7 @@ var booking_edit_put = [
 
 //Display booking update form on DELETE #5
 var booking_delete_delete = (req,res,next)=>{
-    Booking.findByIdAndRemove(req.body.bookingid, function deleteBooking(err) {
+    Booking.findByIdAndDelete(req.params.id, function deleteBooking(err) {
         if (err) { return next(err); }
         res.redirect('../booking');
     })

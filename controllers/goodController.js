@@ -23,8 +23,8 @@ var good_create_get = (req,res,next)=>{
 
 //Handle good create form on POST #2.2
 var good_create_post = [
-    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('linkToPurchase').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('name').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('linkToPurchase').isLength({ min: 1 }).trim().withMessage('Invalid length'),
 
     sanitizeBody('name').escape(),
     sanitizeBody('linkToPurchase').escape(),

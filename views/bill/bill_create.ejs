@@ -2,8 +2,10 @@
 <h1><%= title %></h1>
 
 <form action="create" method="POST">
-    <input name="isPaid" placeholder="isPaid">
-    <input name="dine" placeholder="dine">
+    <select name="isPaid" placeholder="isPaid">
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
     <input name="dineAmount" placeholder="dineAmount">
     <input name="taxAmount" placeholder="taxAmount">
     <input name="serviceCharge" placeholder="serviceCharge">
@@ -12,3 +14,4 @@
 </form>
 
 <%- include ('../partials/footer') %>
+

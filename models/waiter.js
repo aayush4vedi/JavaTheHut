@@ -9,7 +9,7 @@ var Schema = mongoose.Schema;
 var WaiterSchema = new Schema({
     name            : String,                                
     employee        : {type: Schema.Types.ObjectId, ref: 'Employee'}, 
-    tables          : [{type: Schema.Types.ObjectId, ref: 'Table'}],  
+    // tables          : [{type: Schema.Types.ObjectId, ref: 'Table'}],  
     attendance      : {type: Boolean, default: true}                                
 }) 
 

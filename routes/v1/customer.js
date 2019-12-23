@@ -17,7 +17,7 @@ router.post('/create', customer_controller.customer_create_post);
 router.get('/:id/edit', customer_controller.customer_edit_get);
 
 //Handle customer update form on PUT #4.2
-router.put('/:id/edit', customer_controller.customer_edit_put);
+router.put('/:id', customer_controller.customer_edit_put);
 
 //Display customer update form on DELETE #5
 router.delete('/:id', customer_controller.customer_delete_delete);

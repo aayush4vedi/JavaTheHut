@@ -38,10 +38,10 @@ var table_create_get = (req,res,next)=>{
 
 //Handle table create form on POST #2.2
 var table_create_post = [
-    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('capacity').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('available').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('location').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('name').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('capacity').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('available').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('location').isLength({ min: 1 }).trim().withMessage('Invalid length'),
 
     sanitizeBody('*').escape(),
 
@@ -122,10 +122,10 @@ var table_edit_get = (req,res,next)=>{
 
 //Handle table update form on PUT #4.2
 var table_edit_put = [
-    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('capacity').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('available').isLength({ min: 3 }).trim().withMessage('Invalid length'),
-    body('location').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('name').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('capacity').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('available').isLength({ min: 1 }).trim().withMessage('Invalid length'),
+    body('location').isLength({ min: 1 }).trim().withMessage('Invalid length'),
 
     sanitizeBody('*').escape(),
 
@@ -168,7 +168,7 @@ var table_edit_put = [
 
 //Display table update form on DELETE #5.1
 var table_delete_delete = (req,res,next)=>{
-    Table.findByIdAndRemove(req.body.restaurantid, function deleteTable(err) {
+    Table.findByIdAndDelete(req.params.id, function deleteTable(err) {
         if (err) { return next(err); }
         res.redirect('../table');
     })

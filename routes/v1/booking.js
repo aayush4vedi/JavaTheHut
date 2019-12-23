@@ -17,7 +17,7 @@ router.post('/create', booking_controller.booking_create_post);
 router.get('/:id/edit', booking_controller.booking_edit_get);
 
 //Handle booking update form on PUT #4.2
-router.put('/:id/edit', booking_controller.booking_edit_put);
+router.put('/:id', booking_controller.booking_edit_put);
 
 //Display booking update form on DELETE #5
 router.delete('/:id', booking_controller.booking_delete_delete);

@@ -38,7 +38,7 @@ var dishInstance_create_get = (req,res,next)=>{
 
 //Handle dishInstance create form on POST #2.2
 var dishInstance_create_post = [
-    body('quantity').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('quantity').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('*').escape(),
 
@@ -121,7 +121,7 @@ var dishInstance_edit_get = (req,res,next)=>{
 
 //Handle dishInstance update form on PUT #4.2
 var dishInstance_edit_put = [
-    body('quantity').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('quantity').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('*').escape(),
 
@@ -160,7 +160,7 @@ var dishInstance_edit_put = [
 
 //Display dishInstance update form on DELETE #5
 var dishInstance_delete_delete = (req,res,next)=>{
-    DishInstance.findByIdAndRemove(req.body.dishInstanceid, function deleteDishInstance(err) {
+    DishInstance.findByIdAndDelete(req.params.id, function deleteDishInstance(err) {
         if (err) { return next(err); }
         res.redirect('../dishinstance');
     })

@@ -52,7 +52,7 @@ var category_create_post = [
         }
         next();
     },
-    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('name').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('*').escape(),
     sanitizeBody('cook.*').escape(),
@@ -166,7 +166,7 @@ var category_edit_put = [
         next();
     },
 
-    body('name').isLength({ min: 3 }).trim().withMessage('Invalid length'),
+    body('name').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('*').escape(),
     sanitizeBody('cook.*').escape(),
@@ -207,7 +207,7 @@ var category_edit_put = [
 
 //Display category update form on DELETE #5
 var category_delete_delete = (req,res,next)=>{
-    Category.findByIdAndRemove(req.body.categoryid, function deleteCategory(err) {
+    Category.findByIdAndDelete(req.params.id, function deleteCategory(err) {
         if (err) { return next(err); }
         res.redirect('../category');
     })
