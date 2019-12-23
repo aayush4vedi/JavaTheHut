@@ -7,10 +7,11 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var WaiterSchema = new Schema({
-    name            : String,                                
+    waiterID        : String,                                
     employee        : {type: Schema.Types.ObjectId, ref: 'Employee'}, 
     // tables          : [{type: Schema.Types.ObjectId, ref: 'Table'}],  
-    attendance      : {type: Boolean, default: true}                                
+    rating          : {type: Number, default: 5}                                
+    // attendance      : {type: Boolean, default: true}                             
 }) 
 
 

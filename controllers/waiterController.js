@@ -11,7 +11,7 @@ const { sanitizeBody } = require('express-validator/filter');
 //List all Waiters GET  #1
 var waiter_list = (req,res,next)=>{
     Waiter.find()
-        .populate('tables')
+        .populate('employee')
         .exec((err, list_waiters) =>{
             if(err){
                 return next(err)
@@ -23,33 +23,15 @@ var waiter_list = (req,res,next)=>{
 //Display waiter create form on GET #2.1
 //Get employee and table to pick from
 var waiter_create_get = (req,res,next)=>{
-    async.parallel({
-        all_employees: (callback) =>{
-            Employee.find(callback)
-        },
-        all_tables: (callback) =>{
-            Table.find(callback)
-        }
-    },(err, results) => {
+    Employee.find()
+        .exec((err, employees) => {
         if (err) { return next(err); } 
-        res.render('waiter/waiter_create', {title: 'Waiter Create', all_employees: results.all_employees, all_tables: results.all_tables});
+        res.render('waiter/waiter_create', {title: 'Waiter Create', employees: employees});
     });
 }
 
 //Handle waiter create form on POST #2.2
 var waiter_create_post = [
-    (req, res, next) => {
-        if(!(req.body.table instanceof Array)){
-            if(typeof req.body.table==='undefined')
-            req.body.table=[];
-            else
-            req.body.table=new Array(req.body.table);
-        }
-        next();
-    },
-
-    body('name').isLength({ min: 1 }).trim().withMessage('Invalid length'),
-
     sanitizeBody('*').trim().escape(),
 
     (req,res,next)=>{
@@ -57,24 +39,19 @@ var waiter_create_post = [
         const errors = validationResult(req);
         var waiter = new Waiter(
             {
-                name : req.body.name,
+                waiterID : req.body.waiterID,
                 employee : req.body.employee,
-                table :  (typeof req.body.table==='undefined') ? [] : req.body.table,
-                attendance : req.body.attendance
+                rating : req.body.rating
             }
         );
 
         if (!errors.isEmpty()) {
-            async.parallel({
-                all_employees: (callback) =>{
-                    Employee.find(callback)
-                },
-                all_tables: (callback) =>{
-                    Table.find(callback)
-                }
-            },(err, results) => {
+            console.log("ERROR in creating waiter...redirecting to create form");
+            
+            Employee.find()
+                .exec((err, employees) => {
                 if (err) { return next(err); } 
-                res.render('waiter/waiter_create', {title: 'Waiter Create', all_employees: results.all_employees, all_tables: results.all_tables});
+                res.render('waiter/waiter_create', {title: 'Waiter Create', employees: employees});
             });
             return;
         }
@@ -83,6 +60,7 @@ var waiter_create_post = [
                 if (err) { return next(err); }
                 res.redirect('../waiter');
             });
+            //TODO: update role of the selected employee in employee
         }
     }
 ]
@@ -91,7 +69,6 @@ var waiter_create_post = [
 var waiter_details = (req,res,next)=>{
     Waiter.findById(req.params.id)
         .populate('employee')
-        .populate('table')
         .exec((err,waiter)=>{
             if (err) { return next(err); } 
             if (waiter == null) { 
@@ -99,7 +76,7 @@ var waiter_details = (req,res,next)=>{
                 err.status = 404;
                 return next(err);
             }
-            res.render('waiter/waiter_details', { title: 'Table Detail',  waiter: waiter});
+            res.render('waiter/waiter_details', { title: 'Waiter Details',  waiter: waiter});
         })
 }
 
@@ -112,53 +89,39 @@ var waiter_edit_get = (req,res,next)=>{
                 .populate('table')
                 .exec(callback)
         },
-        all_employees: (callback) =>{
+        employees: (callback) =>{
             Employee.find()
-                .exec(callback)
-        },
-        all_tables: (callback) =>{
-            Table.find()
                 .exec(callback)
         }
     },(err, results) => {
         if (err) { return next(err); } 
-        if (waiter == null) { 
+        if (results.waiter == null) { 
             var err = new Error('Waiter not found');
             err.status = 404;
             return next(err);
         }
-        res.render('waiter/waiter_edit', { title: 'Update Waiter', waiter: results.waiter , all_employees: results.all_employees, all_tables: results.all_tables});
+        res.render('waiter/waiter_edit', { title: 'Update Waiter', waiter: results.waiter , employees: results.employees});
     });
 }
 
 //Handle waiter update form on PUT #4.2
 var waiter_edit_put = [
-    (req, res, next) => {
-        if(!(req.body.waiter instanceof Array)){
-            if(typeof req.body.table==='undefined')
-            req.body.table=[];
-            else
-            req.body.waiter=new Array(req.body.table);
-        }
-        next();
-    },
-
-    body('name').isLength({ min: 1 }).trim().withMessage('Invalid length'),
-    
     sanitizeBody('*').escape(),
 
     (req,res,next)=>{
         const errors = validationResult(req);
         var waiter = new Waiter(
             {
-                name: req.body.name,
-                employee: req.body.employee,
-                table: (typeof req.body.table==='undefined') ? [] : req.body.table,
+                waiterID : req.body.waiterID,
+                employee : req.body.employee,
+                rating : req.body.rating,
                 _id : req.params.id
             }
         );
 
         if (!errors.isEmpty()) {
+            console.log("ERROR in creating waiter...redirecting to create form");
+
             async.parallel({
                 all_employees: (callback) =>{
                     Employee.find(callback)
@@ -177,6 +140,7 @@ var waiter_edit_put = [
                 if (err) { return next(err); }
                 res.redirect('../waiter');
             });
+            //TODO: update role of the selected employee in employee
         }
     }
 ]
