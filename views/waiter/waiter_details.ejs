@@ -6,7 +6,7 @@
 <h2><%= waiter.employee._id %></h2>
 <h2><%= waiter.employee.name %></h2>
 
-<a href="/fooder/v1/waiter/<%= waiter._id %>">Edit</a>
+<a href="/fooder/v1/waiter/<%=waiter._id %>/edit">Edit</a>
 <form action="/fooder/v1/waiter/<%= waiter._id %>?_method=DELETE" method="POST" id="delete">
     <button type="submit">Delete</button>
 </form>
