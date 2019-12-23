@@ -1,10 +1,10 @@
 <%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
+<h2><%= waiter.employee.name %></h2>
 <h2><%= waiter.waiterID %></h2>
 <h2><%= waiter.rating %></h2>
 <h2><%= waiter.employee._id %></h2>
-<h2><%= waiter.employee.name %></h2>
 
 <a href="/fooder/v1/waiter/<%=waiter._id %>/edit">Edit</a>
 <form action="/fooder/v1/waiter/<%= waiter._id %>?_method=DELETE" method="POST" id="delete">

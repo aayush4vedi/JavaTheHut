@@ -7,10 +7,9 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var CookSchema = new Schema({
+    cookID          : String,                                 
     employee        : {type: Schema.Types.ObjectId, ref: 'Employee', required: true}, 
-    name            : {type: String, required: true} ,                                
-    // category        : [{type: Schema.Types.ObjectId, ref: 'Category'}],  //not mandatory to put
-    attendance      : {type: Boolean, default: true, required: true}                                
+    // category        : [{type: Schema.Types.ObjectId, ref: 'Category'}],  //TODO: Add this
 }) 
 
 

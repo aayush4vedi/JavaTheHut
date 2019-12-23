@@ -15,7 +15,7 @@ var EmployeeSchema = new Schema({
     salary          : {type: Number, default: 0},                                
     role            : { 
                         type: String, 
-                        enum: ['Admin','Booking Manager', 'Hall Manager','Waiter Manager','Waiter', 'Kitchen Manager', 'Chef'], 
+                        enum: ['Admin','Booking Manager', 'Hall Manager','Waiter Manager','Waiter', 'Kitchen Manager', 'Cook'], 
                         default: 'Waiter' 
                         },  
     // attendance      : {type: Boolean, default: true}                                

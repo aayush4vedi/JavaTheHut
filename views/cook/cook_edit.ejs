@@ -1,11 +1,13 @@
 <%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
-<form action="<%= cook._id %>?_method=PUT" method="POST">
-    <input name="employee" value = "<%=cook.employee %>">
-    <input name="name" value = "<%=cook.name %>">
-    <input name="category" value = "<%=cook.category %>">
-    <input name="attendance" value = "<%=cook.attendance %>">
+<form action="/fooder/v1/cook/<%= cook._id %>?_method=PUT" method="POST">
+    <input name="cookID" value = "<%=cook.cookID %>">
+    <select id="employee" type="select" value= <%=cook.employee._id%> name="employee" required="true">
+        <% employees.forEach((employee)=>{ %>
+            <option value= <%=employee._id%> selected="selected"><%=employee.name%></option>
+        <% }) %>
+    </select>
 
     <button type="submit">Submit</button>
 </form>

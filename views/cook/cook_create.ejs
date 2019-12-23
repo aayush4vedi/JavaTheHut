@@ -2,11 +2,12 @@
 <h1><%= title %></h1>
 
 <form action="create" method="POST">
-    <input name="employee" placeholder="employee">
-    <input name="name" placeholder="name">
-    <input name="category" placeholder="category">
-    <input name="attendance" placeholder="attendance">
-
+    <input name="cookID" placeholder="cookID">
+    <select id="employee" type="select" placeholder="Select employee" name="employee" required="true">
+        <% employees.forEach((employee)=>{ %>
+            <option value= <%=employee._id%> selected="selected"><%=employee.name%></option>
+        <% }) %>
+    </select>
     <button type="submit">Submit</button>
 </form>
 

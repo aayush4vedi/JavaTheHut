@@ -9,6 +9,7 @@ const { sanitizeBody } = require('express-validator/filter');
 //List all Employees GET  #1
 var employee_list = (req,res,next)=>{
     Employee.find({},'name attendance')
+        .sort([['name', 'ascending']])
         .exec((err, list_employee) =>{
             if(err){
                 return next(err)

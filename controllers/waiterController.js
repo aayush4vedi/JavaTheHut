@@ -12,6 +12,7 @@ const { sanitizeBody } = require('express-validator/filter');
 var waiter_list = (req,res,next)=>{
     Waiter.find()
         .populate('employee')
+        .sort([['waiterID', 'ascending']])
         .exec((err, list_waiters) =>{
             if(err){
                 return next(err)
@@ -86,7 +87,7 @@ var waiter_edit_get = (req,res,next)=>{
         waiter: (callback) =>{
             Waiter.findById(req.params.id)
                 .populate('employee')
-                .populate('table')
+                // .populate('table')       //TODO: when all DB is pululated
                 .exec(callback)
         },
         employees: (callback) =>{

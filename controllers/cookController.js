@@ -11,7 +11,8 @@ const { sanitizeBody } = require('express-validator/filter');
 //List all Cooks GET  #1
 var cook_list = (req,res,next)=>{
     Cook.find()
-        .populate('category')
+        // .populate('category') //TODO: 
+        .sort([['cookID', 'ascending']])
         .exec((err, list_cooks) =>{
             if(err){
                 return next(err)
@@ -23,33 +24,15 @@ var cook_list = (req,res,next)=>{
 //Display cook create form on GET #2.1
 //Get employee and category to pick from
 var cook_create_get = (req,res,next)=>{
-    async.parallel({
-        all_employees: (callback) =>{
-            Employee.find(callback)
-        },
-        all_categories: (callback) =>{
-            Category.find(callback)
-        }
-    },(err, results) => {
+    Employee.find()
+        .exec((err, employees) => {
         if (err) { return next(err); } 
-        res.render('cook/cook_create', {title: 'Cook Create', all_employees: results.all_employees, all_categories: results.all_categories});
+        res.render('cook/cook_create', {title: 'Cook Create', employees: employees});
     });
 }
 
 //Handle cook create form on POST #2.2
 var cook_create_post = [
-    (req, res, next) => {
-        if(!(req.body.category instanceof Array)){
-            if(typeof req.body.category==='undefined')
-            req.body.category=[];
-            else
-            req.body.category=new Array(req.body.category);
-        }
-        next();
-    },
-
-    body('name').isLength({ min: 1 }).trim().withMessage('Invalid length'),
-
     sanitizeBody('*').trim().escape(),
 
     (req,res,next)=>{
@@ -57,24 +40,18 @@ var cook_create_post = [
         const errors = validationResult(req);
         var cook = new Cook(
             {
-                name : req.body.name,
-                employee : req.body.employee,
-                category :  (typeof req.body.category==='undefined') ? [] : req.body.category,
-                attendance : req.body.attendance
+                cookID : req.body.cookID,
+                employee : req.body.employee
             }
         );
 
         if (!errors.isEmpty()) {
-            async.parallel({
-                all_employees: (callback) =>{
-                    Employee.find(callback)
-                },
-                all_categories: (callback) =>{
-                    Category.find(callback)
-                }
-            },(err, results) => {
+            console.log("ERROR in creating cook...redirecting to create form");
+
+            Employee.find()
+                .exec((err, employees) => {
                 if (err) { return next(err); } 
-                res.render('cook/cook_create', {title: 'Cook Create', all_employees: results.all_employees, all_categories: results.all_categories});
+                res.render('cook/cook_create', {title: 'Cook Create', employees: employees});
             });
             return;
         }
@@ -91,7 +68,7 @@ var cook_create_post = [
 var cook_details = (req,res,next)=>{
     Cook.findById(req.params.id)
         .populate('employee')
-        .populate('category')
+        // .populate('category')    //TODO: 
         .exec((err,cook)=>{
             if (err) { return next(err); } 
             if (cook == null) { 
@@ -99,7 +76,7 @@ var cook_details = (req,res,next)=>{
                 err.status = 404;
                 return next(err);
             }
-            res.render('cook/category_details', { title: 'Category Detail',  cook: cook});
+            res.render('cook/cook_details', { title: 'Cook Detail',  cook: cook});
         })
 }
 
@@ -109,66 +86,49 @@ var cook_edit_get = (req,res,next)=>{
         cook: (callback) =>{
             Cook.findById(req.params.id)
                 .populate('employee')
-                .populate('category')
+                // .populate('category')    //TODO: 
                 .exec(callback)
         },
-        all_employees: (callback) =>{
+        employees: (callback) =>{
             Employee.find()
                 .exec(callback)
-        },
-        all_categories: (callback) =>{
-            Category.find()
-                .exec(callback)
         }
+        // all_categories: (callback) =>{       //TODO:
+        //     Category.find()
+        //         .exec(callback)
+        // }
     },(err, results) => {
         if (err) { return next(err); } 
-        if (cook == null) { 
+        if (results.cook == null) { 
             var err = new Error('Cook not found');
             err.status = 404;
             return next(err);
         }
-        res.render('cook/cook_edit', { title: 'Update Cook', cook: results.cook , all_employees: results.all_employees, all_categories: results.all_categories});
+        res.render('cook/cook_edit', { title: 'Update Cook', cook: results.cook ,employees: results.employees});
     });
 }
 
 //Handle cook update form on PUT #4.2
 var cook_edit_put = [
-    (req, res, next) => {
-        if(!(req.body.cook instanceof Array)){
-            if(typeof req.body.category==='undefined')
-            req.body.category=[];
-            else
-            req.body.cook=new Array(req.body.category);
-        }
-        next();
-    },
-
-    body('name').isLength({ min: 1 }).trim().withMessage('Invalid length'),
-    
     sanitizeBody('*').escape(),
 
     (req,res,next)=>{
         const errors = validationResult(req);
         var cook = new Cook(
             {
-                name: req.body.name,
-                employee: req.body.employee,
-                category: (typeof req.body.category==='undefined') ? [] : req.body.category,
+                cookID : req.body.cookID,
+                employee : req.body.employee,
                 _id : req.params.id
             }
         );
 
         if (!errors.isEmpty()) {
-            async.parallel({
-                all_employees: (callback) =>{
-                    Employee.find(callback)
-                },
-                all_categories: (callback) =>{
-                    Category.find(callback)
-                }
-            },(err, results) => {
+            console.log("ERROR in creating cook...redirecting to create form");
+
+            Employee.find()
+                .exec((err, employees) => {
                 if (err) { return next(err); } 
-                res.render('cook/cook_create', {title: 'Cook Create', all_employees: results.all_employees, all_categories: results.all_categories});
+                res.render('cook/cook_create', {title: 'Cook Create', employees: employees});
             });
             return;
         }
