@@ -12,7 +12,7 @@ const { sanitizeBody } = require('express-validator/filter');
 var waiter_list = (req,res,next)=>{
     Waiter.find()
         .populate('employee')
-        .sort([['waiterID', 'ascending']])
+        .sort([['cookID', 'ascending']])
         .exec((err, list_waiters) =>{
             if(err){
                 return next(err)

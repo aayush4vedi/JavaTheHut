@@ -11,7 +11,7 @@ const { sanitizeBody } = require('express-validator/filter');
 //List all tables #1
 var table_list = (req,res, next)=>{
     Table.find()
-        .populate('hall')
+        // .populate('hall')
         .populate('waiter')
         .exec((err, list_table) =>{
             if(err){
@@ -24,15 +24,16 @@ var table_list = (req,res, next)=>{
 //Display table create form on GET #2.1
 var table_create_get = (req,res,next)=>{
     async.parallel({
-        halls: (callback) =>{
-            Hall.find(callback)
-        },
+        // halls: (callback) =>{
+        //     Hall.find(callback)
+        // },
         waiters: (callback) =>{
             Waiter.find(callback)
+            .populate('employee')
         }
     },(err, results) => {
         if (err) { return next(err); } 
-        res.render('table/table_create', {title: 'Table Create', halls: results.halls,waiters: results.waiters });
+        res.render('table/table_create', {title: 'Table Create', waiters: results.waiters });
     });
 }
 
@@ -41,7 +42,6 @@ var table_create_post = [
     body('name').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     body('capacity').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     body('available').isLength({ min: 1 }).trim().withMessage('Invalid length'),
-    body('location').isLength({ min: 1 }).trim().withMessage('Invalid length'),
 
     sanitizeBody('*').escape(),
 
@@ -53,23 +53,29 @@ var table_create_post = [
                 name: req.body.name,
                 capacity: req.body.capacity,
                 available: req.body.available,
-                location: req.body.location,
-                hall: req.body.hall,
+                location: {
+                    x: req.body.locationx,
+                    y: req.body.locationx,
+                    z: req.body.locationx,
+                },
+                // hall: req.body.hall,
                 waiter: req.body.waiter
             }
         );
 
         if (!errors.isEmpty()) {
+            console.log("ERROR in creating table...redirecting to create form");
+
             async.parallel({
-                halls: (callback) =>{
-                    Hall.find(callback)
-                },
+                // halls: (callback) =>{
+                //     Hall.find(callback)
+                // },
                 waiters: (callback) =>{
                     Waiter.find(callback)
                 }
             },(err, results) => {
                 if (err) { return next(err); } 
-                res.render('table/table_create', {title: 'Table Create', halls: results.halls,waiters: results.waiters });
+                res.render('table/table_create', {title: 'Table Create', waiters: results.waiters });
             });
             return;
         }
@@ -85,7 +91,7 @@ var table_create_post = [
 //Display details for a specefic table #3
 var table_details = (req,res, next)=>{
     Table.findById(req.params.id)
-        .populate('hall')
+        // .populate('hall')
         .populate('waiter')
         .exec((err, table) => {
             if (err) { return next(err); } 
@@ -104,19 +110,18 @@ var table_edit_get = (req,res,next)=>{
     async.parallel({
         table: (callback) =>{
             Table.findById(req.params.id)
-                .populate('hall')
                 .populate('waiter')
                 .exec(callback)
         },
-        halls: (callback) =>{
-            Hall.find(callback)
-        },
+        // halls: (callback) =>{
+        //     Hall.find(callback)
+        // },
         waiters: (callback) =>{
             Waiter.find(callback)
         }
     },(err, results) => {
         if (err) { return next(err); } 
-        res.render('table/table_edit', { title: 'Update Table', table: results.table,halls: results.halls,waiters: results.waiters });
+        res.render('table/table_edit', { title: 'Update Table', table: results.table,waiters: results.waiters });
     });
 }
 
@@ -125,40 +130,53 @@ var table_edit_put = [
     body('name').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     body('capacity').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     body('available').isLength({ min: 1 }).trim().withMessage('Invalid length'),
-    body('location').isLength({ min: 1 }).trim().withMessage('Invalid length'),
 
     sanitizeBody('*').escape(),
 
     (req,res,next)=>{
+        console.log("hereeeeee");
+        
         const errors = validationResult(req);
         var table = new Table(
             {
                 name: req.body.name,
                 capacity: req.body.capacity,
                 available: req.body.available,
-                location: req.body.location,
-                hall: req.body.hall,
+                location: {
+                    x: req.body.locationx,
+                    y: req.body.locationx,
+                    z: req.body.locationx,
+                },
+                // hall: req.body.hall,
                 waiter: req.body.waiter,
                 _id: req.params.id
             }
         );
 
         if (!errors.isEmpty()) {
+            console.log("ERROR in updating table...redirecting to create form");
+
             async.parallel({
-                halls: (callback) =>{
-                    Hall.find(callback)
+                table: (callback) =>{
+                    Table.findById(req.params.id)
+                        .populate('waiter')
+                        .exec(callback)
                 },
+                // halls: (callback) =>{
+                //     Hall.find(callback)
+                // },
                 waiters: (callback) =>{
                     Waiter.find(callback)
+                        .populate('employee')
                 }
             },(err, results) => {
                 if (err) { return next(err); } 
-                res.render('table/table_create', {title: 'Table Create', halls: results.halls,waiters: results.waiters });
+                res.render('table/table_create', {title: 'Table Create', waiters: results.waiters });
             });
             return;
         }
         else {
-            table.findByIdAndUpdate(function (err) {
+            Table.findByIdAndUpdate(req.params.id, table, {}, (err)=> {
                 if (err) { return next(err); }
                 res.redirect('../table');
             });

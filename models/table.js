@@ -9,7 +9,11 @@ var TableSchema = new Schema({
     // tableID         : { type: String, default: uuid.v1 },     //restaurant specefic ID's to be implemented later
     name            : {type: String, default: 'Table1'},
     capacity        : {type: Number, default:4},
-    available       : {type: Boolean, default:true},
+    available       : { 
+                        type: String, 
+                        enum: ['Yes','No'], 
+                        default: 'Yes' 
+                        },
     location        : {                                 //doing coordinates for now(UI will show size acc. to capacity but locaion is fixed)
                         x: {type: Number, default:0},
                         y: {type: Number, default:0},

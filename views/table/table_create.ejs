@@ -4,14 +4,22 @@
 <form action="create" method="POST">
     <input name="name" placeholder="name">
     <input name="capacity" placeholder="capacity">
-    <input name="available" placeholder="available">
-    <input name="location.x" placeholder="location.x">
-    <input name="location.y" placeholder="location.y">
-    <input name="location.z" placeholder="location.z">
-    <input name="hall" placeholder="hall">
-    <input name="waiter" placeholder="waiter">
+    <select name="available" placeholder="attendance">
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+    <input name="locationx" placeholder="location-x">
+    <input name="locationy" placeholder="location-y">
+    <input name="locationz" placeholder="location-z">
+    <!-- <input name="hall" placeholder="hall"> -->
+    <select id="waiter" type="select" placeholder="Select waiter" name="waiter">
+        <% waiters.forEach((waiter)=>{ %>
+            <option value= <%=waiter._id%> selected="selected"><%=waiter.employee.name%></option>
+        <% }) %>
+    </select>
 
     <button type="submit">Submit</button>
 </form>
 
 <%- include ('../partials/footer') %>
+

@@ -1,17 +1,25 @@
 <%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
-<form action="<%= table._id %>?_method=PUT" method="POST">
+<form action="/fooder/v1/table/<%= table._id%>?_method=PUT" method="POST">
     <input name="name" value="<%= table.name %>">
     <input name="capacity" value="<%= table.capacity %>">
-    <input name="available" value="<%= table.available %>">
+    <select name="available" value="<%= table.available %>">
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
     <input name="location.x" value="<%= table.location.x %>">
     <input name="location.y" value="<%= table.location.y %>">
     <input name="location.z" value="<%= table.location.z %>">
-    <input name="hall" value="<%= table.hall %>">
-    <input name="waiter" value="<%= table.waiter %>">
+    <select id="waiter" type="select" value= <%=table.waiter._id%> name="waiter">
+        <% waiters.forEach((waiter)=>{ %>
+            <option value= <%=waiter._id%> selected="selected"><%=waiter.employee.name%></option>
+        <% }) %>
+    </select>
 
     <button type="submit">Submit</button>
 </form>
 
 <%- include ('../partials/footer') %>
+
+

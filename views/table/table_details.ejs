@@ -7,11 +7,11 @@
 <h2><%= table.location.x %></h2>
 <h2><%= table.location.y %></h2>
 <h2><%= table.location.z %></h2>
-<h2><%= table.hall %></h2>
-<h2><%= table.waiter %></h2>
+<!-- <h2><%= table.hall %></h2> -->
+<h2><%= table.waiter.waiterID %></h2>
 
-<button href="<%= table._id%>/edit">Edit</button>
-<form action="<%= table._id %>?_method=DELETE" method="POST" id="delete">
+<a href="/fooder/v1/table/<%= table._id%>/edit">Edit</a>
+<form action="/fooder/v1/table/<%= table._id %>?_method=DELETE" method="POST" id="delete">
     <button type="submit">Delete</button>
 </form>
 

@@ -29,6 +29,11 @@ app.use(methodOverride('_method'));
 //Add more versioning here
 app.use('/fooder/v1', v1);
 
+//Homes shortcut. TODO: remove this
+app.get('/', (req,res)=>{ 
+    res.render('home'); 
+});
+
 // catch 404 and forward to error handler
 app.use((req, res, next) =>{
     next(createError(404));
