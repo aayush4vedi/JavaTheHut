@@ -22,8 +22,8 @@ router.put('/:id', customer_controller.customer_edit_put);
 //Display customer update form on DELETE #5
 router.delete('/:id', customer_controller.customer_delete_delete);
 
-//Display customer update form on DELETE #5
-router.delete('/:id/bookings', customer_controller.booking_for_customer_get);
+//Display all bookings(list) by customerID on GET #6
+// router.delete('/:id/bookings', customer_controller.booking_for_customer_get);
 
 //Display details for a specefic customer #3 : Must come in end
 router.get('/:id', customer_controller.customer_details);

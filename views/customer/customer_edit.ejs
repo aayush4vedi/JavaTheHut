@@ -1,11 +1,10 @@
 <%- include ('../partials/header') %>
 <h1><%= title %></h1>
 
-<form action="<%= customer._id %>?_method=PUT" method="POST">
+<form action="/fooder/v1/customer/<%= customer._id %>?_method=PUT" method="POST">
     <input name="name" value = "<%= customer.name %>">
     <input name="email" value = "<%= customer.email %>">
     <input name="phone" value = "<%= customer.phone %>">
-    <input name="bookings" value = "<%= customer.bookings %>">
 
     <button type="submit">Submit</button>
 </form>

@@ -12,7 +12,6 @@ const { sanitizeBody } = require('express-validator/filter');
 var customer_list = (req,res, next)=>{
     Customer.find()
         .sort([['name', 'ascending']])
-        .populate('bookings')
         .exec((err, list_customer) =>{
             if(err){
                 return next(err)
@@ -30,8 +29,8 @@ var customer_create_get = (req,res,next)=>{
 //Handle customer create form on POST #2.2
 var customer_create_post = [
     body('name').isLength({ min: 1 }).trim().withMessage('Name must be >= 3 characters.'),
-    body('email').isLength({ min: 10 }).trim().withMessage('Email must be >= 10 characters.'),
-    body('phone').isLength({ min: 11 }).trim().withMessage('Phone must be >= 11 characters.'),
+    body('email').isLength({ min: 5 }).trim().withMessage('Email must be >= 10 characters.'),
+    body('phone').isLength({ min: 10 }).trim().withMessage('Phone must be >= 11 characters.'),
 
     sanitizeBody('*').escape(),
     (req,res,next)=>{
@@ -61,7 +60,6 @@ var customer_create_post = [
 //Display details for a specefic customer #3
 var customer_details = (req,res, next)=>{
     Customer.findById(req.params.id)
-        .populate('booking')
         .exec((err,customer)=>{
             if (err) { return next(err); } 
             if (customer == null) { 
@@ -75,32 +73,23 @@ var customer_details = (req,res, next)=>{
 
 //Display customer update form on GET #4.1
 var customer_edit_get = (req,res,next)=>{
-    async.parallel({
-        customer: (callback) =>{
-            Customer.findById(req.params.id)
-                .populate('booking')
-                .exec(callback)
-        },
-        all_bookings: (callback) =>{
-            Booking.find()
-                .exec(callback)
-        }
-    },(err, results) => {
+    Customer.findById(req.params.id)
+        .exec((err,customer)=>{
         if (err) { return next(err); } 
         if (customer == null) { 
             var err = new Error('Customer not found');
             err.status = 404;
             return next(err);
         }
-        res.render('customer/customer_edit', { title: 'Update Customer', category: results.category, all_bookings: results.all_bookings});
+        res.render('customer/customer_edit', { title: 'Update Customer', customer: customer});
     });
 }
 
 //Handle customer update form on PUT #4.2
 var customer_edit_put = [
     body('name').isLength({ min: 1 }).trim().withMessage('Name must be >= 3 characters.'),
-    body('email').isLength({ min: 10 }).trim().withMessage('Email must be >= 10 characters.'),
-    body('phone').isLength({ min: 11 }).trim().withMessage('Phone must be >= 11 characters.'),
+    body('email').isLength({ min: 5 }).trim().withMessage('Email must be >= 10 characters.'),
+    body('phone').isLength({ min: 10 }).trim().withMessage('Phone must be >= 11 characters.'),
 
     sanitizeBody('*').escape(),
     (req,res,next)=>{
@@ -129,25 +118,25 @@ var customer_edit_put = [
 
 //Display customer update form on DELETE #5
 var customer_delete_delete = (req,res,next)=>{
-    Customer.findByIdAndDelete(req.params.id, function deleteCustomer(err) {
+    Customer.findByIdAndDelete(req.params.id, (err, deletecustomer)=> {
         if (err) { return next(err); }
         res.redirect('../customer');
     })
 }
 
 //Display all bookings(list) by customerID on GET #6
-var booking_for_customer_get = (req,res,next)=>{
-    Booking.find({'customer' : req.params.id})
-        .populate('customer')
-        .populate('dine')
-        .populate('tableInstance')
-        .exec((err, list_booking) =>{
-            if(err){
-                return next(err)
-            }
-            res.render('booking/booking_list', { title: 'Booking List', booking_list: list_booking})
-        })
-}
+// var booking_for_customer_get = (req,res,next)=>{
+//     Booking.find({'customer' : req.params.id})
+//         .populate('customer')
+//         .populate('dine')
+//         .populate('tableInstance')
+//         .exec((err, list_booking) =>{
+//             if(err){
+//                 return next(err)
+//             }
+//             res.render('booking/booking_list', { title: 'Booking List', booking_list: list_booking})
+//         })
+// }
 
 
 
@@ -159,6 +148,6 @@ module.exports = {
     customer_edit_get,
     customer_edit_put,
     customer_delete_delete,
-    booking_for_customer_get
+    // booking_for_customer_get
 }
 
