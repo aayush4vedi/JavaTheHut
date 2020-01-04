@@ -62,7 +62,7 @@ var table_create_post = [
                 waiter: req.body.waiter
             }
         );
-
+        //TODO: check if location cordinates are not overlapping
         if (!errors.isEmpty()) {
             console.log("ERROR in creating table...redirecting to create form");
 
@@ -152,7 +152,8 @@ var table_edit_put = [
                 _id: req.params.id
             }
         );
-
+        //TODO: check if location cordinates are not overlapping
+        
         if (!errors.isEmpty()) {
             console.log("ERROR in updating table...redirecting to create form");
 

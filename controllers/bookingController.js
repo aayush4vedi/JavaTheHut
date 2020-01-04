@@ -1,7 +1,7 @@
 var Booking             = require('../models/booking'),
     Customer            = require('../models/customer'),
-    Dine                = require('../models/dine'),
-    TableInstance       = require('../models/tableInstance'),
+    // Dine                = require('../models/dine'),
+    Table               = require('../models/table'),
     async               = require('async')
 
 const { body, validationResult } = require('express-validator/check');
@@ -13,8 +13,7 @@ const { sanitizeBody } = require('express-validator/filter');
 var booking_list = (req,res,next)=>{
     Booking.find()
         .populate('customer')
-        .populate('dine')
-        .populate('tableInstance')
+        .populate('table')
         .exec((err, list_booking) =>{
             if(err){
                 return next(err)
@@ -27,37 +26,44 @@ var booking_list = (req,res,next)=>{
 var booking_create_get = (req,res,next)=>{
     //Get list of all tables,customers to select from.Dine is not formed yet.
     async.parallel({
-        customer: (callback) =>{
+        customers: (callback) =>{
             Customer.find()
                 .exec(callback)
         },
         //only send free tables
         tables: (callback) =>{
-            TableInstance.find({'isFree':true})
-            .exec(callback)
-        }
+            Table.find()
+                .exec(callback)
+            // Table.find({'available':'Yes'})
+        }           //TODO: show only tables whose capacity is >= size
     },(err, results) => {
         if (err) { return next(err); } 
-        if (results.customer == null) { 
-            var err = new Error('No such customer found');
+        if (results.customers== null) { 
+            var err = new Error('No customers found');
             err.status = 404;
             return next(err);
         }
-        res.render('booking/booking_create', { title: 'Booking Create', customer: results.customer, tables: results.tables});
+        if (results.tables == null) { 
+            var err = new Error('No free tables found');
+            err.status = 404;
+            return next(err);
+            //TODO: handle this 
+        }
+        res.render('booking/booking_create', { title: 'Booking Create', customers: results.customers, tables: results.tables});
     });
 }
 
 //Handle booking create form on POST #2.2
 var booking_create_post = [
-    (req, res, next) => {
-        if(!(req.body.tableInstance instanceof Array)){
-            if(typeof req.body.tableInstance==='undefined')
-            req.body.gentableInstancere=[];
-            else
-            req.body.tableInstance=new Array(req.body.tableInstance);
-        }
-        next();
-    },
+    // (req, res, next) => {
+    //     if(!(req.body.table instanceof Array)){
+    //         if(typeof req.body.table==='undefined')
+    //         req.body.table=[];
+    //         else
+    //         req.body.table=new Array(req.body.table);
+    //     }
+    //     next();
+    // },
 
     body('checkInTime').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     body('stayingMinutes').isLength({ min: 1 }).trim().withMessage('Invalid length'),
@@ -66,36 +72,46 @@ var booking_create_post = [
 
     (req,res,next)=>{
         console.log('***req.body:',req.body);
+        console.log("table: ",req.body.table);
+
         const errors = validationResult(req);
         var booking = new Booking(
             {
                 customer: req.body.customer,
-                dine: req.body.dine,
-                tableInstance: (typeof req.body.tableInstance==='undefined') ? [] : req.body.tableInstance,
+                size    : req.body.size,
+                // dine: req.body.dine,
+                table : req.body.table,
                 checkInTime: req.body.checkInTime,
                 stayingMinutes: req.body.stayingMinutes
             }
         );
-
+        //TODO: write logic here to check if size >= table.capacity, else show error
         if (!errors.isEmpty()) {
+            console.log("Error in create post...Redirecting to create page");
             async.parallel({
-                customer: (callback) =>{
+                customers: (callback) =>{
                     Customer.find()
                         .exec(callback)
                 },
                 //only send free tables
                 tables: (callback) =>{
-                    TableInstance.find({'isFree':true})
+                    Table.find({'available':'Yes'})
                     .exec(callback)
-                }
+                }           //TODO: show only tables whose capacity is >= size
             },(err, results) => {
                 if (err) { return next(err); } 
-                if (results.customer == null) { 
-                    var err = new Error('No such customer found');
+                if (results.customers== null) { 
+                    var err = new Error('No customers found');
                     err.status = 404;
                     return next(err);
                 }
-                res.render('booking/booking_create', { title: 'Booking Create', customer: results.customer, tables: results.tables});
+                if (results.tables == null) { 
+                    var err = new Error('No free tables found');
+                    err.status = 404;
+                    return next(err);
+                    //TODO: handle this 
+                }
+                res.render('booking/booking_create', { title: 'Booking Create', customers: results.customers, tables: results.tables});
             });
             return;
         }
@@ -114,22 +130,17 @@ var booking_details = (req,res,next)=>{
         booking: (callback) =>{
             Booking.findById(req.params.id)
                 .populate('customer')
-                .populate('dine')
-                .populate('tableInstance')
+                .populate('table')
                 .exec(callback)
         },
-        booking_dine: (callback) =>{
-            Dine.find({ 'booking': req.params.id }, 'orders status bill')
-                .exec(callback)
-        },
-        booking_customer: (callback) =>{
-            Customer.find({ 'booking': req.params.id }, 'name')
-                .exec(callback)
-        },
-        booking_tables: (callback) =>{
-            TableInstance.find({ 'booking': req.params.id })
-                .exec(callback)
-        }
+        // booking_customer: (callback) =>{
+        //     Customer.find({ 'booking': req.params.id }, 'name')
+        //         .exec(callback)
+        // },
+        // booking_tables: (callback) =>{
+        //     TableInstance.find({ 'booking': req.params.id })
+        //         .exec(callback)
+        // }
     },(err, results) => {
         if (err) { return next(err); } 
         if (results.booking == null) { 
@@ -137,7 +148,7 @@ var booking_details = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('booking/booking_details', { title: 'Booking Detail', booking: results.booking, booking_dine: results.booking_dine, booking_customer: results.booking_customer, booking_tables: results.booking_tables});
+        res.render('booking/booking_details', { title: 'Booking Detail', booking: results.booking});
     });
 }
 
@@ -147,26 +158,17 @@ var booking_edit_get = (req,res,next)=>{
         booking: (callback)=>{
             Booking.findById(req.params.id)
                 .populate('customer')
-                .populate('dine')
-                .populate('tableInstance')
+                .populate('table')
                 .exec(callback)
         },
-        booking_dine: (callback) =>{
-            Dine.find({ 'booking': req.params.id }, 'orders status bill')
+        customers: (callback) =>{
+            Customer.find()
                 .exec(callback)
         },
-        booking_customer: (callback) =>{
-            Customer.find({ 'booking': req.params.id }, 'name')
-                .exec(callback)
-        },
-        booking_tables: (callback) =>{
-            TableInstance.find({ 'booking': req.params.id })
-                .exec(callback)
-        }, 
         //Get list of all tables, to select from
-        all_tables: (callback) =>{
-            TableInstance.find(callback)
-        }
+        tables: (callback) =>{
+            Table.find(callback)
+        }                                   //TODO: show only tables whose capacity is >= size
     },(err, results)=>{
         if (err) { return next(err); } 
         if (results.booking == null) { 
@@ -174,37 +176,37 @@ var booking_edit_get = (req,res,next)=>{
             err.status = 404;
             return next(err);
         }
-        res.render('booking/booking_edit', { title: 'Update Booking', booking: results.booking, booking_dine: results.booking_dine, booking_customer: results.booking_customer, booking_tables: results.booking_tables, all_tables: results.all_tables});
+        res.render('booking/booking_edit', { title: 'Update Booking', booking: results.booking, customers: results.customers, tables: results.tables});
     })
 }
 
 //Handle booking update form on PUT #4.2
 var booking_edit_put = [
     (req, res, next) => {
-        if(!(req.body.tableInstance instanceof Array)){
-            if(typeof req.body.tableInstance==='undefined')
+        if(!(req.body.table instanceof Array)){
+            if(typeof req.body.table==='undefined')
             req.body.gentableInstancere=[];
             else
-            req.body.tableInstance=new Array(req.body.tableInstance);
+            req.body.table=new Array(req.body.table);
         }
         next();
     },
 
     body('customer').isLength({ min: 1 }).trim().withMessage('Invalid length'),
-    body('dine').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     body('checkInTime').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     body('stayingMinutes').isLength({ min: 1 }).trim().withMessage('Invalid length'),
     
     sanitizeBody('*').trim().escape(),
-    sanitizeBody('tableInstance.*').escape(),
+    sanitizeBody('table.*').escape(),
 
     (req,res,next)=>{
         const errors = validationResult(req);
         var booking = new Booking(
             {
                 customer: req.body.customer,
-                dine: req.body.dine,
-                tableInstance: (typeof req.body.tableInstance==='undefined') ? [] : req.body.tableInstance,
+                size    : req.body.size,
+                // dine: req.body.dine,
+                table : req.body.table,
                 checkInTime: req.body.checkInTime,
                 stayingMinutes: req.body.stayingMinutes,
                 _id: req.params.id
@@ -212,13 +214,34 @@ var booking_edit_put = [
         );
 
         if (!errors.isEmpty()) {
-            TableInstance.find(callback)
-                .exec((err, all_tables) =>{
-                    if(err){
-                        return next(err)
-                    }
-                    res.render('booking/booking_create', { title: 'Booking Create', booking:booking, all_tables: all_tables, errors: errors.array()})
-                })
+            console.log("Error in edit...Redirecting to create page");
+            
+            async.parallel({
+                customers: (callback) =>{
+                    Customer.find()
+                        .exec(callback)
+                },
+                //only send free tables
+                tables: (callback) =>{
+                    Table.find()
+                    // Table.find({'available':'Yes'})
+                    .exec(callback)
+                }           //TODO: show only tables whose capacity is >= size
+            },(err, results) => {
+                if (err) { return next(err); } 
+                if (results.customers== null) { 
+                    var err = new Error('No customers found');
+                    err.status = 404;
+                    return next(err);
+                }
+                if (results.tables == null) { 
+                    var err = new Error('No free tables found');
+                    err.status = 404;
+                    return next(err);
+                    //TODO: handle this 
+                }
+                res.render('booking/booking_create', { title: 'Booking Create', customers: results.customers, tables: results.tables});
+            });
             return;
         }
         else {
@@ -243,7 +266,7 @@ var booking_delete_delete = (req,res,next)=>{
 //Display all bookings by checkInTime &  checkOutTime on GET #6 
 //:: find all bookings overlapping withing this time => to get list of all the busy tables at time t
 var booking_for_time_get = (req,res,next)=>{
-    //TODO: optimise this query
+    //TODO: re-write this query
     Booking.find({ 'checkInTime': req.params.checkintime , 'checkOutTime': req.params.checkouttime}, (err, booking)=> {
         if (err) { return next(err); }
         if (booking == null) { 
@@ -256,7 +279,7 @@ var booking_for_time_get = (req,res,next)=>{
     });
 }
 
-//Display all bookings by date & tableInstance on GET #9 => no usecase exists
+//Display all bookings by date & table on GET #9 => no usecase exists
 
 module.exports = {
     booking_list,
