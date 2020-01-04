@@ -5,12 +5,22 @@
     <input name="name" placeholder="name">
     <input name="description" placeholder="description">
     <input name="ingredients" placeholder="ingredients">
-    <input name="goods" placeholder="goods">
-    <input name="category" placeholder="category">
-    <input name="goods" placeholder="goods">
+    <label for="goods">
+        <select id="goods" type="select" placeholder="Select goods" name="goods" required="true">
+            <% goods.forEach((good)=>{ %>
+                <option value= <%=good._id%> selected="selected"><%=good.name%></option>
+            <% }) %>
+        </select>
+    </label><br>
     <input name="price" placeholder="price">
-    <input name="isServing" placeholder="isServing">
-    <input name="veg" placeholder="veg">
+    <select name="isServing" placeholder="isServing">
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+    <select name="veg" placeholder="veg/non-veg">
+        <option value="Veg">Veg</option>
+        <option value="Non-Veg">Non-Veg</option>
+    </select>
     <input name="eta" placeholder="eta">
 
     <button type="submit">Submit</button>

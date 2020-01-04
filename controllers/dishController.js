@@ -24,15 +24,17 @@ var dish_list = (req,res,next)=>{
 //Display dish create form on GET #2.1
 var dish_create_get = (req,res,next)=>{
     async.parallel({
-        all_categories: (callback) =>{
-            Category.find(callback)
-        },
-        all_goods: (callback) =>{
+        // categories: (callback) =>{
+        //     Category.find(callback)
+        //         .exec(callback)
+        // },
+        goods: (callback) =>{
             Good.find(callback)
+                .exec(callback)
         }
     },(err, results) => {
         if (err) { return next(err); } 
-        res.render('dish/dish_create', {title: 'Dish Create', all_categories: results.all_categories,all_goods: results.all_goods});
+        res.render('dish/dish_create', {title: 'Dish Create', goods: results.goods});
     });
 }
 
@@ -67,15 +69,17 @@ var dish_create_post = [
 
         if (!errors.isEmpty()) {
             async.parallel({
-                all_categories: (callback) =>{
-                    Category.find(callback)
-                },
-                all_goods: (callback) =>{
+                // categories: (callback) =>{
+                //     Category.find(callback)
+                //         .exec(callback)
+                // },
+                goods: (callback) =>{
                     Good.find(callback)
+                        .exec(callback)
                 }
             },(err, results) => {
                 if (err) { return next(err); } 
-                res.render('dish/dish_create', {title: 'Dish Create', all_categories: results.all_categories,all_goods: results.all_goods});
+                res.render('dish/dish_create', {title: 'Dish Create', goods: results.goods});
             });
             return;
         }
