@@ -8,3 +8,4 @@
 
 # v1
 MVP for a game changing player(*waiter* is the better word), hush!
+[Doc](https://docs.google.com/document/d/1zDu6tlQMZJeAXBT-IClH8cXZ-_fSsCLmTslbeCOhLx0/edit#)
