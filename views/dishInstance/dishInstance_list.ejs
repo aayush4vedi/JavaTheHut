@@ -1,9 +1,0 @@
-<%- include ('../partials/header') %>
-<h1><%= title %></h1>
-
-<% dishInstances.forEach((dishInstance)=>{ %>
-    <h2><%= dishInstance.dish.name %></h2>
-    <h2><%= dishInstance.quantity %></h2>
-    <h2><%= dishInstance.order._id %></h2>
-    <a href="<%= dishInstances._id %>">Details</a>
-<% }) %>
