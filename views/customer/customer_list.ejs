@@ -1,0 +1,10 @@
+<%- include ('../partials/header') %>
+<a href="/fooder/v1/customer/create">Create</a>
+<h1><%= title %></h1>
+
+<% customers.forEach((customer)=>{ %>
+    <h2><%= customer.name %></h2>
+    <h2><%= customer.email %></h2>
+    <h2><%= customer.phone %></h2>
+    <a href="/fooder/v1/customer/<%= customer._id %>">Details</a>
+<% }) %>

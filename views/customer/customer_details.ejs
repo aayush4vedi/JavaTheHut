@@ -1,0 +1,13 @@
+<%- include ('../partials/header') %>
+<h1><%= title %></h1>
+
+<h2><%= customer.name %></h2>
+<h2><%= customer.email %></h2>
+<h2><%= customer.phone %></h2>
+
+<a href="/fooder/v1/customer/<%= customer._id%>/edit">Edit</a>
+<form action="/fooder/v1/customer/<%= customer._id %>?_method=DELETE" method="POST" id="delete">
+    <button type="submit">Delete</button>
+</form>
+
+<%- include ('../partials/footer') %>

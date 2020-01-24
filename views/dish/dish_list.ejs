@@ -1,0 +1,21 @@
+<%- include ('../partials/header') %>
+<a href="/fooder/v1/dish/create">Create</a>
+<h1><%= title %></h1>
+
+<% dishes.forEach((dish)=>{ %>
+    <h2><%= dish.name %></h2>
+    <h2><%= dish.description %></h2>
+    <% dish.ingredients.forEach((ingredient)=>{ %>
+        <h3><%= ingredient %></h3>
+    <% }) %>
+    <% dish.goods.forEach((good)=>{ %>
+        <h3><%= good.good %></h3>
+        <h3><%= good.quantity %></h3>
+    <% }) %>
+    <h2><%= dish.category.name %></h2>
+    <h2><%= dish.price %></h2>
+    <h2><%= dish.isServing %></h2>
+    <h2><%= dish.veg %></h2>
+    <h2><%= dish.eta %></h2>
+    <a href="<%= dish._id %>">Details</a>
+<% }) %>

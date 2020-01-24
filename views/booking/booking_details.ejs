@@ -1,0 +1,14 @@
+<%- include ('../partials/header') %>
+<h1><%= title %></h1>
+
+<h2><%= booking.customer.name %></h2>
+<h2><%= booking.checkInTime %></h2>
+<h2><%= booking.stayingMinutes %></h2>
+<h2><%= booking.table.name %></h2>
+
+<a href="/fooder/v1/booking/<%= booking._id%>/edit">Edit</a>
+<form action="/fooder/v1/booking/<%= booking._id %>?_method=DELETE" method="POST" id="delete">
+    <button type="submit">Delete</button>
+</form>
+
+<%- include ('../partials/footer') %>

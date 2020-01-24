@@ -1,0 +1,17 @@
+<%- include ('../partials/header') %>
+<h1><%= title %></h1>
+
+<form action="create" method="POST">
+    <input name="orders" placeholder="orders">
+    <input name="booking" placeholder="booking">
+    <input name="bill" placeholder="bill">
+    <input name="waiter" placeholder="waiter">
+    <input name="customer" placeholder="customer">
+    <input name="tableInstances" placeholder="tableInstances">
+    <input name="status" placeholder="status">
+    <input name="date" placeholder="date">
+
+    <button type="submit">Submit</button>
+</form>
+
+<%- include ('../partials/footer') %>

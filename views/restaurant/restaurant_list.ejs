@@ -1,0 +1,13 @@
+<%- include ('../partials/header') %>
+<h1><%= title %></h1>
+
+<% restaurants.forEach((restaurant)=>{ %>
+    <h2><%= restaurant.name %></h2>
+    <h2><%= restaurant.phone %></h2>
+    <h2><%= restaurant.address %></h2>
+    <h2><%= restaurant.activePlanID %></h2>
+    <% restaurant.halls.forEach((halls)=>{ %>
+        <h2><%= table.name %></h2>
+    <% }) %>
+    <a href="<%= restaurant._id %>">Details</a>
+<% }) %>

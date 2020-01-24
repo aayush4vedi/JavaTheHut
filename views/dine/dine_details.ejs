@@ -1,0 +1,24 @@
+<%- include ('../partials/header') %>
+<h1><%= title %></h1>
+
+<h2><%= dine.date %></h2>
+<h2><%= dine.booking.checkInTime %></h2>
+<h2><%= dine.dine.payableamount %></h2>
+<h2><%= dine.waiter.name %></h2>
+<h2><%= dine.customer.name %></h2>
+<h2><%= dine.tableInstances.table.name %></h2>
+<h2><%= dine.status.status %></h2>
+<h2><%= dine.status.time %></h2>
+<% dine.orders.forEach((order)=>{ %>
+    <% order.items.forEach((item)=>{ %>
+        <h2><%= item.dish.name %></h2>
+        <h2><%= item.quantity %></h2>
+    <% }) %>
+<% }) %>
+
+<button href="<%= dine._id%>/edit">Edit</button>
+<form action="<%= dine._id %>?_method=DELETE" method="POST" id="delete">
+    <button type="submit">Delete</button>
+</form>
+
+<%- include ('../partials/footer') %>

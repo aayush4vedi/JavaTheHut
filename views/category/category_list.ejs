@@ -1,0 +1,14 @@
+<%- include ('../partials/header') %>
+<a href="/fooder/v1/category/create">Create</a>
+<h1><%= title %></h1>
+
+<% category.forEach((category)=>{ %>
+    <h2><%= category.name %></h2>
+    <% category.cook.forEach((cook)=>{ %>
+        <h2><%= cook.name %></h2>
+    <% }) %>
+    <% category.dish.forEach((dish)=>{ %>
+        <h2><%= dish.name %></h2>
+    <% }) %>
+    <a href="<%= category._id %>">Details</a>
+<% }) %>
