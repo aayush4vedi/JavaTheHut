@@ -1,0 +1,17 @@
+{   
+    "name": "Calma", 
+    "version": "1.0", 
+    "description": "Autoplay Calm music from Youtube", 
+    "manifest_version": 2,
+    "permissions": ["tabs"],
+    "chrome_url_overrides" :{
+        "newtab" : "newpage.html"
+    },
+    "browser_action": {
+        "default_icon" : "calma.png"
+    },
+    "background": {
+        "scripts": ["scripts.js"],
+        "persistent": false
+    }
+}
