@@ -1,0 +1,19 @@
+<%- include ('../partials/header') %>
+<h1><%= title %></h1>
+
+<h2><%= employee.name %></h2>
+<h2><%= employee.username %></h2>
+<h2><%= employee.password %></h2>
+<h2><%= employee.email %></h2>
+<h2><%= employee.phone %></h2>
+<h2><%= employee.govIDNumber %></h2>
+<h2><%= employee.salary %></h2>
+<h2><%= employee.role %></h2>
+<h2><%= employee.attendance %></h2>
+
+<a href="/fooder/v1/employee/<%= employee._id %>/edit">Edit</a>
+<form action="/fooder/v1/employee/<%=employee._id %>?_method=DELETE" method="POST" id="delete">
+    <button type="submit">Delete</button>
+</form>
+
+<%- include ('../partials/footer') %>

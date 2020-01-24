@@ -1,0 +1,17 @@
+<%- include ('../partials/header') %>
+<h1><%= title %></h1>
+
+<h2><%= category.name %></h2>
+<% category.cook.forEach((cook)=>{ %>
+    <h2><%= cook.name %></h2>
+<% }) %>
+<% category.dish.forEach((dish)=>{ %>
+    <h2><%= dish.name %></h2>
+<% }) %>
+
+<button href="<%= category._id%>/edit">Edit</button>
+<form action="<%= category._id %>?_method=DELETE" method="POST" id="delete">
+    <button type="submit">Delete</button>
+</form>
+
+<%- include ('../partials/footer') %>

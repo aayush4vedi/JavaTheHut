@@ -1,0 +1,19 @@
+<%- include ('../partials/header') %>
+<h1><%= title %></h1>
+
+<form action="<%= dish._id %>?_method=PUT" method="POST">
+    <input name="name" value="<%= dish.name %>">
+    <input name="description" value="<%= dish.description %>">
+    <input name="ingredients" value="<%= dish.ingredients %>">
+    <input name="goods" value="<%= dish.goods %>">
+    <input name="category" value="<%= dish.category %>">
+    <input name="goods" value="<%= dish.goods %>">
+    <input name="price" value="<%= dish.price %>">
+    <input name="isServing" value="<%= dish.isServing %>">
+    <input name="veg" value="<%= dish.veg %>">
+    <input name="eta" value="<%= dish.eta %>">
+
+    <button type="submit">Submit</button>
+</form>
+
+<%- include ('../partials/footer') %>

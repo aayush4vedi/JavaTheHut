@@ -1,0 +1,24 @@
+<%- include ('../partials/header') %>
+<h1><%= title %></h1>
+
+<h2><%= dish.name %></h2>
+<h2><%= dish.description %></h2>
+<% dish.ingredients.forEach((ingredient)=>{ %>
+    <h3><%= ingredient %></h3>
+<% }) %>
+<% dish.goods.forEach((good)=>{ %>
+    <h3><%= good.good %></h3>
+    <h3><%= good.quantity %></h3>
+<% }) %>
+<h2><%= dish.category.name %></h2>
+<h2><%= dish.price %></h2>
+<h2><%= dish.isServing %></h2>
+<h2><%= dish.veg %></h2>
+<h2><%= dish.eta %></h2>
+
+<button href="<%= dish._id%>/edit">Edit</button>
+<form action="<%= bldishog._id %>?_method=DELETE" method="POST" id="delete">
+    <button type="submit">Delete</button>
+</form>
+
+<%- include ('../partials/footer') %>
