@@ -1,0 +1,45 @@
+body{
+    background: rgb(41, 38, 38);
+    margin: 0;
+}
+.jumbotron{
+    padding-top: 1.5%;
+    padding-bottom: 0%;
+    background: cyan;
+}
+#bar{
+    background:white;
+}
+#new-color{
+    float: right;
+}
+#display{
+    width: 20%;
+    display: inline-block;
+}
+.game{
+    margin: 0 auto;
+    max-width: 600px;
+}
+.square{
+    width: 30%;
+    margin: 1.66%;
+    background: yellow;
+    padding-bottom: 30%;
+    float: left;
+    border-radius: 15%;
+    transition: background 0.70s;
+}
+.b-active{
+    background: rgb(0, 150, 205);
+}
+.a .b-active{
+    color: white;
+}
+
+.nav-pills .nav-link {
+    border-radius: 0%;
+    height: 100%;
+    letter-spacing: 1px;
+    transition: all 0.25s;
+}
