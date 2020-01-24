@@ -6,7 +6,6 @@ About
 <img src = './media/cast.png' height = "500px"/>
 <br>
 <img src="https://img.shields.io/badge/React-C3190B" alt="React">
-<img src="https://img.shields.io/badge/React-634272" alt="React">
 <img src="https://img.shields.io/badge/Firebase-E27D06" alt="Firebase">
 <br>
 Welcome to the Big City!<br>
