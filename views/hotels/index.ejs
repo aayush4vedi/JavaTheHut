@@ -1,0 +1,32 @@
+<% include ../partials/header %>
+
+<div class="container">
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">List of Hotels</h1>
+            <p>List of hotels near you</p>
+        </div>
+        <div class="container">
+            <a class="btn btn-warning btn-large" href="/">Home</a>
+            <a class="btn btn-danger btn-large" href="/hotels/new">Add a new hotel</a>
+        </div>
+    </div>
+    
+    <div class="row text-center" style="display:flex; flex-wrap:wrap;">
+        <% hotels.forEach((hotel)=>{ %>
+            <div class= 'col-md-4 col-sm-6'>
+                <div class='card' >
+                    <img src="<%= hotel.image %>">
+                    <div class='card-body'>
+                        <h5 class='catd-title'>
+                            <%=hotel.name  %>
+                        </h5>
+                        <a href="/hotels/<%= hotel._id %>" class="btn btn-info">More Info</a>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+</div>
+<% include ../partials/footer %>
+
