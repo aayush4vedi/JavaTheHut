@@ -1,6 +1,8 @@
 # About
 An incplmete collection of some fun, small,(few) incomplete projects-mostly written in JS which, if given separate repo, will make me look like a pro-coder.Obvisously don't want that.Hence this repository exists.
 
+**Note**: Each project exists on it's own branch
+
 # List of mentionable mentions
 
 ## [Color Game](https://github.com/aayush4vedi/JavaTheHut/tree/colorgame) :video_game:
